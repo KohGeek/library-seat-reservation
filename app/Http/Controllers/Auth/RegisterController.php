@@ -51,10 +51,41 @@ class RegisterController extends Controller
     {
         return Validator::make($data, [
             'name' => ['required', 'string', 'max:255'],
+            'username' => ['required', 'string', 'max:255'],
             'email' => ['required', 'string', 'email', 'max:255', 'unique:users'],
-            'password' => ['required', 'string', 'min:8', 'confirmed'],
+            'password' => ['required','min:8', 
+                    'regex:/^.*(?=.{3,})(?=.*[a-zA-Z])(?=.*[0-9])(?=.*[\d\x])(?=.*[!$#%]).*$/', 'confirmed'],
+            'confirm_password' => ['required','same:password'],            
         ]);
     }
+    // public function register(Request $req){
+
+    //     $req->validate([
+    //         'name' => ['required', 'string', 'max:255'],
+    //         'username' => ['required', 'string', 'max:255'],
+    //         'email' => 'required | email',
+    //         'password' => ['required','min:8', 
+    //         'regex:/^.*(?=.{3,})(?=.*[a-zA-Z])(?=.*[0-9])(?=.*[\d\x])(?=.*[!$#%]).*$/', 'confirmed']
+    //         'confirm_password' => ['required','same:password'],
+    //         ],
+            
+    //     ]);
+
+    //     $user = new User;
+    //     $user->name = $req->name;
+    //     $user->username = $req->username;
+    //     $user->email = $req->email;
+    //     //$user->email_verified_at = $req->email_verified_at;
+    //     $user->password = $req->password;
+    //     $user->role = $req->role;
+
+    //     $user->save();
+        
+    //     $req->session()->flash('user',$user['username']);
+
+    //     return redirect ('login');
+
+    // }
 
     /**
      * Create a new user instance after a valid registration.
@@ -66,8 +97,10 @@ class RegisterController extends Controller
     {
         return User::create([
             'name' => $data['name'],
+            'username' => $data['username'],
             'email' => $data['email'],
             'password' => Hash::make($data['password']),
+            'role' => $data['role'],
         ]);
     }
 }

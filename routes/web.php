@@ -24,3 +24,14 @@ Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name
 Auth::routes();
 
 Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
+
+
+
+//Self-defined routes
+//Normal Register
+Route::view('/register','register')->name('register');
+Route::post('/register',[RegisterController::class,'register']);
+
+//Normal Login
+Route::view('/login','login')->name('login');
+Route::post('/login',[LoginController::class,'login']);
