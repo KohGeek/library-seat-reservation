@@ -48,7 +48,7 @@ class LoginController extends Controller
 
         $req->validate([
             'email' => 'required | email',
-            'password' => ['required', 'confirmed'],
+            'password' => 'required',
         ]);
 
 
@@ -72,7 +72,7 @@ class LoginController extends Controller
 
         $credentials = $req->validate([
             'email' => 'required | email',
-            'password' => ['required', 'confirmed'],
+            'password' => 'required',
         ]);
 
         if(Auth::attempt($credentials)){
