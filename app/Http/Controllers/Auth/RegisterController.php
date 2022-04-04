@@ -57,7 +57,7 @@ class RegisterController extends Controller
             'username' => ['required', 'string', 'max:255'],
             'email' => ['required', 'string', 'email', 'max:255', 'unique:users'],
             'password' => [Password::min(8)->mixedCase()->numbers()->symbols(), 'confirmed'],
-            'confirm_password' => ['required', 'same:password'],
+            'role' => ['required'],
         ]);
     }
 
@@ -81,7 +81,12 @@ class RegisterController extends Controller
     public function register(Request $req)
     {
 
-        $this->validator($req->all())->validate();
+        $validator = $this->validator($req->all());
+
+        if ($validator->fails()) {
+            return back()->withErrors($validator)->withInput();
+        }
+
         $user = new User;
         $user = $this->create($req->all());
         $user->save();
