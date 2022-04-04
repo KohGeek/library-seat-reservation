@@ -48,9 +48,7 @@ class LoginController extends Controller
 
         $req->validate([
             'email' => 'required | email',
-            'password' => ['required','min:8', 
-            'regex:/^.*(?=.{3,})(?=.*[a-zA-Z])(?=.*[0-9])(?=.*[\d\x])(?=.*[!$#%]).*$/', 
-            'confirmed'],
+            'password' => ['required', 'confirmed'],
         ]);
 
 
@@ -74,9 +72,7 @@ class LoginController extends Controller
 
         $credentials = $req->validate([
             'email' => 'required | email',
-            'password' => ['required','min:8', 
-            'regex:/^.*(?=.{3,})(?=.*[a-zA-Z])(?=.*[0-9])(?=.*[\d\x])(?=.*[!$#%]).*$/', 
-            'confirmed'],
+            'password' => ['required', 'confirmed'],
         ]);
 
         if(Auth::attempt($credentials)){
