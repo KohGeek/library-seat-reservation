@@ -44,10 +44,10 @@ return [
             'driver' => 'session',
             'provider' => 'users'
         ],
-        'librarian' => [
-            'driver' => 'session',
-            'provider' => 'librarians',
-        ]
+        // 'librarian' => [
+        //     'driver' => 'session',
+        //     'provider' => 'librarians',
+        // ]
     ],
 
     /*
@@ -73,10 +73,10 @@ return [
             'model' => App\Models\User::class,
         ],
 
-        'librarians' => [
-            'driver' => 'eloquent',
-            'model' => App\Models\Librarian::class,
-        ]
+        // 'librarians' => [
+        //     'driver' => 'eloquent',
+        //     'model' => App\Models\Librarian::class,
+        // ]
 
         // 'users' => [
         //     'driver' => 'database',
