@@ -1,6 +1,10 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+use Illuminate\Support\Facades\Auth;
+use App\Http\Controllers\Auth\LoginController;
+use App\Http\Controllers\Auth\RegisterController;
+
 
 /*
 |--------------------------------------------------------------------------
@@ -21,17 +25,16 @@ Auth::routes();
 
 Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
 
-Auth::routes();
-
-Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
+// Auth::routes();
+// Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
 
 
 
 // //Self-defined routes
 // //Normal Register
 // Route::view('/register','register')->name('register');
-// Route::post('/register','Auth\RegisterController@register');
+Route::post('/register', [RegisterController::class, 'register']);
 
 // //Normal Login
 // Route::view('/login','login')->name('login');
-// Route::post('/login',[Auth\LoginController::class,'login']);
+Route::post('/login', [LoginController::class, 'login']);

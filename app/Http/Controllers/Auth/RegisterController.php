@@ -5,9 +5,12 @@ namespace App\Http\Controllers\Auth;
 use App\Http\Controllers\Controller;
 use App\Providers\RouteServiceProvider;
 use App\Models\User;
+
 use Illuminate\Foundation\Auth\RegistersUsers;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
+use Illuminate\Validation\Rules\Password;
+use Illuminate\Http\Request;
 
 class RegisterController extends Controller
 {
@@ -53,39 +56,10 @@ class RegisterController extends Controller
             'name' => ['required', 'string', 'max:255'],
             'username' => ['required', 'string', 'max:255'],
             'email' => ['required', 'string', 'email', 'max:255', 'unique:users'],
-            'password' => ['required','min:8', 
-                    'regex:/^.*(?=.{3,})(?=.*[a-zA-Z])(?=.*[0-9])(?=.*[\d\x])(?=.*[!$#%]).*$/', 'confirmed'],
-            'confirm_password' => ['required','same:password'],            
+            'password' => [Password::min(8)->mixedCase()->numbers()->symbols(), 'confirmed'],
+            'confirm_password' => ['required', 'same:password'],
         ]);
     }
-    // public function register(Request $req){
-
-    //     $req->validate([
-    //         'name' => ['required', 'string', 'max:255'],
-    //         'username' => ['required', 'string', 'max:255'],
-    //         'email' => 'required | email',
-    //         'password' => ['required','min:8', 
-    //         'regex:/^.*(?=.{3,})(?=.*[a-zA-Z])(?=.*[0-9])(?=.*[\d\x])(?=.*[!$#%]).*$/', 'confirmed']
-    //         'confirm_password' => ['required','same:password'],
-    //         ],
-            
-    //     ]);
-
-    //     $user = new User;
-    //     $user->name = $req->name;
-    //     $user->username = $req->username;
-    //     $user->email = $req->email;
-    //     //$user->email_verified_at = $req->email_verified_at;
-    //     $user->password = $req->password;
-    //     $user->role = $req->role;
-
-    //     $user->save();
-        
-    //     $req->session()->flash('user',$user['username']);
-
-    //     return redirect ('login');
-
-    // }
 
     /**
      * Create a new user instance after a valid registration.
@@ -102,5 +76,18 @@ class RegisterController extends Controller
             'password' => Hash::make($data['password']),
             'role' => $data['role'],
         ]);
+    }
+
+    public function register(Request $req)
+    {
+
+        $this->validator($req->all())->validate();
+        $user = new User;
+        $user = $this->create($req->all());
+        $user->save();
+
+        $req->session()->flash('user', $user['username']);
+
+        return redirect('login');
     }
 }
