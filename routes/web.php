@@ -38,3 +38,8 @@ Route::post('/register', [RegisterController::class, 'register']);
 // //Normal Login
 // Route::view('/login','login')->name('login');
 Route::post('/login', [LoginController::class, 'login']);
+
+//Librarian Register
+Route::view('/librarianRegister','auth.librarianRegister');
+Route::post('/librarianRegister', [RegisterController::class, 'register']);
+
