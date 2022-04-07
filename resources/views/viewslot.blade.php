@@ -11,20 +11,7 @@
                     <form method="POST" action="viewslot">
                         @csrf
 
-                        <div class="row mb-3">
-                            <label for="floor" class="col-md-4 col-form-label text-md-end">{{ __('Floor') }}</label>
-
-                            <div class="col-md-6">
-                                <select name="floor" id="floor">
-                                    <option value="">--- Choose a floor ---</option>
-                                    <option value="1">1</option>
-                                    <option value="2">2</option>
-                                    <option value="3">3</option>
-                                    <option value="4">4</option>
-                                    <option value="5">5</option>
-                                </select>
-                            </div>
-                        </div>
+                        
 
                         <div class="row mb-3">
                             <label for="table" class="col-md-4 col-form-label text-md-end">{{ __('Table') }}</label>
