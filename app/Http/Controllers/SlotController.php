@@ -7,6 +7,9 @@ use Illuminate\Http\Request;
 class SlotController extends Controller
 {
     public function showSlots(Request $req){
-        return [];
+        
+        $slot = $req;
+        
+        return $slot;
     }
 }
