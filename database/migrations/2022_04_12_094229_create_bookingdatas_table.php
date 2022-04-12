@@ -15,13 +15,15 @@ return new class extends Migration
     {
         Schema::create('bookingdatas', function (Blueprint $table) {
             $table->id();
-            $table->foreign('booked_by')->references('id')->on('users');
+            $table->foreignId('booked_by');
             $table->string('purpose');
             $table->foreignId('timeslot')->constrained();
             $table->foreignId('seat')->constrained();
 
             $table->timestamps();
             $table->softDeletes();
+
+            $table->foreign('booked_by')->references('id')->on('users');
         });
     }
 
