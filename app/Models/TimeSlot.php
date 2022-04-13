@@ -20,6 +20,6 @@ class TimeSlot extends Model
      * @var array<string, string>
      */
     protected $casts = [
-        'date_time' => 'datetime',
+        'date_time' => 'timestamp',
     ];
 }
