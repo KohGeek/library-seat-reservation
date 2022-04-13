@@ -103,12 +103,13 @@ export default class Registration extends Component {
                             </DropdownToggle>
                             <DropdownMenu>
                                 <DropdownItem header>Select your Role</DropdownItem>
-                                <DropdownItem >
-                                <div onClick={this.setState({userData:{role:"student"}})}>
+                                <DropdownItem onClick={this.setState({userData:{role:"student"}})}>
+                                <div>
                                 Student
                                 </div>
                                 </DropdownItem>
-                                <DropdownItem><div onClick={this.setState({userData:{role:"staff"}})}>
+                                <DropdownItem onClick={this.setState({userData:{role:"staff"}})}>
+                                    <div >
                                 Staff
                                 </div>
                                 </DropdownItem>
