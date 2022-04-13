@@ -9,9 +9,9 @@ export default class AdminSeats extends Component {
         super();
         this.state = {
             seats: [],
-            newSeatData: {table_number:"", closed:"", closed_reason:""},
+            newSeatData: {table_number:"", closed:0, closed_reason:""},
             newSeatModal: false,
-            updateSeatData: {id:"", table_number:"", closed:"", closed_reason:"" },
+            updateSeatData: {id:"", table_number:"", closed:0, closed_reason:"" },
             updateSeatModal: false
         }
     }
@@ -33,7 +33,7 @@ export default class AdminSeats extends Component {
             this.setState({
                 seats,
                 newSeatModal : false,
-                newSeatData : {table_number:"", closed:"", closed_reason:""},
+                newSeatData : {table_number:"", closed:0, closed_reason:""},
             });
         });
     }
@@ -53,7 +53,7 @@ export default class AdminSeats extends Component {
             this.loadSeat()
             this.setState({
                 updateSeatModal : false,
-                updateSeatData : {id:"", table_number:"", closed:"", closed_reason:"" },
+                updateSeatData : {id:"", table_number:"", closed:0, closed_reason:"" },
             });
         });
     }
@@ -93,8 +93,9 @@ export default class AdminSeats extends Component {
                 <tr key={seat.id}>
                     <td>{seat.id}</td>
                     <td>{seat.table_number}</td>
-                    <td>{seat.closed}</td>
-                    <td>{seat.closed_reason}</td>
+                    {/* for seat.closed, 1 is CLOSED, 0 is Available */}
+                    <td> {seat.closed ? 'Closed' : 'Available'} </td>
+                    <td>{(seat.closed_reason==null) ? '-' : seat.closed_reason}</td>
                     <td>
                         <Button color="success" size="sm" outline onClick={this.callUpdateSeat.bind(this, seat.id, seat.table_number, seat.closed, seat.closed_reason)}>
                             {" "} Edit {" "}
@@ -131,14 +132,27 @@ export default class AdminSeats extends Component {
                             </FormGroup>
                             {/* ADD SEAT - Closed */}
                             <FormGroup>
-                                <Label for = "closed"> Is it closed? </Label>
-                                <Input id = "closed"
-                                    value = {this.state.newSeatData.closed}
+                                <Label for = "closed"> Status </Label> <br></br>
+                                <Input type = "radio"
+                                    name = "closed"
+                                    id = "closed"
+                                    value = {0}
                                     onChange = {(e) => {
                                         let {newSeatData} = this.state
                                         newSeatData.closed = e.target.value
-                                        this.setState({newSeatData})
-                                    }}> </Input>
+                                        this.setState({newSeatData}) }}
+                                        > </Input>
+                                <Label for="closed">Available</Label>  <br></br>
+                                <Input type = "radio"
+                                    name = "closed"
+                                    id = "closed"
+                                    value = {1}
+                                    onChange = {(e) => {
+                                        let {newSeatData} = this.state
+                                        newSeatData.closed = e.target.value
+                                        this.setState({newSeatData}) 
+                                }}> </Input>
+                                <Label for="closed">Closed</Label>
                             </FormGroup>
                             {/* ADD SEAT - Closed Reason */}
                             <FormGroup>
@@ -177,14 +191,27 @@ export default class AdminSeats extends Component {
                             </FormGroup>
                             {/* EDIT SEAT - Closed */}
                             <FormGroup>
-                                <Label for = "closed"> Is it closed? </Label>
-                                <Input id = "closed"
-                                    value = {this.state.updateSeatData.closed}
+                                <Label for = "closed"> Status </Label> <br></br>
+                                <Input type = "radio"
+                                    name = "closed"
+                                    id = "closed"
+                                    value = {0}
                                     onChange = {(e) => {
                                         let {updateSeatData} = this.state
                                         updateSeatData.closed = e.target.value
-                                        this.setState({updateSeatData})
-                                    }}> </Input>
+                                        this.setState({updateSeatData}) }}
+                                        > </Input>
+                                <Label for="closed">Available</Label>  <br></br>
+                                <Input type = "radio"
+                                    name = "closed"
+                                    id = "closed"
+                                    value = {1}
+                                    onChange = {(e) => {
+                                        let {updateSeatData} = this.state
+                                        updateSeatData.closed = e.target.value
+                                        this.setState({updateSeatData}) 
+                                }}> </Input>
+                                <Label for="closed">Closed</Label>
                             </FormGroup>
                             {/* EDIT SEAT - Closed Reason */}
                             <FormGroup>
@@ -212,7 +239,7 @@ export default class AdminSeats extends Component {
                             <tr>
                                 <th> ID </th>
                                 <th> Table Number </th>
-                                <th> Is it closed? </th>
+                                <th> Status </th>
                                 <th> Closed Reason </th>
                             </tr>
                         </thead>
