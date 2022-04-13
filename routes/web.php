@@ -46,8 +46,8 @@ Route::post('/librarianRegister', [RegisterController::class, 'register']);
 Route::view('/viewslot','viewslot');
 Route::post('/viewslot',[SlotController::class,'showSlots']);
 
-
-Route::view('/dashboard','dashboard')
+//Dashboard
+Route::view('/dashboard','dashboard');
 
 
 
