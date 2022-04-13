@@ -3,7 +3,10 @@
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AdminSeatController;
+use App\Http\Controllers\AdminLogController;
 use App\Http\Controllers\LoginController;
+use App\Http\Controllers\RegisterController;
+
 
 
 /*
@@ -21,6 +24,8 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
 });
 
+// Admin Logs' API
+Route::get('adminlogs',[AdminLogController::class, 'index']);
 
 // Admin Seats' API
 Route::get('adminseats',[AdminSeatController::class, 'index']);
@@ -31,4 +36,7 @@ Route::delete('adminseat/{id}',[AdminSeatController::class, 'destroy']);
 
 // Login API
 // Route::get('users/email/{email}/password/{password}',[LoginController::class,'login']);
-Route::get('users',[LoginController::class,'login']);
+Route::post('users',[LoginController::class,'login']);
+
+// Register API
+Route::post('user',[RegisterController::class,'register']);

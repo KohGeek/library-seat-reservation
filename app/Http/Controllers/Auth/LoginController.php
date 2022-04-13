@@ -53,7 +53,7 @@ class LoginController extends Controller
 
         if (Auth::attempt($credentials)) {
             $req->session()->regenerate();
-
+            
             return redirect()->intended('/home');
         }
 
