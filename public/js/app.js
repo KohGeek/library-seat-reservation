@@ -6013,54 +6013,29 @@ var Login = /*#__PURE__*/function (_Component) {
 
     _this = _super.call(this);
     _this.state = {
-      email: '',
-      password: '',
-      validate: {
-        emailState: '',
-        passwordState: ''
+      userData: {
+        email: "",
+        password: ""
       }
     };
     return _this;
   }
 
   _createClass(Login, [{
-    key: "componentWillMount",
-    value: function componentWillMount() {
-      this.setState({
-        userDatas: [],
-        loginUserData: {
-          email: "",
-          password: ""
-        }
-      });
-    }
-  }, {
     key: "login",
     value: function login() {
-      axios__WEBPACK_IMPORTED_MODULE_2___default().get("http://127.0.0.1:8000/api/users").then(function (response) {});
+      // axios.get("http://127.0.0.1:8000/api/users/email/{"+email+"}/password/{"+password+"}");
+      axios__WEBPACK_IMPORTED_MODULE_2___default().get("http://127.0.0.1:8000/api/users", this.state.userData);
     }
   }, {
     key: "render",
     value: function render() {
+      var _this2 = this;
+
       var email = this.state.email;
-      return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsxs)("div", {
+      return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsx)("div", {
         className: "container",
-        children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsx)("div", {
-          className: "row justify-content-center",
-          children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsx)("div", {
-            className: "col-md-8",
-            children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsxs)("div", {
-              className: "card",
-              children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsx)("div", {
-                className: "card-header",
-                children: "Login Component"
-              }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsx)("div", {
-                className: "card-body",
-                children: "I'm an example component!"
-              })]
-            })
-          })
-        }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsxs)("div", {
+        children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsxs)("div", {
           className: "login",
           children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsx)("h2", {
             children: "Login"
@@ -6074,7 +6049,16 @@ var Login = /*#__PURE__*/function (_Component) {
                 type: "email",
                 name: "email",
                 id: "email",
-                placeholder: "example@example.com"
+                placeholder: "example@example.com",
+                value: this.state.userData.email,
+                onChange: function onChange(e) {
+                  var userData = _this2.state.userData;
+                  userData.email = e.target.value;
+
+                  _this2.setState({
+                    userData: userData
+                  });
+                }
               })]
             }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsxs)(reactstrap__WEBPACK_IMPORTED_MODULE_4__.FormGroup, {
               children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsx)(reactstrap__WEBPACK_IMPORTED_MODULE_4__.Label, {
@@ -6084,14 +6068,23 @@ var Login = /*#__PURE__*/function (_Component) {
                 type: "password",
                 name: "password",
                 id: "password",
-                placeholder: "*********"
+                placeholder: "*********",
+                value: this.state.userData.password,
+                onChange: function onChange(e) {
+                  var userData = _this2.state.userData;
+                  userData.password = e.target.value;
+
+                  _this2.setState({
+                    userData: userData
+                  });
+                }
               })]
             }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsx)(reactstrap__WEBPACK_IMPORTED_MODULE_4__.Button, {
               onClick: this.login.bind(this),
               children: "Login"
             })]
           })]
-        })]
+        })
       });
     }
   }]);

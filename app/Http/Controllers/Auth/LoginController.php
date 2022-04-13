@@ -62,6 +62,8 @@ class LoginController extends Controller
         ])->withInput($req->only('email', 'remember'));
     }
 
+  
+
     public function login(Request $req)
     {
         $this->authenticate($req);

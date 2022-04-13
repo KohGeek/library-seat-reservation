@@ -3,6 +3,8 @@
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AdminSeatController;
+use App\Http\Controllers\LoginController;
+
 
 /*
 |--------------------------------------------------------------------------
@@ -28,4 +30,5 @@ Route::delete('adminseat/{id}',[AdminSeatController::class, 'destroy']);
 
 
 // Login API
+// Route::get('users/email/{email}/password/{password}',[LoginController::class,'login']);
 Route::get('users',[LoginController::class,'login']);

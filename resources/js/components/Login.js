@@ -8,45 +8,26 @@ export default class Login extends Component{
     constructor(){
         super();
         this.state ={
-            email :'',
-            password:'',
-            validate:{
-                emailState:'',
-                passwordState:'',
-            }
+            userData:{email:"", password:""}
         }
     }
 
 
 
-    componentWillMount(){
-        this.setState({
-            userDatas: [],
-            loginUserData: {email:"", password:""},
-
-        })
-    }
+  
 
     login(){
         
-        axios.get("http://127.0.0.1:8000/api/users").then((response) => {
-           
-        });
+        // axios.get("http://127.0.0.1:8000/api/users/email/{"+email+"}/password/{"+password+"}");
+        axios.get("http://127.0.0.1:8000/api/users", this.state.userData);
+
     }
 
     render(){
         const { email } = this.state;
         return (
             <div className="container">
-                <div className="row justify-content-center">
-                    <div className="col-md-8">
-                        <div className="card">
-                            <div className="card-header">Login Component</div>
-
-                            <div className="card-body">I'm an example component!</div>
-                        </div>
-                    </div>
-                </div>
+               
 
                 <div className="login">
                     <h2>Login</h2>
@@ -58,6 +39,12 @@ export default class Login extends Component{
                                 name = "email"
                                 id   = "email"
                                 placeholder = "example@example.com"
+                                value ={this.state.userData.email}
+                                onChange = {(e) => {
+                                    let {userData} = this.state
+                                    userData.email = e.target.value
+                                    this.setState({userData})
+                                }}
                                 />
                         </FormGroup>
                         <FormGroup>
@@ -67,6 +54,12 @@ export default class Login extends Component{
                                 name = "password"
                                 id   = "password"
                                 placeholder = "*********"
+                                value ={this.state.userData.password}
+                                onChange = {(e) => {
+                                    let {userData} = this.state
+                                    userData.password = e.target.value
+                                    this.setState({userData})
+                                }}
                                 />
                         </FormGroup>
                         <Button onClick={this.login.bind(this)}>Login</Button>
