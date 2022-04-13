@@ -16,7 +16,7 @@ return new class extends Migration
         Schema::create('bookingdatas', function (Blueprint $table) {
             $table->id();
             $table->foreignId('booked_by');
-            $table->string('purpose');
+            $table->string('purpose')->nullable();
             $table->foreignId('timeslot')->constrained();
             $table->foreignId('seat')->constrained();
 

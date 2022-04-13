@@ -17,7 +17,7 @@ return new class extends Migration
             $table->id();
             $table->integer('table_number');
             $table->boolean('closed');
-            $table->string('closed_reason');
+            $table->string('closed_reason')->nullable();
             $table->timestamps();
             $table->softDeletes();
         });
