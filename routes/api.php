@@ -2,6 +2,7 @@
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\AdminSeatController;
 
 /*
 |--------------------------------------------------------------------------
@@ -17,3 +18,10 @@ use Illuminate\Support\Facades\Route;
 Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
 });
+
+
+// Admin Seats' API
+Route::get('adminseats',[AdminSeatController::class, 'index']);
+Route::post('adminseat',[AdminSeatController::class, 'create']);
+Route::put('adminseat/{id}',[AdminSeatController::class, 'update']);
+Route::delete('adminseat/{id}',[AdminSeatController::class, 'destroy']);
