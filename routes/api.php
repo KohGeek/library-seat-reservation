@@ -3,6 +3,7 @@
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AdminSeatController;
+use App\Http\Controllers\AdminLogController;
 use App\Http\Controllers\LoginController;
 
 
@@ -21,6 +22,8 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
 });
 
+// Admin Logs' API
+Route::get('adminlogs',[AdminLogController::class, 'index']);
 
 // Admin Seats' API
 Route::get('adminseats',[AdminSeatController::class, 'index']);

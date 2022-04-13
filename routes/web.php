@@ -50,9 +50,22 @@ Route::view('/viewslot','viewslot');
 Route::post('/viewslot',[SlotController::class,'showSlots']);
 
 
+
+
+
+
+
+
+
+
+
 // AdminSeats
 Route::get('/adminseat', function() {
     return view('adminseat');
 });
 
+// AdminLogs
+Route::get('/adminlog', function() {
+    return view('adminlog');
+});
 
