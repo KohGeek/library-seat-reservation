@@ -13,7 +13,7 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('bookingdatas', function (Blueprint $table) {
+        Schema::create('booking_data', function (Blueprint $table) {
             $table->id();
             $table->foreignId('booked_by');
             $table->string('purpose')->nullable();
@@ -34,6 +34,6 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('bookingdatas');
+        Schema::dropIfExists('booking_data');
     }
 };
