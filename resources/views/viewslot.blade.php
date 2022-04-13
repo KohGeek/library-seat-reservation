@@ -11,8 +11,6 @@
                     <form method="POST" action="viewslot">
                         @csrf
 
-                        
-
                         <div class="row mb-3">
                             <label for="table" class="col-md-4 col-form-label text-md-end">{{ __('Table') }}</label>
 
@@ -69,5 +67,9 @@
             </div>
         </div>
     </div>
+
+    <div id="viewslot"></div>
+
 </div>
+
 @endsection
