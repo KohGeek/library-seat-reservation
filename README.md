@@ -20,7 +20,15 @@ For initial cloning, do the following:
 
 -   `composer install`
 -   `cp .env.example .env` (do not use in active deployment)
--   `php artisan key:generate`
+-   `sail artisan key:generate`
+
+If `sail artisan` fails, you may need to first run it once.
+
+To setup the corresponding react environment, do the following:
+
+-  `sail bash`
+-  `npm install`
+-  `npm run dev`
 
 ## Running the app
 
