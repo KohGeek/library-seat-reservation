@@ -49,3 +49,10 @@ Route::post('/librarianRegister', [RegisterController::class, 'register']);
 Route::view('/viewslot','viewslot');
 Route::post('/viewslot',[SlotController::class,'showSlots']);
 
+
+// AdminSeats
+Route::get('/adminseat', function() {
+    return view('adminseat');
+});
+
+
