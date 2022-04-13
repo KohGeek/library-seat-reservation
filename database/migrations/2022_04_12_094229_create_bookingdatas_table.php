@@ -17,13 +17,14 @@ return new class extends Migration
             $table->id();
             $table->foreignId('booked_by');
             $table->string('purpose')->nullable();
-            $table->foreignId('timeslot')->constrained();
+            $table->foreignId('timeslot');
             $table->foreignId('seat')->constrained();
 
             $table->timestamps();
             $table->softDeletes();
 
             $table->foreign('booked_by')->references('id')->on('users');
+            $table->foreign('timeslot')->references('id')->on('time_slots');
         });
     }
 
