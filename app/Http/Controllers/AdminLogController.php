@@ -11,9 +11,9 @@ class AdminLogController extends Controller
     // Load all Booking Datas
     public function index()
     {
-        $data = BookingData::join('timeslots', 'timeslots.id', '=', 'bookingdatas.timeslot')
-                            ->join('users', 'users.id', '=', 'bookingdatas.booked_by')
-                            ->get(['bookingdatas.id', 'users.name', 'bookingdatas.purpose', 'timeslots.date_time', 'bookingdatas.seat', 'bookingdatas.created_at']);
+        $data = BookingData::join('time_slots', 'time_slots.id', '=', 'booking_data.timeslot')
+                            ->join('users', 'users.id', '=', 'booking_data.booked_by')
+                            ->get(['booking_data.id', 'users.name', 'booking_data.purpose', 'time_slots.date_time', 'booking_data.seat', 'booking_data.created_at']);
         
         return $data;
         // return BookingData::all();

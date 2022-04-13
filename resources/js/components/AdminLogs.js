@@ -31,15 +31,19 @@ export default class AdminLogs extends Component {
     render() {
         let logs = this.state.logs.map((log) => {
 
+            // console.log(log.created_at);
+            // console.log(log.date_time);
+
             var createdat_date = new Date(log.created_at);
+            var datetime_date = new Date(log.date_time);
 
             return (
                 <tr key={log.id}>
                     <td>{log.id}</td>
                     <td>{log.name}</td>
                     <td>{log.purpose}</td>
-                    <td>{log.date_time}</td>
                     <td>{log.seat}</td>
+                    <td>{dateFormat(datetime_date, "yyyy-mm-dd HH:MM:ss")}</td>
                     <td>{dateFormat(createdat_date, "UTC:yyyy-mm-dd HH:MM:ss")}</td>
                 </tr>
             );
@@ -59,8 +63,8 @@ export default class AdminLogs extends Component {
                                 <th> ID </th>
                                 <th> Person Name </th>
                                 <th> Purpose </th>
-                                <th> Date & Time </th>
                                 <th> Seat </th>
+                                <th> Date & Time </th>
                                 <th> Booked At </th>
                             </tr>
                         </thead>
@@ -71,84 +75,7 @@ export default class AdminLogs extends Component {
                 </div>
             </div>
         )
-
-    // render() {
-    //     let logs = this.state.logs.map((log) => {
-
-    //         console.log(log.created_at);
-
-    //         return (
-    //             <tr key={log.id}>
-    //                 <td>{log.id}</td>
-    //                 <td>{log.booked_by}</td>
-    //                 <td>{log.purpose}</td>
-    //                 <td>{log.timeslot}</td>
-    //                 <td>{log.seat}</td>
-    //                 <td>{log.created_at}</td>
-    //             </tr>
-    //         );
-    //     });
-
-
-
-
-
-    //     return(
-    //         <div className="container">
-    //             {/* Load Table */}
-    //             <div>
-    //                 <Table>
-    //                     <thead>
-    //                         <tr>
-    //                             <th> ID </th>
-    //                             <th> Person Name </th>
-    //                             <th> Purpose </th>
-    //                             <th> Date & Time </th>
-    //                             <th> Seat </th>
-    //                             <th> Booked At </th>
-    //                         </tr>
-    //                     </thead>
-    //                     <tbody>
-    //                         {logs}
-    //                     </tbody>
-    //                 </Table>
-    //             </div>
-    //         </div>
-    //     )
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
     }
-
-
-
-
-
-
-
-
 }
 
 if (document.getElementById("adminlogs")) {

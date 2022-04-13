@@ -19,3 +19,5 @@ require('./components/AdminSeats');
 require('./components/AdminLogs');
 require('./components/Registration');
 require('./components/Login');
+require('./components/Viewslot');
+require('./components/Dashboard');
