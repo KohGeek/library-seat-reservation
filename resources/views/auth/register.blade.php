@@ -102,5 +102,9 @@
             </div>
         </div>
     </div>
+
+    <div id="registration"></div>
+
 </div>
+<script src="/js/app.js"></script>
 @endsection

@@ -27,10 +27,7 @@ Auth::routes();
 
 Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
 
-// Auth::routes();
-// Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
-
-
+Auth::routes();
 
 // //Self-defined routes
 // //Normal Register
@@ -38,7 +35,7 @@ Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name
 Route::post('/register', [RegisterController::class, 'register']);
 
 // //Normal Login
-// Route::view('/login','login')->name('login');
+// Route::view('/login','auth.login')->name('login');
 Route::post('/login', [LoginController::class, 'login']);
 
 //Librarian Register
