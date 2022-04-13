@@ -5387,7 +5387,9 @@ __webpack_require__(/*! ./components/Registration */ "./resources/js/components/
 
 __webpack_require__(/*! ./components/Login */ "./resources/js/components/Login.js");
 
-__webpack_require__(/*! ./components/Viewslot */ "./resources/js/components/Viewslot.js");
+__webpack_require__(/*! ./components/ViewSlot */ "./resources/js/components/ViewSlot.js");
+
+__webpack_require__(/*! ./components/Dashboard */ "./resources/js/components/Dashboard.js");
 
 /***/ }),
 
@@ -5514,7 +5516,10 @@ var AdminLogs = /*#__PURE__*/function (_Component) {
     key: "render",
     value: function render() {
       var logs = this.state.logs.map(function (log) {
+        // console.log(log.created_at);
+        // console.log(log.date_time);
         var createdat_date = new Date(log.created_at);
+        var datetime_date = new Date(log.date_time);
         return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsxs)("tr", {
           children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("td", {
             children: log.id
@@ -5523,9 +5528,9 @@ var AdminLogs = /*#__PURE__*/function (_Component) {
           }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("td", {
             children: log.purpose
           }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("td", {
-            children: log.date_time
-          }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("td", {
             children: log.seat
+          }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("td", {
+            children: (0,dateformat__WEBPACK_IMPORTED_MODULE_3__["default"])(datetime_date, "yyyy-mm-dd HH:MM:ss")
           }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("td", {
             children: (0,dateformat__WEBPACK_IMPORTED_MODULE_3__["default"])(createdat_date, "UTC:yyyy-mm-dd HH:MM:ss")
           })]
@@ -5544,9 +5549,9 @@ var AdminLogs = /*#__PURE__*/function (_Component) {
                 }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("th", {
                   children: " Purpose "
                 }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("th", {
-                  children: " Date & Time "
-                }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("th", {
                   children: " Seat "
+                }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("th", {
+                  children: " Date & Time "
                 }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("th", {
                   children: " Booked At "
                 })]
@@ -5556,42 +5561,7 @@ var AdminLogs = /*#__PURE__*/function (_Component) {
             })]
           })
         })
-      }); // render() {
-      //     let logs = this.state.logs.map((log) => {
-      //         console.log(log.created_at);
-      //         return (
-      //             <tr key={log.id}>
-      //                 <td>{log.id}</td>
-      //                 <td>{log.booked_by}</td>
-      //                 <td>{log.purpose}</td>
-      //                 <td>{log.timeslot}</td>
-      //                 <td>{log.seat}</td>
-      //                 <td>{log.created_at}</td>
-      //             </tr>
-      //         );
-      //     });
-      //     return(
-      //         <div className="container">
-      //             {/* Load Table */}
-      //             <div>
-      //                 <Table>
-      //                     <thead>
-      //                         <tr>
-      //                             <th> ID </th>
-      //                             <th> Person Name </th>
-      //                             <th> Purpose </th>
-      //                             <th> Date & Time </th>
-      //                             <th> Seat </th>
-      //                             <th> Booked At </th>
-      //                         </tr>
-      //                     </thead>
-      //                     <tbody>
-      //                         {logs}
-      //                     </tbody>
-      //                 </Table>
-      //             </div>
-      //         </div>
-      //     )
+      });
     }
   }]);
 
@@ -6050,6 +6020,109 @@ if (document.getElementById("adminseats")) {
 
 /***/ }),
 
+/***/ "./resources/js/components/Dashboard.js":
+/*!**********************************************!*\
+  !*** ./resources/js/components/Dashboard.js ***!
+  \**********************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (/* binding */ Dashboard)
+/* harmony export */ });
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "./node_modules/react/index.js");
+/* harmony import */ var react_dom__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! react-dom */ "./node_modules/react-dom/index.js");
+/* harmony import */ var axios__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! axios */ "./node_modules/axios/index.js");
+/* harmony import */ var axios__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(axios__WEBPACK_IMPORTED_MODULE_2__);
+/* harmony import */ var react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! react/jsx-runtime */ "./node_modules/react/jsx-runtime.js");
+function _typeof(obj) { "@babel/helpers - typeof"; return _typeof = "function" == typeof Symbol && "symbol" == typeof Symbol.iterator ? function (obj) { return typeof obj; } : function (obj) { return obj && "function" == typeof Symbol && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }, _typeof(obj); }
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } }
+
+function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); Object.defineProperty(Constructor, "prototype", { writable: false }); return Constructor; }
+
+function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function"); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, writable: true, configurable: true } }); Object.defineProperty(subClass, "prototype", { writable: false }); if (superClass) _setPrototypeOf(subClass, superClass); }
+
+function _setPrototypeOf(o, p) { _setPrototypeOf = Object.setPrototypeOf || function _setPrototypeOf(o, p) { o.__proto__ = p; return o; }; return _setPrototypeOf(o, p); }
+
+function _createSuper(Derived) { var hasNativeReflectConstruct = _isNativeReflectConstruct(); return function _createSuperInternal() { var Super = _getPrototypeOf(Derived), result; if (hasNativeReflectConstruct) { var NewTarget = _getPrototypeOf(this).constructor; result = Reflect.construct(Super, arguments, NewTarget); } else { result = Super.apply(this, arguments); } return _possibleConstructorReturn(this, result); }; }
+
+function _possibleConstructorReturn(self, call) { if (call && (_typeof(call) === "object" || typeof call === "function")) { return call; } else if (call !== void 0) { throw new TypeError("Derived constructors may only return object or undefined"); } return _assertThisInitialized(self); }
+
+function _assertThisInitialized(self) { if (self === void 0) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return self; }
+
+function _isNativeReflectConstruct() { if (typeof Reflect === "undefined" || !Reflect.construct) return false; if (Reflect.construct.sham) return false; if (typeof Proxy === "function") return true; try { Boolean.prototype.valueOf.call(Reflect.construct(Boolean, [], function () {})); return true; } catch (e) { return false; } }
+
+function _getPrototypeOf(o) { _getPrototypeOf = Object.setPrototypeOf ? Object.getPrototypeOf : function _getPrototypeOf(o) { return o.__proto__ || Object.getPrototypeOf(o); }; return _getPrototypeOf(o); }
+
+
+
+
+
+
+
+var Dashboard = /*#__PURE__*/function (_Component) {
+  _inherits(Dashboard, _Component);
+
+  var _super = _createSuper(Dashboard);
+
+  function Dashboard() {
+    var _this;
+
+    _classCallCheck(this, Dashboard);
+
+    _this = _super.call(this);
+    _this.state = {
+      userData: {
+        email: "",
+        password: ""
+      }
+    };
+    return _this;
+  }
+
+  _createClass(Dashboard, [{
+    key: "login",
+    value: function login() {
+      // axios.get("http://127.0.0.1:8000/api/users/email/{"+email+"}/password/{"+password+"}");
+      axios__WEBPACK_IMPORTED_MODULE_2___default().get("http://127.0.0.1:8000/api/users", this.state.userData);
+    }
+  }, {
+    key: "render",
+    value: function render() {
+      var email = this.state.email;
+      return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsx)("div", {
+        className: "container",
+        children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsx)("div", {
+          className: "top_banner",
+          children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsx)(Image, {
+            style: {
+              width: 150,
+              height: 150,
+              margin: 20,
+              borderRadius: 100
+            },
+            source: __webpack_require__(/*! ../../../images/profileicon.png */ "./images/profileicon.png")
+          })
+        })
+      });
+    }
+  }]);
+
+  return Dashboard;
+}(react__WEBPACK_IMPORTED_MODULE_0__.Component);
+
+
+
+if (document.getElementById("dashboard")) {
+  react_dom__WEBPACK_IMPORTED_MODULE_1__.render( /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsx)(Dashboard, {}), document.getElementById("dashboard"));
+}
+
+/***/ }),
+
 /***/ "./resources/js/components/Example.js":
 /*!********************************************!*\
   !*** ./resources/js/components/Example.js ***!
@@ -6207,7 +6280,8 @@ var Login = /*#__PURE__*/function (_Component) {
   _createClass(Login, [{
     key: "login",
     value: function login() {
-      // axios.get("http://127.0.0.1:8000/api/users/email/{"+email+"}/password/{"+password+"}");
+      console.log("Is it calling?"); // axios.get("http://127.0.0.1:8000/api/users/email/{"+email+"}/password/{"+password+"}");
+
       axios__WEBPACK_IMPORTED_MODULE_2___default().post("http://127.0.0.1:80/api/users", this.state.userData).then(function (response) {
         console.log(response);
       });
@@ -6476,20 +6550,10 @@ var Registration = /*#__PURE__*/function (_Component) {
                     children: "Select your Role"
                   }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsx)(reactstrap__WEBPACK_IMPORTED_MODULE_4__.DropdownItem, {
                     children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsx)("div", {
-                      onClick: this.setState({
-                        userData: {
-                          role: "student"
-                        }
-                      }),
                       children: "Student"
                     })
                   }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsx)(reactstrap__WEBPACK_IMPORTED_MODULE_4__.DropdownItem, {
                     children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsx)("div", {
-                      onClick: this.setState({
-                        userData: {
-                          role: "staff"
-                        }
-                      }),
                       children: "Staff"
                     })
                   })]
@@ -6516,9 +6580,9 @@ if (document.getElementById('registration')) {
 
 /***/ }),
 
-/***/ "./resources/js/components/Viewslot.js":
+/***/ "./resources/js/components/ViewSlot.js":
 /*!*********************************************!*\
-  !*** ./resources/js/components/Viewslot.js ***!
+  !*** ./resources/js/components/ViewSlot.js ***!
   \*********************************************/
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
@@ -11775,6 +11839,21 @@ var __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;/*!
 	} else {}
 }());
 
+
+/***/ }),
+
+/***/ "./images/profileicon.png":
+/*!********************************!*\
+  !*** ./images/profileicon.png ***!
+  \********************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
+/* harmony export */ });
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ("/images/profileicon.png?5e4e360ae1052aeaa795da8faef36941");
 
 /***/ }),
 

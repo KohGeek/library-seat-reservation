@@ -14,7 +14,7 @@ import {
 } from "reactstrap";
 import axios from "axios";
 
-export default class Login extends Component {
+export default class Dashboard extends Component {
     constructor() {
         super();
         this.state = {
@@ -39,7 +39,7 @@ export default class Login extends Component {
                             margin: 20,
                             borderRadius: 100,
                         }}
-                        source={require("../image/profileicon.png")}
+                        source={require("../../../images/profileicon.png")}
                     />
                 </div>
             </div>
