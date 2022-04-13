@@ -42,8 +42,8 @@ export default class AdminLogs extends Component {
                     <td>{log.id}</td>
                     <td>{log.name}</td>
                     <td>{log.purpose}</td>
-                    <td>{dateFormat(datetime_date, "yyyy-mm-dd HH:MM:ss")}</td>
                     <td>{log.seat}</td>
+                    <td>{dateFormat(datetime_date, "yyyy-mm-dd HH:MM:ss")}</td>
                     <td>{dateFormat(createdat_date, "UTC:yyyy-mm-dd HH:MM:ss")}</td>
                 </tr>
             );
@@ -63,8 +63,8 @@ export default class AdminLogs extends Component {
                                 <th> ID </th>
                                 <th> Person Name </th>
                                 <th> Purpose </th>
-                                <th> Date & Time </th>
                                 <th> Seat </th>
+                                <th> Date & Time </th>
                                 <th> Booked At </th>
                             </tr>
                         </thead>
