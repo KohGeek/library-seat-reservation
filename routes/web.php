@@ -47,12 +47,7 @@ Route::view('/viewslot','viewslot');
 Route::post('/viewslot',[SlotController::class,'showSlots']);
 
 
-
-
-
-
-
-
+Route::view('/dashboard','dashboard')
 
 
 
