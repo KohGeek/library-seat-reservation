@@ -16,3 +16,5 @@ require('./bootstrap');
 
 require('./components/Example');
 require('./components/AdminSeats');
+require('./components/Registration');
+require('./components/Login');

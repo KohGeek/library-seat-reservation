@@ -1,14 +1,14 @@
-import React, { Component } from 'react';
+import React, {Component} from 'react';
 import ReactDOM from 'react-dom';
 
-export default class Example extends Component{
+export default class Registration extends Component {
     render(){
         return (
             <div className="container">
                 <div className="row justify-content-center">
                     <div className="col-md-8">
                         <div className="card">
-                            <div className="card-header">Example1 Component</div>
+                            <div className="card-header">Register Component</div>
 
                             <div className="card-body">I'm an example component!</div>
                         </div>
@@ -21,6 +21,6 @@ export default class Example extends Component{
 
 
 
-if (document.getElementById('example')) {
-    ReactDOM.render(<Example />, document.getElementById('example'));
+if (document.getElementById('registration')) {
+    ReactDOM.render(<Registration />, document.getElementById('registration'));
 }

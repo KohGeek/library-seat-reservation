@@ -25,3 +25,7 @@ Route::get('adminseats',[AdminSeatController::class, 'index']);
 Route::post('adminseat',[AdminSeatController::class, 'create']);
 Route::put('adminseat/{id}',[AdminSeatController::class, 'update']);
 Route::delete('adminseat/{id}',[AdminSeatController::class, 'destroy']);
+
+
+// Login API
+Route::get('users',[LoginController::class,'login']);
