@@ -5,6 +5,8 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AdminSeatController;
 use App\Http\Controllers\AdminLogController;
 use App\Http\Controllers\LoginController;
+use App\Http\Controllers\RegisterController;
+
 
 
 /*
@@ -34,4 +36,7 @@ Route::delete('adminseat/{id}',[AdminSeatController::class, 'destroy']);
 
 // Login API
 // Route::get('users/email/{email}/password/{password}',[LoginController::class,'login']);
-Route::get('users',[LoginController::class,'login']);
+Route::post('users',[LoginController::class,'login']);
+
+// Register API
+Route::post('user',[RegisterController::class,'register']);

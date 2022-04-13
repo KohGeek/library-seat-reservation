@@ -12,23 +12,21 @@ export default class Login extends Component{
         }
     }
 
-
-
-  
+    
 
     login(){
         
         // axios.get("http://127.0.0.1:8000/api/users/email/{"+email+"}/password/{"+password+"}");
-        axios.get("http://127.0.0.1:8000/api/users", this.state.userData);
-
+        axios.post("http://127.0.0.1:80/api/users", this.state.userData).then((response) =>{
+            console.log(response)
+        });
+        
     }
 
     render(){
-        const { email } = this.state;
         return (
             <div className="container">
                
-
                 <div className="login">
                     <h2>Login</h2>
                     <Form className="form">
