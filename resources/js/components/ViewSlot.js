@@ -28,14 +28,43 @@ export default class ViewSlot extends Component {
                 date: "",
                 time: "",
             },
-            searchBy:"seatID",
-            searchInput:"",
+            searchBy: "seatID",
+            searchInput: "",
+
+            seats: [
+                { id: 1, tableNo: 1, availableTime: [9, 10, 11, 12, 13, 14] },
+                { id: 2, tableNo: 2, availableTime: [9, 10, 11, 12, 13, 14] },
+                { id: 3, tableNo: 3, availableTime: [9, 10, 11, 12, 13, 14] },
+            ]
         };
     }
 
-    componentWillMount(){
+    componentWillMount() {
         this.loadSlot();
     }
+
+    seatGeneration() {
+        var seats = getSeats();
+        var availableTime = [9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20]
+
+        seats.forEach(element => {
+            var seat = { "id": element.id, "tableNo": element.tableNo, "availableTime": availableTime }
+            this.setState.seats.push(seat);
+        });
+
+        bookingData.forEach(element => {
+            seats =
+                [
+                    { id: 1, tableNo: 1, availableTime: [9, 10, 11, 12, 13, 14] },
+                    { id: 2, tableNo: 2, availableTime: [9, 10, 11, 12, 13, 14] },
+                    { id: 3, tableNo: 3, availableTime: [9, 10, 11, 12, 13, 14] },
+                ]
+
+            var seat = seats.find(x => x.id === element.seatID);
+            seat.availableTime = seat.availableTime.remove(element.time);
+        });
+    }
+
 
     loadSlot() {
         axios.get("http://127.0.0.1:80/api/slots").then((response) => {
@@ -60,34 +89,34 @@ export default class ViewSlot extends Component {
             );
         });
         return (
-            <div className="container">
-               
+            <div className="container" >
+
 
                 <FormGroup tag="fieldset">
                     <legend>Search By</legend>
                     <FormGroup check>
-                    <Label check>
-                        <Input type="radio" name="searchBy" onClick= {() =>{
-                            this.setState({
-                                searchBy:"seatID"
-                            })
-                        }} /> Seat ID
-                    </Label>
+                        <Label check>
+                            <Input type="radio" name="searchBy" onClick={() => {
+                                this.setState({
+                                    searchBy: "seatID"
+                                })
+                            }} /> Seat ID
+                        </Label>
                     </FormGroup>
                     <FormGroup check>
-                    <Label check>
-                        <Input type="radio" name="searchBy" onClick= {() =>{
-                            this.setState({
-                                searchBy:"tableNo"
-                            })
-                        }}/> Table Number
-                    </Label>
+                        <Label check>
+                            <Input type="radio" name="searchBy" onClick={() => {
+                                this.setState({
+                                    searchBy: "tableNo"
+                                })
+                            }} /> Table Number
+                        </Label>
                     </FormGroup>
                     <FormGroup>
                         <Input type="text" name="searchBy" id="searchBy" placeholder={this.state.searchBy}
-                            onChange = {(e) =>{
+                            onChange={(e) => {
                                 this.setState({
-                                    searchInput:e.target.value
+                                    searchInput: e.target.value
                                 })
                             }}
                         />
