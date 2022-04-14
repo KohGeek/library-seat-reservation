@@ -64,4 +64,8 @@ class BookingController extends Controller
             ->select('booking_data.seat as id', 'seats.table_number', 'booking_data.datetime as date')
             ->get();
     }
+
+    public function store(Request $req){
+        return BookingData::create($req->all());
+    }
 }
