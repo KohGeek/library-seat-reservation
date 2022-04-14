@@ -107,7 +107,7 @@ export default class AdminLogs extends Component {
 
         let timeslots = this.state.listtimeslot.map((timeslot) => {
 
-            var dt_date = new Date(toInteger(timeslot.date_time.toString() + "000"));
+            var dt_date = new Date(timeslot.date_time);
             console.log(timeslot.date_time)
             console.log(dt_date)
 

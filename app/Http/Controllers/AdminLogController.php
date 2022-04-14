@@ -23,6 +23,8 @@ class AdminLogController extends Controller
     // Search Booking Datas
     public function search(Request $req)
     {
+        
+
         if ($req->name != null) {
             if ($req->seat != null) {
                 $data = BookingData::join('time_slots', 'time_slots.id', '=', 'booking_data.timeslot')
@@ -70,13 +72,11 @@ class AdminLogController extends Controller
     {
         $data = Timeslot::all();
 
-        error_log($data);
-
         foreach($data as $d)
         {
-            $d->date_time = (int)((string)$d->date_time + "000");
+            $d->date_time = ((string)$d->date_time . "000");
         }
-
+        
         return $data;
     }
 }
