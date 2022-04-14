@@ -1,63 +1,100 @@
 import React, { Component } from "react";
 import ReactDOM from "react-dom";
-import {
-    Table,
-    Button,
-    Modal,
-    ModalHeader,
-    ModalBody,
-    ModalFooter,
-    Input,
-    FormGroup,
-    Label,
-    Form,
-} from "reactstrap";
+import { Table, Button, Modal, ModalHeader, ModalBody, ModalFooter, Input, FormGroup, Label, NavItem } from "reactstrap";
 import axios from "axios";
+import dateFormat, { masks } from "dateformat";
 
 export default class Dashboard extends Component {
+    
     constructor() {
         super();
         this.state = {
-            userData: { email: "", password: "" },
-        };
+            logs: [],
+            searchLogData: {seat:"", name:""},
+            searchLogModal: false,
+            listseat:[]
+        }
     }
 
-    // login() {
-    //     // axios.get("http://127.0.0.1:8000/api/users/email/{"+email+"}/password/{"+password+"}");
-    //     axios.get("http://127.0.0.1:8000/api/users", this.state.userData);
-    // }
+      // Loads All Logs
+      loadLog() {
+        axios.get("http://127.0.0.1:80/api/adminlogs", {}).then((response) => {
+            this.setState({
+                logs:response.data,
+            });
+        });
+        axios.get("http://127.0.0.1:80/api/adminlogs_listseat", {}).then((response) => {
+            this.setState({
+                listseat:response.data,
+            });
+        });
+
+        axios.get("http://127.0.0.1:80/api/adminlogs_listtimeslot", {}).then((response) => {
+            this.setState({
+                listtimeslot: response.data,
+            });
+        });
+    }
+
+    componentWillMount() {
+        this.loadLog();
+    }
 
     render() {
-        const { email } = this.state;
+      
+        let logs = this.state.logs.map((log) => {
+
+            // console.log(log.created_at);
+            // console.log(log.date_time);
+
+            var createdat_date = new Date(log.created_at);
+            var datetime_date = new Date(log.date_time);
+                      
+
+            return (
+                <tr key={log.id}>
+                    <td>{log.id}</td>
+                    <td>{log.name}</td>
+                    <td>{log.purpose}</td>
+                    <td>{log.seat}</td>
+                    <td>{dateFormat(datetime_date, "yyyy-mm-dd HH:MM:ss")}</td>
+                    <td>{dateFormat(createdat_date, "UTC:yyyy-mm-dd HH:MM:ss")}</td>
+                </tr>
+            );
+        });
+
+    
+
+
         return (
+                    
             <div className="container">
-                <div className="top_banner">
-                    <img
-                        style={{
-                            width: 150,
-                            height: 150,
-                            //margin: 200,
-                            marginRight: 200,
-                            //marginRight:0,
-                            borderRadius: 100,
-                        }}
-                        src="{{asset('images/profileicon.png')}}"
-                    ></img> 
-                    <div className="welcome_msg">
-                        <h1 style={{
-                                fontSize: 20,
-                                fontWeight: "bold",
-                                textAlign: "left",
-                                margin: 10,
-                                color: "black",
-                            }}>
-                                Welcome 
-                            </h1>
-                    </div>
-                </div>
+                
                
+
+                <div>
+                    <Table>
+                        <thead>
+                            <tr>
+                                <th> ID </th>
+                                <th> Person Name </th>
+                                <th> Purpose </th>
+                                <th> Seat </th>
+                                <th> Date & Time </th>
+                                <th> Booked At </th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {logs}
+                        </tbody>
+                    </Table>
+                </div>
             </div>
+
         );
+        
+
+       
     }
 }
 
