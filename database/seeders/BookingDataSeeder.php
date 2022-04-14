@@ -3,10 +3,10 @@
 namespace Database\Seeders;
 
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
-use Illuminate\Support\Facades\DB;
 use Illuminate\Database\Seeder;
+use App\Models\BookingData;
 
-class TimeSlotSeeder extends Seeder
+class BookingDataSeeder extends Seeder
 {
     /**
      * Run the database seeds.
@@ -15,9 +15,7 @@ class TimeSlotSeeder extends Seeder
      */
     public function run()
     {
-        DB::table('time_slots')->insert([
-            'date_time' => '2020-01-01 00:00:00',
-            'slot_length' => '00:15:00',
-        ]);
+        BookingData::factory()->count(80)->create();
+        BookingData::factory()->count(5)->deleted()->create();
     }
 }

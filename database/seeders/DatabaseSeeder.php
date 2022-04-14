@@ -4,6 +4,9 @@ namespace Database\Seeders;
 
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
+use Illuminate\Database\Eloquent\Factories\Factory;
+use App\Models\User;
+use App\Models\Seat;
 
 class DatabaseSeeder extends Seeder
 {
@@ -14,6 +17,11 @@ class DatabaseSeeder extends Seeder
      */
     public function run()
     {
-        // \App\Models\User::factory(10)->create();
+        User::factory()->count(10)->create();
+        User::factory()->count(2)->librarian()->create();
+        Seat::factory()->count(12)->create();
+        Seat::factory()->count(2)->closed()->create();
+        Seat::factory()->count(1)->deleted()->create();
+        $this->call(BookingDataSeeder::class);
     }
 }

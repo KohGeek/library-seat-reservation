@@ -25,4 +25,12 @@ class Seat extends Model
         'table_number' => 'integer',
         'closed' => 'boolean',
     ];
+
+    /**
+     * Get all related booking data for the seat
+     */
+    public function bookingData()
+    {
+        return $this->hasMany(BookingData::class);
+    }
 }
