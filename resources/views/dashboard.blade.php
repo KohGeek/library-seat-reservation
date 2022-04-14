@@ -1,6 +1,17 @@
 @extends('layouts.app')
 
 @section('content')
+<div class="container">
+    <img src = "../icon.png" 
+        width= "150"
+        height= "150"
+        margin= "20"
+        borderRadius="100" />
+    <h1>
+        Welcome
+    </h1>
+</div>
+
 
 <div class="container">
     <div class="row justify-content-center">
