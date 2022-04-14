@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\BookingData;
 use App\Models\Seat;
+use App\Models\TimeSlot;
 
 class AdminLogController extends Controller
 {
@@ -62,6 +63,21 @@ class AdminLogController extends Controller
     public function getSeat()
     {
         return Seat::all();
+    }
+
+    // Get Timeslot Data
+    public function getTimeslot()
+    {
+        $data = Timeslot::all();
+
+        error_log($data);
+
+        foreach($data as $d)
+        {
+            $d->date_time = (int)((string)$d->date_time + "000");
+        }
+
+        return $data;
     }
 }
  

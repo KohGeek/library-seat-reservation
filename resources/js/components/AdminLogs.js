@@ -14,16 +14,18 @@ import {
 } from "reactstrap";
 import axios from "axios";
 import dateFormat, { masks } from "dateformat";
+import { toInteger } from "lodash";
 
 export default class AdminLogs extends Component {
     constructor() {
         super();
         this.state = {
             logs: [],
-            searchLogData: { seat: "", name: "" },
+            searchLogData: {seat:"", name:"", timeslot:""},
             searchLogModal: false,
-            listseat: [],
-        };
+            listseat:[],
+            listtimeslot:[],
+        }
     }
 
     // Loads All Logs
@@ -33,28 +35,28 @@ export default class AdminLogs extends Component {
                 logs: response.data,
             });
         });
-        axios
-            .get("http://127.0.0.1:80/api/adminlogs_listseat", {})
+        axios.get("http://127.0.0.1:80/api/adminlogs_listseat", {})
             .then((response) => {
                 this.setState({
                     listseat: response.data,
                 });
             });
+        
+        axios.get("http://127.0.0.1:80/api/adminlogs_listtimeslot", {}).then((response) => {
+            this.setState({
+                listtimeslot:response.data,
+            });
+        });
     }
 
     // Searching Logs
     searchLog() {
-        let { seat, name } = this.state.searchLogData;
-        axios
-            .get("http://127.0.0.1:80/api/adminlogs/search", {
-                params: { seat, name },
-            })
-            .then((response) => {
-                this.setState({
-                    logs: response.data,
-                    searchLogData: { seat: "", name: "" },
-                    searchLogModal: false,
-                });
+        let {seat, name} = this.state.searchLogData
+        axios.get("http://127.0.0.1:80/api/adminlogs/search", {params: {seat, name}}).then((response) => {
+            this.setState({
+                logs:response.data,
+                //searchLogData: {seat:"", name:"", timeslot:""},
+                searchLogModal: false,
             });
 
         console.log(this.state.searchLogData);
@@ -102,80 +104,67 @@ export default class AdminLogs extends Component {
             );
         });
 
-        return (
+        let timeslots = this.state.listtimeslot.map((timeslot) => {
+
+            var dt_date = new Date( toInteger(timeslot.date_time.toString() + "000") );
+            console.log(timeslot.date_time)
+            console.log(dt_date)
+
+            return (
+                <option key={timeslot.id}
+                    value = {timeslot.id}
+                    >{dateFormat(dt_date.getTime(), "yyyy-mm-dd HH:MM:ss")}</option>
+            );
+        });
+
+
+        return(
             <div className="container">
                 {/* Searching Log Section */}
                 <div>
-                    <Button
-                        color="primary"
-                        onClick={this.toggleSearchLogModal.bind(this)}
-                    >
-                        {" "}
-                        Search Log{" "}
-                    </Button>
-
-                    <Modal
-                        isOpen={this.state.searchLogModal}
-                        toggle={this.toggleSearchLogModal.bind(this)}
-                    >
-                        <ModalHeader
-                            toggle={this.toggleSearchLogModal.bind(this)}
-                        >
-                            {" "}
-                            Search Log{" "}
-                        </ModalHeader>
-                        <ModalBody>
-                            <FormGroup>
-                                <Label> Person Name </Label>
-                                <Input
-                                    id="name"
-                                    value={this.state.searchLogData.name}
-                                    onChange={(e) => {
-                                        let { searchLogData } = this.state;
-                                        searchLogData.name = e.target.value;
-                                        this.setState({ searchLogData });
-                                    }}
+                        {/* Filtering - Person Name */}
+                        <FormGroup>
+                            <Label > Person Name </Label>
+                            <Input id = "name"
+                                value = {this.state.searchLogData.name}
+                                onChange = {(e) => {
+                                    let {searchLogData} = this.state
+                                    searchLogData.name = e.target.value
+                                    this.setState({searchLogData})
+                                }}> </Input>
+                        </FormGroup>
+                        {/* Filtering - Seat */}
+                        <FormGroup>
+                            <Label>Seat</Label> <br></br>
+                            <select for="seats" id="seats"
+                            onChange = {(e) => {
+                                let {searchLogData} = this.state
+                                searchLogData.seat = e.target.value
+                                this.setState({searchLogData})}}
                                 >
-                                    {" "}
-                                </Input>
-                            </FormGroup>
-                            <FormGroup>
-                                <Label>Seat</Label> <br></br>
-                                <select
-                                    for="seats"
-                                    id="seats"
-                                    onChange={(e) => {
-                                        let { searchLogData } = this.state;
-                                        searchLogData.seat = e.target.value;
-                                        this.setState({ searchLogData });
-                                    }}
+                                <option></option> 
+                                {seats} </select>
+                        </FormGroup>
+                        {/* Filtering - Timeslot */}
+                        <FormGroup>
+                            <Label>Time & Date</Label> <br></br>
+                            <select for="timeslots" id="timeslots"
+                            onChange = {(e) => {
+                                let {searchLogData} = this.state
+                                searchLogData.timeslot = e.target.value
+                                this.setState({searchLogData})}}
                                 >
-                                    <option></option>
-                                    {seats}{" "}
-                                </select>
-                            </FormGroup>
-                        </ModalBody>
-                        <ModalFooter>
-                            <Button
-                                color="primary"
-                                onClick={this.searchLog.bind(this)}
-                            >
-                                {" "}
-                                Filter{" "}
-                            </Button>
-                            <Button
-                                color="secondary"
-                                onClick={this.toggleSearchLogModal.bind(this)}
-                            >
-                                {" "}
-                                Cancel{" "}
-                            </Button>
-                        </ModalFooter>
-                    </Modal>
+                                <option></option> 
+                                {timeslots} </select>
+                        </FormGroup>
+                        <Button color="primary" onClick={this.searchLog.bind(this)}> Search </Button>
                 </div>
 
                 {/* Load Table */}
                 <div>
+                    <br></br>
+                    <br></br>
+                    <br></br>
                     <Table>
                         <thead>
                             <tr>
