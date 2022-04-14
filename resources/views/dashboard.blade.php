@@ -2,7 +2,7 @@
 
 @section('content')
 <div class="container">
-    <img src = "../icon.png" 
+    <img src = "/images/icon.png" 
         width= "150"
         height= "150"
         margin= "20"
