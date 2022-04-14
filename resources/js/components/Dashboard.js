@@ -21,8 +21,7 @@ export default class Dashboard extends Component {
         super();
         this.state = {
             logs: [],
-            searchLogData: { seat: "", name: "", date: "", time: "" },
-            searchLogModal: false,
+            
         };
     }
 
@@ -59,11 +58,12 @@ export default class Dashboard extends Component {
 
             return (
                 <tr key={log.id}>
+                    <td>{dateFormat(datetime_date, "yyyy-mm-dd HH:MM:ss")}</td>
                     <td>{log.id}</td>
                     <td>{log.name}</td>
                     <td>{log.purpose}</td>
                     <td>{log.seat}</td>
-                    <td>{dateFormat(datetime_date, "yyyy-mm-dd HH:MM:ss")}</td>
+                    
                     <td>
                         {dateFormat(createdat_date, "yyyy-mm-dd HH:MM:ss")}
                     </td>
@@ -86,17 +86,17 @@ export default class Dashboard extends Component {
                 {/* Load Table */}
                 <div>
                     {/* Missing OnClick*/}
-                    <Button color="primary" style={{ marginLeft: "95%" }}>
+                    <Button color="primary" style={{ marginLeft: "92%" }}>
                         {" "}Add{" "}
                     </Button>
                     <Table>
                     <thead>
                             <tr>
+                                <th> Booked Date & Time </th>
                                 <th> Booking ID </th>
                                 <th> Person Name </th>
                                 <th> Purpose </th>
                                 <th> Seat </th>
-                                <th> Booked Date & Time </th>
                                 <th> Booked At </th>
                             </tr>
                         </thead>
