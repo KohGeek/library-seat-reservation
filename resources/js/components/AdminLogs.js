@@ -15,16 +15,19 @@ import {
 import axios from "axios";
 import dateFormat, { masks } from "dateformat";
 import { toInteger } from "lodash";
+var DatePicker = require("reactstrap-date-picker");
 
 export default class AdminLogs extends Component {
     constructor() {
         super();
         this.state = {
             logs: [],
-            searchLogData: { seat: "", name: "", timeslot: "" },
+            searchLogData: { seat: "", name: "", date:""},
             searchLogModal: false,
             listseat: [],
-            listtimeslot: [],
+
+
+            value: new Date().toISOString()
         }
     }
 
@@ -42,11 +45,6 @@ export default class AdminLogs extends Component {
                 });
             });
 
-        axios.get("http://127.0.0.1:80/api/adminlogs_listtimeslot", {}).then((response) => {
-            this.setState({
-                listtimeslot: response.data,
-            });
-        });
     }
 
     // Searching Logs
@@ -70,18 +68,77 @@ export default class AdminLogs extends Component {
         });
     }
 
+
+
+    handleChange(value, formattedValue) {
+
+        let { date } = this.state.searchLogData
+        this.setState({
+            value: value, // ISO String, ex: "2016-11-19T12:00:00.000Z"
+            formattedValue: formattedValue, // Formatted String, ex: "11/19/2016"
+
+            //searchLogData.date: value
+        })
+      }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
     // DEFAULT STUFF
     componentWillMount() {
         this.loadLog();
     }
 
+
+
+
+
+
+
+
+
+
+    componentDidUpdate() {
+        // Access ISO String and formatted values from the DOM.
+        var hiddenInputElement = document.getElementById("example-datepicker");
+        console.log(hiddenInputElement.value); // ISO String, ex: "2016-11-19T12:00:00.000Z"
+        console.log(hiddenInputElement.getAttribute('data-formattedvalue')) // Formatted String, ex: "11/19/2016"
+        console.log(dateFormat(hiddenInputElement.value, "yyyy-mm-dd"))
+    }
+
+
+
+
+
+
+
+
+
     render() {
         let logs = this.state.logs.map((log) => {
+            
+            //
+            // This is to check what's the data retrive from backend
+            //
+            // console.log(log.datetime);
             // console.log(log.created_at);
-            // console.log(log.date_time);
 
+            var datetime_date = new Date(log.datetime);
             var createdat_date = new Date(log.created_at);
-            var datetime_date = new Date(log.date_time);
+            
 
             return (
                 <tr key={log.id}>
@@ -91,7 +148,7 @@ export default class AdminLogs extends Component {
                     <td>{log.seat}</td>
                     <td>{dateFormat(datetime_date, "yyyy-mm-dd HH:MM:ss")}</td>
                     <td>
-                        {dateFormat(createdat_date, "UTC:yyyy-mm-dd HH:MM:ss")}
+                        {dateFormat(createdat_date, "yyyy-mm-dd HH:MM:ss")}
                     </td>
                 </tr>
             );
@@ -105,23 +162,24 @@ export default class AdminLogs extends Component {
             );
         });
 
-        let timeslots = this.state.listtimeslot.map((timeslot) => {
+        // let timeslots = this.state.listtimeslot.map((timeslot) => {
 
-            var dt_date = new Date(timeslot.date_time);
-            console.log(timeslot.date_time)
-            console.log(dt_date)
+        //     var dt_date = new Date(timeslot.date_time);
+        //     console.log(timeslot.date_time)
+        //     console.log(dt_date)
 
-            return (
-                <option key={timeslot.id}
-                    value={timeslot.id}
-                >{dateFormat(dt_date.getTime(), "yyyy-mm-dd HH:MM:ss")}</option>
-            );
-        });
+        //     return (
+        //         <option key={timeslot.id}
+        //             value={timeslot.id}
+        //         >{dateFormat(dt_date.getTime(), "yyyy-mm-dd HH:MM:ss")}</option>
+        //     );
+        // });
 
 
         return (
             <div className="container">
-                {/* Searching Log Section */}
+
+	            {/* Searching Log Section */}
                 <div>
                     {/* Filtering - Person Name */}
                     <FormGroup>
@@ -147,18 +205,11 @@ export default class AdminLogs extends Component {
                             <option></option>
                             {seats} </select>
                     </FormGroup>
-                    {/* Filtering - Timeslot */}
                     <FormGroup>
-                        <Label>Time & Date</Label> <br></br>
-                        <select for="timeslots" id="timeslots"
-                            onChange={(e) => {
-                                let { searchLogData } = this.state
-                                searchLogData.timeslot = e.target.value
-                                this.setState({ searchLogData })
-                            }}
-                        >
-                            <option></option>
-                            {timeslots} </select>
+                        <Label>Date Picker</Label> <br></br>
+                        <DatePicker id      = "example-datepicker" 
+                            value   = {this.state.value} 
+                            onChange= {(v,f) => this.handleChange(v, f)} />
                     </FormGroup>
                     <Button color="primary" onClick={this.searchLog.bind(this)}> Search </Button>
                 </div>
@@ -171,7 +222,7 @@ export default class AdminLogs extends Component {
                     <Table>
                         <thead>
                             <tr>
-                                <th> ID </th>
+                                <th> Booking ID </th>
                                 <th> Person Name </th>
                                 <th> Purpose </th>
                                 <th> Seat </th>
