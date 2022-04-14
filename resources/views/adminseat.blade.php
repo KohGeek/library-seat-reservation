@@ -5,7 +5,7 @@
     <div class="row justify-content-center">
         <div class="col-md-8">
             <div class="card">
-                <div class="card-header">{{ __('View Slots') }}</div>
+                <div class="card-header">{{ __('Seats Configuration') }}</div>
 
                 <div class="card-body">
                     <div id="adminseats"></div>
