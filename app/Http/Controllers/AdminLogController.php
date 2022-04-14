@@ -12,57 +12,44 @@ class AdminLogController extends Controller
     public function index()
     {
         $data = BookingData::join('users', 'users.id', '=', 'booking_data.booked_by')
-                            ->get(['booking_data.id', 'users.name', 'booking_data.purpose', 'booking_data.datetime', 'booking_data.seat', 'booking_data.created_at']);
-        
-        foreach($data as $d)
-        {
+            ->get(['booking_data.id', 'users.name', 'booking_data.purpose', 'booking_data.datetime', 'booking_data.seat', 'booking_data.created_at']);
+
+        foreach ($data as $d) {
             $d->datetime = ((string)$d->datetime . "000");
         }
 
         return $data;
-        
-        
     }
 
     // Search Booking Datas
     public function search(Request $req)
     {
-        
+        $query = [];
+        $date = $req->date;
+        $time = $req->time;
 
         if ($req->name != null) {
-            if ($req->seat != null) {
-                $data = BookingData::join('users', 'users.id', '=', 'booking_data.booked_by')
-                            ->where('users.name','LIKE', '%'.$req->name.'%' )
-                            ->where('booking_data.seat', $req->seat)
-                            ->get(['booking_data.id', 'users.name', 'booking_data.purpose', 'booking_data.datetime', 'booking_data.seat', 'booking_data.created_at']);
-                }
-            else
-            {
-                $data = BookingData::join('users', 'users.id', '=', 'booking_data.booked_by')
-                            ->where('users.name','LIKE', '%'.$req->name.'%' )
-                            ->get(['booking_data.id', 'users.name', 'booking_data.purpose', 'booking_data.datetime', 'booking_data.seat', 'booking_data.created_at']);
-            }
-
+            array_push($query, ['users.name', 'LIKE', '%' . $req->name . '%']);
         }
-        else
-        {
-            if ($req->seat != null) {
-                $data = BookingData::join('users', 'users.id', '=', 'booking_data.booked_by')
-                            ->where('booking_data.seat', $req->seat)
-                            ->get(['booking_data.id', 'users.name', 'booking_data.purpose', 'booking_data.datetime', 'booking_data.seat', 'booking_data.created_at']);
-            }
-            else
-            {
-                $data = BookingData::join('users', 'users.id', '=', 'booking_data.booked_by')
-                            ->get(['booking_data.id', 'users.name', 'booking_data.purpose', 'booking_data.datetime', 'booking_data.seat', 'booking_data.created_at']);
-            }
+        if ($req->seat != null) {
+            array_push($query, ['booking_data.seat', '=', $req->seat]);
         }
 
-        foreach($data as $d)
-        {
+        $data = BookingData::join('users', 'users.id', '=', 'booking_data.booked_by')
+            ->where($query)
+            ->when($date, function($query, $date){
+                $query->whereDate("datetime", $date);
+            })
+            ->when($time, function($query, $time){
+                $query->whereTime("datetime", $time);
+            })
+            ->get(['booking_data.id', 'users.name', 'booking_data.purpose', 'booking_data.datetime', 'booking_data.seat', 'booking_data.created_at']);
+
+
+        foreach ($data as $d) {
             $d->datetime = ((string)$d->datetime . "000");
         }
-        
+
         return $data;
     }
 
@@ -72,4 +59,3 @@ class AdminLogController extends Controller
         return Seat::all();
     }
 }
- 
