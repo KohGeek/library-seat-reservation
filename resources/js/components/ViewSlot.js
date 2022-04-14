@@ -24,8 +24,6 @@ export default class ViewSlot extends Component {
 
         this.state = {
             slots: [],
-            seats: [],
-            bookingData: [],
 
             searchViewData: { date: dateFormat(new Date(), "yyyy-mm-dd"), time: "" },
 
@@ -52,69 +50,18 @@ export default class ViewSlot extends Component {
 
     componentDidMount() {
         this.getSeats();
-        this.searchBy();
     }
 
     getSeats() {
-        axios.get("http://127.0.0.1:80/api/viewseats").then((response) => {
+        axios.get("http://127.0.0.1:80/api/slots").then((response) => {
             this.setState({
-                seats: response.data,
+                slots: response.data
             });
         });
     }
-
-
-    searchBy() {
-        let { date, time } = this.state.searchViewData;
-        let bookingData = [];
-
-        axios
-            .get("http://127.0.0.1:80/api/viewbookingData", {
-                params: { date, time },
-            })
-            .then((response) => {
-                this.setState({
-                    bookingData: response.data,
-                });
-                bookingData = response.data;
-            });
-
-        let seats = this.state.seats;
-        let availableTime = ["09:00", "10:00", "11:00", "12:00", "13:00", "14:00", "15:00", "16:00", "17:00", "18:00", "19:00", "20:00"];
-
-        let tempSeats = [];
-
-        seats.forEach((element) => {
-            availableTime.forEach((time) => {
-                var seat = {
-                    id: element.id,
-                    tableNo: element.table_number,
-                    time: time,
-                };
-                tempSeats.push(seat);
-            });
-        });
-
-        console.log(tempSeats);
-
-        this.setState({
-            slots: tempSeats,
-        });
-
-    }
-
-    // loadSlot() {
-    //     axios.get("http://127.0.0.1:80/api/slots").then((response) => {
-    //         this.setState({
-    //             slots: response.data,
-    //         });
-    //     });
-    // }
 
     render() {
         let slots = this.state.slots.map((slot) => {
-            var datetime_date = new Date(slot.date_time);
-
             return (
                 <tr key={slot.id + "." + slot.time}>
                     <td>{slot.id}</td>
@@ -124,6 +71,7 @@ export default class ViewSlot extends Component {
                 </tr>
             );
         });
+
         return (
             <div className="container">
                 <div>
@@ -167,7 +115,7 @@ export default class ViewSlot extends Component {
 
 
                     </FormGroup>
-                    <Button type="submit" onClick={this.searchBy.bind(this)}>
+                    <Button type="submit" onClick={this.getSeats.bind(this)}>
                         Search
                     </Button>
                 </div>

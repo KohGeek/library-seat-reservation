@@ -40,7 +40,7 @@ export default class AdminLogs extends Component {
                 logs: response.data,
             });
         });
-        axios.get("http://127.0.0.1:80/api/adminlogs_listseat", {})
+        axios.get("http://127.0.0.1:80/api/adminlogs/seats", {})
             .then((response) => {
                 this.setState({
                     listseat: response.data,
@@ -52,7 +52,7 @@ export default class AdminLogs extends Component {
     // Searching Logs
     searchLog() {
         let { seat, name, date, time } = this.state.searchLogData
-        axios.get("http://127.0.0.1:80/api/adminlogs/search", { params: { seat, name, date, time } }).then((response) => {
+        axios.get("http://127.0.0.1:80/api/adminlogs", { params: { seat, name, date, time } }).then((response) => {
             this.setState({
                 logs: response.data,
                 //searchLogData: {seat:"", name:"", timeslot:""},

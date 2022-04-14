@@ -8,22 +8,24 @@ use App\Models\Seat;
 
 class SlotController extends Controller
 {
-    public function seatsIndex()
+    public function index(Request $req)
     {
-        return Seat::all();
-    }
+        $dbseats = Seat::where('closed', '=', 0)
+            ->select('id', 'table_number')->get();
 
-    public function bookingDataIndex(Request $req)
-    {
-        $date = $req->date;
-        $time = $req->time;
-        $data = BookingData::whereDate("datetime", $date)
-            ->when($time, function ($query, $time) {
-                $query->whereTime("datetime", $time);
-            })
-            ->get(['booking_data.datetime', 'booking_data.seat']);
+        $availabletime = ["09:00", "10:00", "11:00", "12:00", "13:00", "14:00", "15:00", "16:00", "17:00", "18:00", "19:00", "20:00"];
+        $seats = [];
 
+        foreach ($dbseats as $dbseat) {
+            foreach ($availabletime as $time) {
+                $seat = new Seat();
+                $seat->id = $dbseat->id;
+                $seat->table_number = $dbseat->table_number;
+                $seat->time = $time;
+                array_push($seats, $seat);
+            }
+        }
 
-        return $data;
+        return $seats;
     }
 }
