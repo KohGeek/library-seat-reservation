@@ -13,6 +13,8 @@ import {
     Label,
 } from "reactstrap";
 import axios from "axios";
+import dateFormat, { masks } from "dateformat";
+
 
 export default class ViewSlot extends Component {
     constructor() {
@@ -29,11 +31,10 @@ export default class ViewSlot extends Component {
             searchBy:"seatID",
             searchInput:"",
         };
-        this.onChangeValue = this.onChangeValue.bind(this);
     }
 
-    onChangeValue(event) {
-        console.log(event.target.value);
+    componentWillMount(){
+        this.loadSlot();
     }
 
     loadSlot() {
@@ -46,6 +47,9 @@ export default class ViewSlot extends Component {
 
     render() {
         let slots = this.state.slots.map((slot) => {
+
+            var datetime_date = new Date(slot.date_time);
+
             return (
                 <tr key={slot.seatID}>
                     <td>{slot.tableNo}</td>
