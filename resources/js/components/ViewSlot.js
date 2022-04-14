@@ -19,8 +19,8 @@ import dateFormat, { masks } from "dateformat";
 var DatePicker = require("reactstrap-date-picker");
 
 export default class ViewSlot extends Component {
-    constructor() {
-        super();
+    constructor(props) {
+        super(props);
 
         this.state = {
             slots: [],
@@ -144,7 +144,6 @@ export default class ViewSlot extends Component {
                         <br />
                         <Input
                             type="select"
-                            for="times"
                             id="times"
                             onChange={(e) => {
                                 let { searchViewData } = this.state;
