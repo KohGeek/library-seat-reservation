@@ -2,9 +2,7 @@
 
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Auth;
-use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\Auth\RegisterController;
-use App\Http\Controllers\SlotController;
 
 
 
@@ -32,7 +30,7 @@ Route::view('/librarianRegister', 'auth.librarianRegister');
 Route::post('/librarianRegister', [RegisterController::class, 'register']);
 
 //Viewslot
-Route::view('/viewslots', 'viewslot');
+Route::view('/booking', 'booking');
 
 //Dashboard
 Route::view('/dashboard', 'dashboard');

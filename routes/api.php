@@ -5,10 +5,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AdminSeatController;
 use App\Http\Controllers\AdminLogController;
 use App\Http\Controllers\DashboardController;
-use App\Http\Controllers\SlotController;
-
-use App\Http\Controllers\Auth\LoginController;
-use App\Http\Controllers\Auth\RegisterController;
+use App\Http\Controllers\BookingController;
 
 
 
@@ -44,4 +41,4 @@ Route::get('booking', [DashboardController::class, 'index']);
 Route::delete('booking_seat/{id}', [DashboardController::class, 'destroy']);
 
 // Viewslot API
-Route::get('slots', [SlotController::class, 'index']);
+Route::get('slots', [BookingController::class, 'index']);

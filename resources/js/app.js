@@ -16,5 +16,5 @@ require('./bootstrap');
 
 require('./components/AdminSeats');
 require('./components/AdminLogs');
-require('./components/ViewSlot');
+require('./components/Booking');
 require('./components/Dashboard');
