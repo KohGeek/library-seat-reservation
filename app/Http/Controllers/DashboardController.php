@@ -9,23 +9,31 @@ use App\Models\TimeSlot;
 
 class DashboardController extends Controller
 {
-    // Load all Booking Datas
+    // Load all SEATS
     public function index()
     {
-        $data = BookingData::join('time_slots', 'time_slots.id', '=', 'booking_data.timeslot')
-                            ->join('users', 'users.id', '=', 'booking_data.booked_by')
-                            ->get(['booking_data.id', 'users.name', 'booking_data.purpose', 'time_slots.date_time', 'booking_data.seat', 'booking_data.created_at']);
-        
-        return $data;
-        // return BookingData::all();
+        return Seat::all();
     }
-  
-     // Get Seat Data
-     public function getSeat()
-     {
-         return Seat::all();
-     }
 
-     // Get Timeslot Data
-    
+    // Store a new SEAT
+    public function create(Request $req) 
+    {
+        return Seat::create($req->all());
+    }
+
+    // Edit a SEAT
+    public function update(Request $req, $id) 
+    {
+        $seat = Seat::findOrFail($id);
+        $seat -> update($req->all());
+        return $seat;
+    }
+
+    // Delete a SEAT
+    public function destroy($id) 
+    {
+        $seat = Seat::findOrFail($id);
+        $seat -> delete();
+        return 204;
+    }
 }

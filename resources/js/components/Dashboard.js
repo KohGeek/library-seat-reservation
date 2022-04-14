@@ -1,103 +1,92 @@
 import React, { Component } from "react";
 import ReactDOM from "react-dom";
-import { Table, Button, Modal, ModalHeader, ModalBody, ModalFooter, Input, FormGroup, Label, NavItem } from "reactstrap";
+import { Table, Button, Modal, ModalHeader, ModalBody, ModalFooter, Input, FormGroup, Label } from "reactstrap";
 import axios from "axios";
-import dateFormat, { masks } from "dateformat";
 
 export default class Dashboard extends Component {
-    
+
     constructor() {
         super();
         this.state = {
-            logs: [],
-            searchLogData: {seat:"", name:""},
-            searchLogModal: false,
-            listseat:[]
+            seats: [],
+            updateSeatData: {id:"", table_number:"", closed:0, closed_reason:"" },
         }
     }
 
-      // Loads All Logs
-      loadLog() {
-        axios.get("http://127.0.0.1:80/api/adminlogs", {}).then((response) => {
+    // Load Seats
+    loadSeat() {
+        axios.get("http://127.0.0.1:80/api/adminseats").then((response) => {
             this.setState({
-                logs:response.data,
-            });
-        });
-        axios.get("http://127.0.0.1:80/api/adminlogs_listseat", {}).then((response) => {
-            this.setState({
-                listseat:response.data,
-            });
-        });
-
-        axios.get("http://127.0.0.1:80/api/adminlogs_listtimeslot", {}).then((response) => {
-            this.setState({
-                listtimeslot: response.data,
+                seats:response.data,
             });
         });
     }
 
+
+
+
+    // Delete
+    deleteSeat(id) {
+        axios.delete("http://127.0.0.1:80/api/adminseat/" + id).then((response) => {
+            this.loadSeat()
+        });
+    }
+
+
+
+    // DEFAULT STUFF
     componentWillMount() {
-        this.loadLog();
+        this.loadSeat();
     }
 
+
+    // Render
     render() {
-      
-        let logs = this.state.logs.map((log) => {
-
-            // console.log(log.created_at);
-            // console.log(log.date_time);
-
-            var createdat_date = new Date(log.created_at);
-            var datetime_date = new Date(log.date_time);
-                      
-
+        let seats = this.state.seats.map((seat) => {
             return (
-                <tr key={log.id}>
-                    <td>{log.id}</td>
-                    <td>{log.name}</td>
-                    <td>{log.purpose}</td>
-                    <td>{log.seat}</td>
-                    <td>{dateFormat(datetime_date, "yyyy-mm-dd HH:MM:ss")}</td>
-                    <td>{dateFormat(createdat_date, "UTC:yyyy-mm-dd HH:MM:ss")}</td>
+                
+                
+                <tr key={seat.id}>
+                    <td>{seat.id}</td>
+                    <td>{seat.table_number}</td>
+                    {/* for seat.closed, 1 is CLOSED, 0 is Available */}
+                    <td> {seat.closed ? 'Closed' : 'Available'} </td>
+                    <td>{(seat.closed_reason==null) ? '-' : seat.closed_reason}</td>
+                    <td>
+                        <Button color="danger" size="sm" outline onClick={this.deleteSeat.bind(this, seat.id)}>
+                            {" "} Delete {" "}
+                        </Button>
+                    </td>
                 </tr>
             );
         });
 
-    
 
-
-        return (
-                    
-            <div className="container">
-                
-               
-
+        return(
+            <div className="container">   
+                 
+                {/* Load Table */}
                 <div>
+                {/* Missing OnClick*/}
+                <Button color="primary"  style={{ marginLeft: '95%' }}> {" "} Add {" "}</Button>
                     <Table>
                         <thead>
                             <tr>
                                 <th> ID </th>
-                                <th> Person Name </th>
-                                <th> Purpose </th>
-                                <th> Seat </th>
-                                <th> Date & Time </th>
-                                <th> Booked At </th>
+                                <th> Table Number </th>
+                                <th> Status </th>
+                                <th> Closed Reason </th>
                             </tr>
                         </thead>
                         <tbody>
-                            {logs}
+                            {seats}
                         </tbody>
                     </Table>
                 </div>
             </div>
-
         );
-        
-
-       
     }
 }
-
 if (document.getElementById("dashboard")) {
     ReactDOM.render(<Dashboard />, document.getElementById("dashboard"));
 }
