@@ -19,7 +19,7 @@ class BookingDataFactory extends Factory
     public function definition()
     {
         $date = $this->faker->dateTimeBetween('-1 month', '+1 month');
-        $datetime = date('U', strtotime($date->format('Y-m-d') . ' ' . str(rand(10, 20)) . '00H'));
+        $datetime = date('Y-m-d H:i:s', strtotime($date->format('Y-m-d') . ' ' . str(rand(10, 20)) . '00H'));
 
         return [
             'booked_by' => User::inRandomOrder()->first()->id,
