@@ -10,7 +10,7 @@
 
     <title>{{ config('app.name', 'Laravel') }}</title>
 
-    <script src="http://localhost:8097"></script>
+    <!-- <script src="http://localhost:8097"></script> -->
 
     <!-- Scripts -->
     <script src="{{ asset('js/app.js') }}" defer></script>
