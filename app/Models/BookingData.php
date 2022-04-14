@@ -13,7 +13,7 @@ class BookingData extends Model
     protected $fillable = [
         'booked_by',
         'purpose',
-        'timeslot',
+        'datetime',
         'seat',
     ];
 
@@ -24,7 +24,7 @@ class BookingData extends Model
      */
     protected $casts = [
         'booked_by' => 'integer',
-        'timeslot' => 'integer',
+        'datetime' => 'timestamp',
         'seat' => 'integer',
     ];
 }

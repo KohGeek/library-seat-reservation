@@ -5,9 +5,9 @@ namespace Database\Factories;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
- * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\TimeSlot>
+ * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\BookingData>
  */
-class TimeSlotFactory extends Factory
+class BookingDataFactory extends Factory
 {
     /**
      * Define the model's default state.
@@ -17,7 +17,7 @@ class TimeSlotFactory extends Factory
     public function definition()
     {
         return [
-            //
+            ''
         ];
     }
 }
