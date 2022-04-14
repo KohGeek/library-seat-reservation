@@ -14,9 +14,7 @@ require('./bootstrap');
  * or customize the JavaScript scaffolding to fit your unique needs.
  */
 
-require('./components/Example');
 require('./components/AdminSeats');
 require('./components/AdminLogs');
-
 require('./components/ViewSlot');
 require('./components/Dashboard');
