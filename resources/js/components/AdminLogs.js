@@ -22,12 +22,10 @@ export default class AdminLogs extends Component {
         super();
         this.state = {
             logs: [],
-            searchLogData: { seat: "", name: "", date:""},
+            searchLogData: { seat: "", name: "", date:"", time:""},
             searchLogModal: false,
             listseat: [],
-
-
-            value: new Date().toISOString()
+            datePick: ""
         }
     }
 
@@ -49,14 +47,15 @@ export default class AdminLogs extends Component {
 
     // Searching Logs
     searchLog() {
-        let { seat, name } = this.state.searchLogData
-        axios.get("http://127.0.0.1:80/api/adminlogs/search", { params: { seat, name } }).then((response) => {
+        let { seat, name, date, time } = this.state.searchLogData
+        axios.get("http://127.0.0.1:80/api/adminlogs/search", { params: { seat, name, date, time } }).then((response) => {
             this.setState({
                 logs: response.data,
                 //searchLogData: {seat:"", name:"", timeslot:""},
                 searchLogModal: false,
             });
 
+            // LOG --- TO see what Param passed to Controller
             console.log(this.state.searchLogData);
         });
     }
@@ -70,30 +69,17 @@ export default class AdminLogs extends Component {
 
 
 
-    handleChange(value, formattedValue) {
+    // To handle DatePicker
+    handleChange(datePick, formattedValue) {
 
-        let { date } = this.state.searchLogData
+        let searchLogData = this.state.searchLogData
+        searchLogData.date = datePick ? dateFormat(datePick, "yyyy-mm-dd") : ""
+
         this.setState({
-            value: value, // ISO String, ex: "2016-11-19T12:00:00.000Z"
-            formattedValue: formattedValue, // Formatted String, ex: "11/19/2016"
-
-            //searchLogData.date: value
+            datePick: datePick, // ISO String, ex: "2016-11-19T12:00:00.000Z"
+            searchLogData
         })
-      }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+    }
 
 
 
@@ -104,25 +90,13 @@ export default class AdminLogs extends Component {
 
 
 
-
-
-
-
-
-
-
-    componentDidUpdate() {
-        // Access ISO String and formatted values from the DOM.
-        var hiddenInputElement = document.getElementById("example-datepicker");
-        console.log(hiddenInputElement.value); // ISO String, ex: "2016-11-19T12:00:00.000Z"
-        console.log(hiddenInputElement.getAttribute('data-formattedvalue')) // Formatted String, ex: "11/19/2016"
-        console.log(dateFormat(hiddenInputElement.value, "yyyy-mm-dd"))
-    }
-
-
-
-
-
+    // componentDidUpdate() {
+    //     // Access ISO String and formatted values from the DOM.
+    //     var hiddenInputElement = document.getElementById("from_datepicker");
+    //     console.log(hiddenInputElement.datePick); // ISO String, ex: "2016-11-19T12:00:00.000Z"
+    //     console.log(hiddenInputElement.getAttribute('data-formattedvalue')) // Formatted String, ex: "11/19/2016"
+    //     console.log(dateFormat(hiddenInputElement.datePick, "yyyy-mm-dd"))
+    // }
 
 
 
@@ -162,19 +136,6 @@ export default class AdminLogs extends Component {
             );
         });
 
-        // let timeslots = this.state.listtimeslot.map((timeslot) => {
-
-        //     var dt_date = new Date(timeslot.date_time);
-        //     console.log(timeslot.date_time)
-        //     console.log(dt_date)
-
-        //     return (
-        //         <option key={timeslot.id}
-        //             value={timeslot.id}
-        //         >{dateFormat(dt_date.getTime(), "yyyy-mm-dd HH:MM:ss")}</option>
-        //     );
-        // });
-
 
         return (
             <div className="container">
@@ -195,21 +156,46 @@ export default class AdminLogs extends Component {
                     {/* Filtering - Seat */}
                     <FormGroup>
                         <Label>Seat</Label> <br></br>
-                        <select for="seats" id="seats"
+                        <Input type="select" for="seats" id="seats"
                             onChange={(e) => {
                                 let { searchLogData } = this.state
                                 searchLogData.seat = e.target.value
                                 this.setState({ searchLogData })
-                            }}
-                        >
+                            }}>
                             <option></option>
-                            {seats} </select>
+                            {seats} </Input>
                     </FormGroup>
+                    {/* Filtering - Date */}
                     <FormGroup>
-                        <Label>Date Picker</Label> <br></br>
-                        <DatePicker id      = "example-datepicker" 
-                            value   = {this.state.value} 
-                            onChange= {(v,f) => this.handleChange(v, f)} />
+                        <Label>Booked Date</Label> <br></br>
+                        <DatePicker id = "from_datepicker" 
+                            value = {this.state.datePick} 
+                            onChange = {(v,f) => this.handleChange(v, f)} 
+                            />
+                    </FormGroup>
+                    {/* Filtering - Time */}
+                    <FormGroup>
+                        <Label>Booked Time</Label> <br></br>
+                        <Input type="select" for="times" id="times"
+                            onChange={(e) => {
+                                let { searchLogData } = this.state
+                                searchLogData.time = e.target.value
+                                this.setState({ searchLogData })
+                            }}>
+                            <option></option>
+                            <option key="01:00:00" value="01:00:00"> 09:00 </option>
+                            <option key="02:00:00" value="02:00:00"> 10:00 </option>
+                            <option key="03:00:00" value="03:00:00"> 11:00 </option>
+                            <option key="04:00:00" value="04:00:00"> 12:00 </option>
+                            <option key="05:00:00" value="05:00:00"> 13:00 </option>
+                            <option key="06:00:00" value="06:00:00"> 14:00 </option>
+                            <option key="07:00:00" value="07:00:00"> 15:00 </option>
+                            <option key="08:00:00" value="08:00:00"> 16:00 </option>
+                            <option key="09:00:00" value="09:00:00"> 17:00 </option>
+                            <option key="10:00:00" value="10:00:00"> 18:00 </option>
+                            <option key="11:00:00" value="11:00:00"> 19:00 </option>
+                            <option key="12:00:00" value="12:00:00"> 20:00 </option>
+                        </Input>
                     </FormGroup>
                     <Button color="primary" onClick={this.searchLog.bind(this)}> Search </Button>
                 </div>
@@ -226,7 +212,7 @@ export default class AdminLogs extends Component {
                                 <th> Person Name </th>
                                 <th> Purpose </th>
                                 <th> Seat </th>
-                                <th> Date & Time </th>
+                                <th> Booked Date & Time </th>
                                 <th> Booked At </th>
                             </tr>
                         </thead>
