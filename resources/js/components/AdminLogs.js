@@ -13,9 +13,19 @@ import {
     NavItem,
 } from "reactstrap";
 import axios from "axios";
-import dateFormat, { masks } from "dateformat";
-import { toInteger } from "lodash";
-var DatePicker = require("reactstrap-date-picker");
+import dateFormat from "dateformat";
+import DatePicker from "react-datepicker";
+import styled from "styled-components";
+
+import "react-datepicker/dist/react-datepicker.css";
+
+const DatePickerStyle = styled.div`
+    .react-datepicker__close-icon::after {
+        content: "Clear";
+        border-radius: 10%;
+        padding: 0.5rem;
+        background-color: red;
+`
 
 export default class AdminLogs extends Component {
     constructor() {
@@ -25,7 +35,7 @@ export default class AdminLogs extends Component {
             searchLogData: { seat: "", name: "", date: "", time: "" },
             searchLogModal: false,
             listseat: [],
-            datePick: "",
+            datePick: null,
 
             // Data Validation Example ONLY
             // error_msgs_person:[''],
@@ -189,10 +199,15 @@ export default class AdminLogs extends Component {
                     {/* Filtering - Date */}
                     <FormGroup>
                         <Label>Booked Date</Label> <br></br>
-                        <DatePicker id="from_datepicker"
-                            value={this.state.datePick}
-                            onChange={(v, f) => this.handleChange(v, f)}
-                        />
+                        <DatePickerStyle>
+                            <DatePicker
+                                className="form-control"
+                                id="from_datepicker"
+                                selected={this.state.datePick}
+                                isClearable={true}
+                                onChange={(v) => this.handleChange(v)}
+                            />
+                        </DatePickerStyle>
                     </FormGroup>
                     {/* Filtering - Time */}
                     <FormGroup>
@@ -222,10 +237,7 @@ export default class AdminLogs extends Component {
                 </div>
 
                 {/* Load Table */}
-                <div>
-                    <br></br>
-                    <br></br>
-                    <br></br>
+                <div className="mt-4">
                     <Table>
                         <thead>
                             <tr>
