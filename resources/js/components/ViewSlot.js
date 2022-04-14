@@ -58,9 +58,7 @@ export default class ViewSlot extends Component {
 
     }
 
-    componentWillMount() {
-        this.loadSlot();
-    }
+    
 
     getSeats(){
         axios.get("http://127.0.0.1:80/api/viewseats").then((response) => {
@@ -113,6 +111,7 @@ export default class ViewSlot extends Component {
             this.setState({
                 bookingData: response.data,
             });
+            this.seatGeneration();
         });
     }
 
