@@ -1,86 +1,107 @@
 import React, { Component } from "react";
 import ReactDOM from "react-dom";
-import { Table, Button, Modal, ModalHeader, ModalBody, ModalFooter, Input, FormGroup, Label } from "reactstrap";
+import {
+    Table,
+    Button,
+    Modal,
+    ModalHeader,
+    ModalBody,
+    ModalFooter,
+    Input,
+    FormGroup,
+    Label,
+    NavItem,
+} from "reactstrap";
 import axios from "axios";
+import dateFormat, { masks } from "dateformat";
+
 
 export default class Dashboard extends Component {
-
     constructor() {
         super();
         this.state = {
-            seats: [],
-            updateSeatData: {id:"", table_number:"", closed:0, closed_reason:"" },
-        }
+            logs: [],
+            searchLogData: { seat: "", name: "", date: "", time: "" },
+            searchLogModal: false,
+        };
     }
 
-    // Load Seats
-    loadSeat() {
-        axios.get("http://127.0.0.1:80/api/adminseats").then((response) => {
+    // Loads All Logs
+    loadLog() {
+        axios.get("http://127.0.0.1:80/api/booking", {}).then((response) => {
             this.setState({
-                seats:response.data,
+                logs: response.data,
             });
         });
+        
     }
 
-
-
+    
 
     // Delete
     deleteSeat(id) {
-        axios.delete("http://127.0.0.1:80/api/adminseat/" + id).then((response) => {
-            this.loadSeat()
-        });
+        axios.delete("http://127.0.0.1:80/api/booking_seat/" + id)
+            .then((response) => {
+                this.loadLog();
+            });
     }
-
-
 
     // DEFAULT STUFF
     componentWillMount() {
-        this.loadSeat();
+        this.loadLog();
     }
-
 
     // Render
     render() {
-        let seats = this.state.seats.map((seat) => {
+        let logs = this.state.seats.map((log) => {
+            var datetime_date = new Date(log.datetime);
+            var createdat_date = new Date(log.created_at);
+
             return (
-                
-                
-                <tr key={seat.id}>
-                    <td>{seat.id}</td>
-                    <td>{seat.table_number}</td>
-                    {/* for seat.closed, 1 is CLOSED, 0 is Available */}
-                    <td> {seat.closed ? 'Closed' : 'Available'} </td>
-                    <td>{(seat.closed_reason==null) ? '-' : seat.closed_reason}</td>
+                <tr key={log.id}>
+                    <td>{log.id}</td>
+                    <td>{log.name}</td>
+                    <td>{log.purpose}</td>
+                    <td>{log.seat}</td>
+                    <td>{dateFormat(datetime_date, "yyyy-mm-dd HH:MM:ss")}</td>
                     <td>
-                        <Button color="danger" size="sm" outline onClick={this.deleteSeat.bind(this, seat.id)}>
-                            {" "} Delete {" "}
+                        {dateFormat(createdat_date, "yyyy-mm-dd HH:MM:ss")}
+                    </td>
+                    <td>
+                        <Button
+                            color="danger"
+                            size="sm"
+                            outline
+                            onClick={this.deleteSeat.bind(this, seat.id)}
+                        >
+                            {" "} Delete{" "}
                         </Button>
                     </td>
                 </tr>
             );
         });
 
-
-        return(
-            <div className="container">   
-                 
+        return (
+            <div className="container">
                 {/* Load Table */}
                 <div>
-                {/* Missing OnClick*/}
-                <Button color="primary"  style={{ marginLeft: '95%' }}> {" "} Add {" "}</Button>
+                    {/* Missing OnClick*/}
+                    <Button color="primary" style={{ marginLeft: "95%" }}>
+                        {" "}
+                        Add{" "}
+                    </Button>
                     <Table>
-                        <thead>
+                    <thead>
                             <tr>
-                                <th> ID </th>
-                                <th> Table Number </th>
-                                <th> Status </th>
-                                <th> Closed Reason </th>
+                                <th> Booking ID </th>
+                                <th> Person Name </th>
+                                <th> Purpose </th>
+                                <th> Seat </th>
+                                <th> Booked Date & Time </th>
+                                <th> Booked At </th>
                             </tr>
                         </thead>
-                        <tbody>
-                            {seats}
-                        </tbody>
+                        <tbody>{logs}</tbody>
                     </Table>
                 </div>
             </div>
