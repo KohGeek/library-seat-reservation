@@ -4,6 +4,9 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AdminSeatController;
 use App\Http\Controllers\AdminLogController;
+use App\Http\Controllers\DashboardController;
+use App\Http\Controllers\SlotController;
+
 use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\Auth\RegisterController;
 
@@ -44,9 +47,9 @@ Route::post('users', [LoginController::class, 'login']);
 Route::post('user', [RegisterController::class, 'register']);
 
 // Dashboard API
-Route::get('booking', [AdminLogController::class, 'index']);
+Route::get('booking', [DashboardController::class, 'index']);
 //Route::get('booking_listseat', [AdminLogController::class, 'getSeat']);
-Route::delete('booking_seat/{id}', [AdminSeatController::class, 'destroy']);
+Route::delete('booking_seat/{id}', [DashboardController::class, 'destroy']);
 
 // Viewslot API
 Route::get('viewseats',[SlotController::class,'seatsIndex']);

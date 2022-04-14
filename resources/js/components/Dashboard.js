@@ -53,7 +53,7 @@ export default class Dashboard extends Component {
 
     // Render
     render() {
-        let logs = this.state.seats.map((log) => {
+        let logs = this.state.logs.map((log) => {
             var datetime_date = new Date(log.datetime);
             var createdat_date = new Date(log.created_at);
 
@@ -72,7 +72,7 @@ export default class Dashboard extends Component {
                             color="danger"
                             size="sm"
                             outline
-                            onClick={this.deleteSeat.bind(this, seat.id)}
+                            onClick={this.deleteSeat.bind(this, log.id)}
                         >
                             {" "} Delete{" "}
                         </Button>
