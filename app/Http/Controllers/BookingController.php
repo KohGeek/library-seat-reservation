@@ -42,8 +42,6 @@ class BookingController extends Controller
                 $booking = json_encode($booking);
                 array_push($tempbookingdata, $booking);
             }
-            Log::info($tempbookingdata);
-            Log::info($seats);
             $seats = array_diff($seats, $tempbookingdata);
         }
 
@@ -65,7 +63,8 @@ class BookingController extends Controller
             ->get();
     }
 
-    public function store(Request $req){
+    public function store(Request $req)
+    {
         return BookingData::create($req->all());
     }
 }
