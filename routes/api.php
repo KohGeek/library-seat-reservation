@@ -26,6 +26,8 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 
 // Admin Logs' API
 Route::get('adminlogs', [AdminLogController::class, 'index']);
+Route::get('adminlogs_listseat', [AdminLogController::class, 'getSeat']);
+Route::get('adminlogs/search', [AdminLogController::class, 'search']);
 
 // Admin Seats' API
 Route::get('adminseats', [AdminSeatController::class, 'index']);
