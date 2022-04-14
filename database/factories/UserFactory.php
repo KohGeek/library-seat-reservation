@@ -40,4 +40,16 @@ class UserFactory extends Factory
             ];
         });
     }
+
+    /**
+     * Indicate that the model is librarian.
+     */
+    public function librarian()
+    {
+        return $this->state(function (array $attributes) {
+            return [
+                'role' => 'librarian',
+            ];
+        });
+    }
 }

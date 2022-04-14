@@ -17,7 +17,38 @@ class SeatFactory extends Factory
     public function definition()
     {
         return [
-            //
+            'table_number' => $this->faker->numberBetween(1, 10),
+            'closed' => false,
         ];
+    }
+
+    /**
+     * Indicate that the model's availability should be closed.
+     *
+     * @return \Illuminate\Database\Eloquent\Factories\Factory
+     */
+    public function closed()
+    {
+        return $this->state(function (array $attributes) {
+            return [
+                'closed' => true,
+                'closed_reason' => $this->faker->sentence,
+            ];
+        });
+    }
+
+    /**
+     * Indicate soft-deleted model
+     * 
+     * @return \Illuminate\Database\Eloquent\Factories\Factory
+     */
+
+    public function deleted()
+    {
+        return $this->state(function (array $attributes) {
+            return [
+                'deleted_at' => now(),
+            ];
+        });
     }
 }
