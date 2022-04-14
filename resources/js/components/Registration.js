@@ -35,7 +35,7 @@ export default class Registration extends Component {
         return (
             <div className="container">
                 <div className="register">
-                    <h2>Login</h2>
+                    <h2>Registration</h2>
                     <Form className="form">
                         <FormGroup>
                             <Label for="name">Name</Label>

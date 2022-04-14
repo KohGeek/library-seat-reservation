@@ -26,6 +26,8 @@ export default class ViewSlot extends Component {
                 date: "",
                 time: "",
             },
+            searchBy:"seatID",
+            searchInput:"",
         };
         this.onChangeValue = this.onChangeValue.bind(this);
     }
@@ -55,38 +57,39 @@ export default class ViewSlot extends Component {
         });
         return (
             <div className="container">
-                <h2>Search by</h2>
+               
 
-                <form onSubmit={this.formSubmit}>
-                    <div className="radio">
-                        <label>
-                            <input
-                                type="radio"
-                                value="seatID"
-                                checked={this.state.selectedOption === "seatID"}
-                                onChange={this.onValueChange}
-                            />
-                            Seat ID
-                        </label>
-                    </div>
-                    <div className="radio">
-                        <label>
-                            <input
-                                type="radio"
-                                value="tableNo"
-                                checked={
-                                    this.state.selectedOption === "tableNo"
-                                }
-                                onChange={this.onValueChange}
-                            />
-                            Table Number
-                        </label>
-                    </div>
-
-                    <button className="btn btn-default" type="submit">
-                        Submit
-                    </button>
-                </form>
+                <FormGroup tag="fieldset">
+                    <legend>Search By</legend>
+                    <FormGroup check>
+                    <Label check>
+                        <Input type="radio" name="searchBy" onClick= {() =>{
+                            this.setState({
+                                searchBy:"seatID"
+                            })
+                        }} /> Seat ID
+                    </Label>
+                    </FormGroup>
+                    <FormGroup check>
+                    <Label check>
+                        <Input type="radio" name="searchBy" onClick= {() =>{
+                            this.setState({
+                                searchBy:"tableNo"
+                            })
+                        }}/> Table Number
+                    </Label>
+                    </FormGroup>
+                    <FormGroup>
+                        <Input type="text" name="searchBy" id="searchBy" placeholder={this.state.searchBy}
+                            onChange = {(e) =>{
+                                this.setState({
+                                    searchInput:e.target.value
+                                })
+                            }}
+                        />
+                    </FormGroup>
+                    <Button type="submit">Search</Button>
+                </FormGroup>
 
                 <Table>
                     <thead>
