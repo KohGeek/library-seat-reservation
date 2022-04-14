@@ -87,8 +87,7 @@ export default class Dashboard extends Component {
                 <div>
                     {/* Missing OnClick*/}
                     <Button color="primary" style={{ marginLeft: "95%" }}>
-                        {" "}
-                        Add{" "}
+                        {" "}Add{" "}
                     </Button>
                     <Table>
                     <thead>
