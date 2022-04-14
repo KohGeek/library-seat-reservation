@@ -6,6 +6,10 @@ import {
     Input,
     FormGroup,
     Label,
+    Modal,
+    ModalBody,
+    ModalFooter,
+    ModalHeader,
 } from "reactstrap";
 import axios from "axios";
 import dateFormat from "dateformat";
@@ -22,6 +26,9 @@ export default class Booking extends Component {
             searchViewData: { date: dateFormat(new Date(), "yyyy-mm-dd"), time: "" },
 
             dateValue: new Date(),
+
+            addBookingData: "",
+            addBookingModal: false,
         };
 
         console.log(this.state.dateValue);
@@ -60,6 +67,16 @@ export default class Booking extends Component {
         });
     }
 
+    toggleAddBookingModal(){
+        this.setState({
+            addBookingModal: !this.state.addBookingModal
+        })
+    }
+
+    addBooking(){
+
+    }
+
     render() {
         let slots = this.state.slots.map((slot) => {
             return (
@@ -68,7 +85,7 @@ export default class Booking extends Component {
                     <td>{slot.table_number}</td>
                     <td>{slot.date}</td>
                     <td>{dateFormat(this.convertTimetoDate(slot.time), "HH:MM")}</td>
-                    <td><Button color="success" size="sm" outline onClick={this.callUpdatePost.bind(this, post.id, post.title, post.content, post.user_id)}>
+                    <td><Button color="success" size="sm" outline onClick={this.toggleAddBookingModal.bind(this)}>
                         Add Booking
                     </Button>
                     </td>
@@ -79,6 +96,28 @@ export default class Booking extends Component {
         return (
             <div className="container">
                 <div>
+
+                    <Modal isOpen={this.state.addBookingModal} toggle={this.toggleAddBookingModal.bind(this)}>
+                        <ModalHeader toggle={this.toggleAddBookingModal.bind(this)}>Add Booking</ModalHeader>
+                        <ModalBody>
+                            <FormGroup>
+                                <Label for="purpose"> Purpose </Label>
+                                <Input id="purpose"
+                                       value={this.state.addBookingData}
+                                       onChange = {(e) => {
+                                           let {addBookingData} = this.state
+                                           addBookingData.purpose = e.target.value
+                                           this.setState({addBookingData})
+                                       }}></Input>
+                            </FormGroup>
+                        </ModalBody>
+                        <ModalFooter>
+                            <Button color="primary" onClick={this.addBooking.bind(this)}> Add Booking </Button>
+                            <Button color="primary" onClick={this.toggleAddBookingModal.bind(this)}> Cancel </Button>
+                        </ModalFooter>
+
+                    </Modal>
+
 
                     {/* <h1>Search By</h1> */}
                     <FormGroup>

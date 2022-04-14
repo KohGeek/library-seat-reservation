@@ -40,5 +40,6 @@ Route::get('booking', [DashboardController::class, 'index']);
 //Route::get('booking_listseat', [AdminLogController::class, 'getSeat']);
 Route::delete('booking_seat/{id}', [DashboardController::class, 'destroy']);
 
-// Viewslot API
+// Booking API
 Route::get('slots', [BookingController::class, 'index']);
+Route::post('addBooking',[BookingController::class,'store']);
