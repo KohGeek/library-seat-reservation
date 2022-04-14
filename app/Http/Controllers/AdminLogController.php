@@ -24,6 +24,13 @@ class AdminLogController extends Controller
     // Search Booking Datas
     public function search(Request $req)
     {
+
+        // Data Validation Example ONLY
+        // $req -> validate ([
+        //     'name' => 'required',
+        //     'seat' => 'required'
+        // ]);
+
         $query = [];
         $date = $req->date;
         $time = $req->time;

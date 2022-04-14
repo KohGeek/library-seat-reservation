@@ -14,4 +14,21 @@ class SlotController extends Controller
         
         return $slot;
     }
+
+    public function seatsIndex(){
+        return Seat::all();
+    }
+
+    public function bookingDataIndex(Request $req){
+        
+        $data = BookingData::whereDate("datetime", $date) 
+            ->when($time, function($query, $time){
+                $query->whereTime("datetime", $time);
+            })
+            ->get(['booking_data.datetime', 'booking_data.seat']);
+
+        
+        return $data;
+    }
+
 }

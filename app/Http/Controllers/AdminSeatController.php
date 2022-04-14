@@ -16,12 +16,20 @@ class AdminSeatController extends Controller
     // Store a new SEAT
     public function create(Request $req) 
     {
+        $req -> validate ([
+            'table_number' => 'required|numeric|min:1|max:100'
+        ]);
+
         return Seat::create($req->all());
     }
 
     // Edit a SEAT
     public function update(Request $req, $id) 
     {
+        $req -> validate ([
+            'table_number' => 'required|numeric|min:1|max:100'
+        ]);
+
         $seat = Seat::findOrFail($id);
         $seat -> update($req->all());
         return $seat;

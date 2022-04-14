@@ -6,62 +6,106 @@ import {
     Button,
     Modal,
     ModalHeader,
+    Select,
     ModalBody,
     ModalFooter,
     Input,
     FormGroup,
+    FormText,
     Label,
+    
 } from "reactstrap";
 import axios from "axios";
 import dateFormat, { masks } from "dateformat";
+var DatePicker = require("reactstrap-date-picker");
 
 
 export default class ViewSlot extends Component {
     constructor() {
         super();
+
+
         this.state = {
             slots: [],
-            slotData: {
-                seatID: "",
-                tableNo: "",
-                status: "",
-                date: "",
-                time: "",
-            },
+
+            searchViewData: {seat:"", tableNo:"", date:"", time:""},
+            
             searchBy: "seatID",
             searchInput: "",
 
-            seats: [
-                { id: 1, tableNo: 1, availableTime: [9, 10, 11, 12, 13, 14] },
-                { id: 2, tableNo: 2, availableTime: [9, 10, 11, 12, 13, 14] },
-                { id: 3, tableNo: 3, availableTime: [9, 10, 11, 12, 13, 14] },
-            ]
+            seats: [],
+            bookingData:[],
+
+            dateValue: new Date().toISOString(),
+            formattedValue: "",
+            
         };
+    }
+    
+    handleChange(dateValue, formattedValue){
+        
+        let searchViewData = this.state.searchViewData
+        searchViewData.date = dateValue ? dateFormat(dateValue, "yyyy-mm-dd"): ""
+        
+        this.setState({
+            dateValue: dateValue,
+            formattedValue: formattedValue,
+            searchViewData
+        })
+        console.log("ISO Date: " + this.state.dateValue)
+        console.log("String Date: " + this.state.searchViewData.date)
+
+
     }
 
     componentWillMount() {
         this.loadSlot();
     }
 
+    getSeats(){
+        axios.get("http://127.0.0.1:80/api/viewseats").then((response) => {
+            this.setState({
+                seats: response.data,
+            });
+        });
+    }
+
+    getBookingData(){
+        axios.get("http://127.0.0.1:80/api/viewbookingData").then((response) => {
+            this.setState({
+                bookingData: response.data,
+            });
+        });
+    }
+
     seatGeneration() {
-        var seats = getSeats();
+        this.getSeats();
+        this.getBookingData();
+        var seats = this.state.seats;
+        var bookingData = this.state.bookingData;
         var availableTime = [9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20]
+
+        var tempSeats = [];
 
         seats.forEach(element => {
             var seat = { "id": element.id, "tableNo": element.tableNo, "availableTime": availableTime }
-            this.setState.seats.push(seat);
+            tempSeats.push(seat);
         });
 
-        bookingData.forEach(element => {
-            seats =
-                [
-                    { id: 1, tableNo: 1, availableTime: [9, 10, 11, 12, 13, 14] },
-                    { id: 2, tableNo: 2, availableTime: [9, 10, 11, 12, 13, 14] },
-                    { id: 3, tableNo: 3, availableTime: [9, 10, 11, 12, 13, 14] },
-                ]
+        
 
-            var seat = seats.find(x => x.id === element.seatID);
+        bookingData.forEach(element => {
+            var seat = tempSeats.find(x => x.id === element.seatID);
             seat.availableTime = seat.availableTime.remove(element.time);
+        });
+    }
+
+    searchBy(){
+        let {seat, tableno, date, time} = this.state.searchViewData
+        axios.get("http://127.0.0.1:80/api/viewbookingData",{params: {seat, tableno, date, time}}).then((response) => {
+            this.setState({
+                slots: response.data,
+            });
         });
     }
 
@@ -81,10 +125,10 @@ export default class ViewSlot extends Component {
 
             return (
                 <tr key={slot.seatID}>
+                    <td>{slot.seatID}</td>
                     <td>{slot.tableNo}</td>
-                    <td>{slot.status}</td>
-                    <td>{slot.date}</td>
                     <td>{slot.time}</td>
+                    <td>Action</td>
                 </tr>
             );
         });
@@ -93,35 +137,39 @@ export default class ViewSlot extends Component {
 
 
                 <FormGroup tag="fieldset">
-                    <legend>Search By</legend>
+                    <h1>Search By</h1>
                     <FormGroup check>
-                        <Label check>
-                            <Input type="radio" name="searchBy" onClick={() => {
-                                this.setState({
-                                    searchBy: "seatID"
-                                })
-                            }} /> Seat ID
-                        </Label>
+                    <Label>Date</Label> <br/><br/>
+                        <DatePicker id = "datepicker"
+                                    value = {this.state.dateValue}
+                                    onChange = {(v,f) => this.handleChange(v, f)}/>
                     </FormGroup>
+
                     <FormGroup check>
-                        <Label check>
-                            <Input type="radio" name="searchBy" onClick={() => {
-                                this.setState({
-                                    searchBy: "tableNo"
-                                })
-                            }} /> Table Number
-                        </Label>
-                    </FormGroup>
-                    <FormGroup>
-                        <Input type="text" name="searchBy" id="searchBy" placeholder={this.state.searchBy}
+                    <Label>Time</Label> <br/><br/>
+                    <Input type="select" for="times" id="times"
                             onChange={(e) => {
-                                this.setState({
-                                    searchInput: e.target.value
-                                })
-                            }}
-                        />
+                                let { searchViewData } = this.state
+                                searchViewData.time = e.target.value
+                                this.setState({ searchViewData })
+                            }}>
+                            <option></option>
+                            <option key="01:00:00" value="01:00:00"> 09:00 </option>
+                            <option key="02:00:00" value="02:00:00"> 10:00 </option>
+                            <option key="03:00:00" value="03:00:00"> 11:00 </option>
+                            <option key="04:00:00" value="04:00:00"> 12:00 </option>
+                            <option key="05:00:00" value="05:00:00"> 13:00 </option>
+                            <option key="06:00:00" value="06:00:00"> 14:00 </option>
+                            <option key="07:00:00" value="07:00:00"> 15:00 </option>
+                            <option key="08:00:00" value="08:00:00"> 16:00 </option>
+                            <option key="09:00:00" value="09:00:00"> 17:00 </option>
+                            <option key="10:00:00" value="10:00:00"> 18:00 </option>
+                            <option key="11:00:00" value="11:00:00"> 19:00 </option>
+                            <option key="12:00:00" value="12:00:00"> 20:00 </option>
+                        </Input>
                     </FormGroup>
-                    <Button type="submit">Search</Button>
+                    
+                    <Button type="submit" onClick={this.searchBy.bind(this)}>Search</Button>
                 </FormGroup>
 
                 <Table>
@@ -129,9 +177,8 @@ export default class ViewSlot extends Component {
                         <tr>
                             <th>Seat ID</th>
                             <th>Table Number</th>
-                            <th>Status</th>
-                            <th>Date</th>
                             <th>Time</th>
+                            <th>Action</th>
                         </tr>
                     </thead>
                     <tbody>{slots}</tbody>
