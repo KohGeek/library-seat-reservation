@@ -8,21 +8,9 @@ use App\Models\Seat;
 
 class AdminLogController extends Controller
 {
-    // Load all Booking Datas
-    public function index()
-    {
-        $data = BookingData::join('users', 'users.id', '=', 'booking_data.booked_by')
-            ->get(['booking_data.id', 'users.name', 'booking_data.purpose', 'booking_data.datetime', 'booking_data.seat', 'booking_data.created_at']);
 
-        foreach ($data as $d) {
-            $d->datetime = ((string)$d->datetime . "000");
-        }
-
-        return $data;
-    }
-
-    // Search Booking Datas
-    public function search(Request $req)
+    // Get booking datas
+    public function index(Request $req)
     {
 
         // Data Validation Example ONLY
@@ -44,10 +32,10 @@ class AdminLogController extends Controller
 
         $data = BookingData::join('users', 'users.id', '=', 'booking_data.booked_by')
             ->where($query)
-            ->when($date, function($query, $date){
+            ->when($date, function ($query, $date) {
                 $query->whereDate("datetime", $date);
             })
-            ->when($time, function($query, $time){
+            ->when($time, function ($query, $time) {
                 $query->whereTime("datetime", $time);
             })
             ->get(['booking_data.id', 'users.name', 'booking_data.purpose', 'booking_data.datetime', 'booking_data.seat', 'booking_data.created_at']);

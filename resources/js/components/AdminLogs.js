@@ -13,19 +13,29 @@ import {
     NavItem,
 } from "reactstrap";
 import axios from "axios";
-import dateFormat, { masks } from "dateformat";
-import { toInteger } from "lodash";
-var DatePicker = require("reactstrap-date-picker");
+import dateFormat from "dateformat";
+import DatePicker from "react-datepicker";
+import styled from "styled-components";
+
+import "react-datepicker/dist/react-datepicker.css";
+
+const DatePickerStyle = styled.div`
+    .react-datepicker__close-icon::after {
+        content: "Clear";
+        border-radius: 10%;
+        padding: 0.5rem;
+        background-color: red;
+`
 
 export default class AdminLogs extends Component {
     constructor() {
         super();
         this.state = {
             logs: [],
-            searchLogData: { seat: "", name: "", date:"", time:""},
+            searchLogData: { seat: "", name: "", date: "", time: "" },
             searchLogModal: false,
             listseat: [],
-            datePick: "",
+            datePick: null,
 
             // Data Validation Example ONLY
             // error_msgs_person:[''],
@@ -40,7 +50,7 @@ export default class AdminLogs extends Component {
                 logs: response.data,
             });
         });
-        axios.get("http://127.0.0.1:80/api/adminlogs_listseat", {})
+        axios.get("http://127.0.0.1:80/api/adminlogs/seats", {})
             .then((response) => {
                 this.setState({
                     listseat: response.data,
@@ -52,7 +62,7 @@ export default class AdminLogs extends Component {
     // Searching Logs
     searchLog() {
         let { seat, name, date, time } = this.state.searchLogData
-        axios.get("http://127.0.0.1:80/api/adminlogs/search", { params: { seat, name, date, time } }).then((response) => {
+        axios.get("http://127.0.0.1:80/api/adminlogs", { params: { seat, name, date, time } }).then((response) => {
             this.setState({
                 logs: response.data,
                 //searchLogData: {seat:"", name:"", timeslot:""},
@@ -101,7 +111,7 @@ export default class AdminLogs extends Component {
 
 
     // DEFAULT STUFF
-    componentWillMount() {
+    componentDidMount() {
         this.loadLog();
     }
 
@@ -119,7 +129,7 @@ export default class AdminLogs extends Component {
 
     render() {
         let logs = this.state.logs.map((log) => {
-            
+
             //
             // This is to check what's the data retrive from backend
             //
@@ -128,7 +138,7 @@ export default class AdminLogs extends Component {
 
             var datetime_date = new Date(log.datetime);
             var createdat_date = new Date(log.created_at);
-            
+
 
             return (
                 <tr key={log.id}>
@@ -156,13 +166,13 @@ export default class AdminLogs extends Component {
         return (
             <div className="container">
 
-            
 
-	            {/* Searching Log Section */}
+
+                {/* Searching Log Section */}
                 <div>
                     {/* Filtering - Person Name */}
                     <FormGroup>
-                        <Label > Person Name </Label> 
+                        <Label > Person Name </Label>
                         {/* <br></br> */}
                         {/* <span style={{color:'#FF0000'}} > {this.state.error_msgs_person} </span> */}
                         <Input id="name"
@@ -171,13 +181,13 @@ export default class AdminLogs extends Component {
                                 let { searchLogData } = this.state
                                 searchLogData.name = e.target.value
                                 this.setState({ searchLogData })
-                            }}> </Input>
+                            }} />
                     </FormGroup>
                     {/* Filtering - Seat */}
                     <FormGroup>
                         <Label>Seat</Label> <br></br>
                         {/* <span> {this.state.error_msgs_seat} </span> <br></br> */}
-                        <Input type="select" for="seats" id="seats"
+                        <Input type="select" id="seats"
                             onChange={(e) => {
                                 let { searchLogData } = this.state
                                 searchLogData.seat = e.target.value
@@ -189,15 +199,20 @@ export default class AdminLogs extends Component {
                     {/* Filtering - Date */}
                     <FormGroup>
                         <Label>Booked Date</Label> <br></br>
-                        <DatePicker id = "from_datepicker" 
-                            value = {this.state.datePick} 
-                            onChange = {(v,f) => this.handleChange(v, f)} 
+                        <DatePickerStyle>
+                            <DatePicker
+                                className="form-control"
+                                id="from_datepicker"
+                                selected={this.state.datePick}
+                                isClearable={true}
+                                onChange={(v) => this.handleChange(v)}
                             />
+                        </DatePickerStyle>
                     </FormGroup>
                     {/* Filtering - Time */}
                     <FormGroup>
                         <Label>Booked Time</Label> <br></br>
-                        <Input type="select" for="times" id="times"
+                        <Input type="select" id="times"
                             onChange={(e) => {
                                 let { searchLogData } = this.state
                                 searchLogData.time = e.target.value
@@ -222,10 +237,7 @@ export default class AdminLogs extends Component {
                 </div>
 
                 {/* Load Table */}
-                <div>
-                    <br></br>
-                    <br></br>
-                    <br></br>
+                <div className="mt-4">
                     <Table>
                         <thead>
                             <tr>

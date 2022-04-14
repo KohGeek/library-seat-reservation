@@ -2,9 +2,7 @@
 
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Auth;
-use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\Auth\RegisterController;
-use App\Http\Controllers\SlotController;
 
 
 
@@ -27,37 +25,18 @@ Auth::routes();
 
 Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
 
-Auth::routes();
-
-// //Self-defined routes
-// //Normal Register
-// Route::view('/register','register')->name('register');
-Route::post('/register', [RegisterController::class, 'register']);
-
-// //Normal Login
-// Route::view('/login','auth.login')->name('login');
-Route::post('/login', [LoginController::class, 'login']);
-
 //Librarian Register
-Route::view('/librarianRegister','auth.librarianRegister');
+Route::view('/librarianRegister', 'auth.librarianRegister');
 Route::post('/librarianRegister', [RegisterController::class, 'register']);
 
 //Viewslot
-Route::view('/viewslot','viewslot');
-Route::post('/viewslot',[SlotController::class,'showSlots']);
+Route::view('/booking', 'booking');
 
 //Dashboard
-Route::view('/dashboard','dashboard');
-
-
+Route::view('/dashboard', 'dashboard');
 
 // AdminSeats
-Route::get('/adminseat', function() {
-    return view('adminseat');
-});
+Route::view('adminseat', 'adminseat');
 
 // AdminLogs
-Route::get('/adminlog', function() {
-    return view('adminlog');
-});
-
+Route::view('adminlog', 'adminlog');

@@ -5,10 +5,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AdminSeatController;
 use App\Http\Controllers\AdminLogController;
 use App\Http\Controllers\DashboardController;
-use App\Http\Controllers\SlotController;
-
-use App\Http\Controllers\Auth\LoginController;
-use App\Http\Controllers\Auth\RegisterController;
+use App\Http\Controllers\BookingController;
 
 
 
@@ -30,8 +27,7 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 
 // Admin Logs' API
 Route::get('adminlogs', [AdminLogController::class, 'index']);
-Route::get('adminlogs_listseat', [AdminLogController::class, 'getSeat']);
-Route::get('adminlogs/search', [AdminLogController::class, 'search']);
+Route::get('adminlogs/seats', [AdminLogController::class, 'getSeat']);
 
 // Admin Seats' API
 Route::get('adminseats', [AdminSeatController::class, 'index']);
@@ -39,19 +35,11 @@ Route::post('adminseat', [AdminSeatController::class, 'create']);
 Route::put('adminseat/{id}', [AdminSeatController::class, 'update']);
 Route::delete('adminseat/{id}', [AdminSeatController::class, 'destroy']);
 
-
-// Login API
-// Route::get('users/email/{email}/password/{password}',[LoginController::class,'login']);
-Route::post('users', [LoginController::class, 'login']);
-
-// Register API
-Route::post('user', [RegisterController::class, 'register']);
-
 // Dashboard API
 Route::get('booking', [DashboardController::class, 'index']);
 //Route::get('booking_listseat', [AdminLogController::class, 'getSeat']);
 Route::delete('booking_seat/{id}', [DashboardController::class, 'destroy']);
 
-// Viewslot API
-Route::get('viewseats',[SlotController::class,'seatsIndex']);
-Route::get('viewbookingData',[SlotController::class,'bookingDataIndex']);
+// Booking API
+Route::get('slots', [BookingController::class, 'index']);
+Route::post('addBooking',[BookingController::class,'store']);

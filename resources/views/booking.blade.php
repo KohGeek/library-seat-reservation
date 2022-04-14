@@ -3,15 +3,16 @@
 @section('content')
 <div class="container">
     <div class="row justify-content-center">
-        <div class="col-md-12">
+        <div class="col-md-10">
             <div class="card">
-                <div class="card-header">{{ __('Seats Configuration') }}</div>
+                <div class="card-header">{{ __('Search Booking Log') }}</div>
 
                 <div class="card-body">
-                    <div id="adminseats"></div>
+                    <div id="booking"></div>
                 </div>
             </div>
         </div>
     </div>
 </div>
+
 @endsection
