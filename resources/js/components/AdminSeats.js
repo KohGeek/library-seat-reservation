@@ -12,7 +12,11 @@ export default class AdminSeats extends Component {
             newSeatData: {table_number:"", closed:0, closed_reason:""},
             newSeatModal: false,
             updateSeatData: {id:"", table_number:"", closed:0, closed_reason:"" },
-            updateSeatModal: false
+            updateSeatModal: false,
+
+            // Data Validation
+            errmsg_tablenum_add:[],
+            errmsg_tablenum_update:[],
         }
     }
 
@@ -34,7 +38,19 @@ export default class AdminSeats extends Component {
                 seats,
                 newSeatModal : false,
                 newSeatData : {table_number:"", closed:0, closed_reason:""},
+
+                // Clear Data Validation Error Msgs
+                errmsg_tablenum_add:[],
+                errmsg_tablenum_update:[],
             });
+        }).catch(err => {
+
+            console.log(err.response);
+
+            // Data Validation
+            let {errmsg_tablenum_add} = this.state.errmsg_tablenum_add;
+            errmsg_tablenum_add = err.response.data.errors.table_number;
+            this.setState({ errmsg_tablenum_add });
         });
     }
 
@@ -54,7 +70,17 @@ export default class AdminSeats extends Component {
             this.setState({
                 updateSeatModal : false,
                 updateSeatData : {id:"", table_number:"", closed:0, closed_reason:"" },
+
+                // Clear Data Validation Error Msgs
+                errmsg_tablenum_add:[],
+                errmsg_tablenum_update:[],
             });
+        }).catch(err => {
+
+            // Data Validation
+            let {errmsg_tablenum_update} = this.state.errmsg_tablenum_update;
+            errmsg_tablenum_update = err.response.data.errors.table_number;
+            this.setState({ errmsg_tablenum_update });
         });
     }
 
@@ -108,6 +134,18 @@ export default class AdminSeats extends Component {
             );
         });
 
+        let errmsg_tablenum_add = this.state.errmsg_tablenum_add.map((eta) => {
+            return (
+                <div key={eta} style={{color:'#FF0000'}} > {eta} </div>
+            )
+        });
+
+        let errmsg_tablenum_update = this.state.errmsg_tablenum_update.map((etu) => {
+            return (
+                <div key={etu} style={{color:'#FF0000'}} > {etu} </div>
+            )
+        });
+
 
         return(
             <div className="container">
@@ -121,7 +159,9 @@ export default class AdminSeats extends Component {
                         <ModalBody>
                             {/* ADD SEAT - Table Number */}
                             <FormGroup>
-                                <Label for = "table_number"> Table Number </Label>
+                                <Label for = "table_number"> Table Number </Label> <br></br>
+                                {/* Data Validation for Table Number - Adding */}
+                                {errmsg_tablenum_add}
                                 <Input id = "table_number"
                                     value = {this.state.newSeatData.table_number}
                                     onChange = {(e) => {
@@ -180,7 +220,9 @@ export default class AdminSeats extends Component {
                         <ModalBody>
                             {/* EDIT SEAT - Table Number */}
                             <FormGroup>
-                                <Label for = "table_number"> Table Number </Label>
+                                <Label for = "table_number"> Table Number </Label> <br></br>
+                                {/* Data Validation for Table Number - Updating */}
+                                {errmsg_tablenum_update}
                                 <Input id = "table_number"
                                     value = {this.state.updateSeatData.table_number}
                                     onChange = {(e) => {
