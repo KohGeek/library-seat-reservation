@@ -25,10 +25,7 @@ export default class ViewSlot extends Component {
         this.state = {
             slots: [],
 
-            searchViewData: { seat: "", tableNo: "", date: "", time: "" },
-
-            searchBy: "seatID",
-            searchInput: "",
+            searchViewData: { date: dateFormat(new Date(), "yyyy-mm-dd"), time: "" },
 
             seats: [],
             bookingData: [],
@@ -36,6 +33,7 @@ export default class ViewSlot extends Component {
             dateValue: new Date().toISOString(),
             formattedValue: "",
         };
+
     }
 
     handleChange(dateValue, formattedValue) {
@@ -53,53 +51,24 @@ export default class ViewSlot extends Component {
         console.log("String Date: " + this.state.searchViewData.date);
     }
 
-    getSeats() {}
+    componentDidMount() {
+        this.getSeats();
+        this.searchBy();
+    }
 
-    seatGeneration() {
+    getSeats() {
         axios.get("http://127.0.0.1:80/api/viewseats").then((response) => {
             this.setState({
                 seats: response.data,
             });
         });
-        var seats = this.state.seats;
-        var bookingData = this.state.bookingData;
-        var availableTime = [9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20];
-
-        console.log(seats);
-
-        var tempSeats = [];
-
-        seats.forEach((element) => {
-            var seat = {
-                id: element.id,
-                tableNo: element.table_number,
-                availableTime: availableTime,
-            };
-            tempSeats.push(seat);
-        });
-
-        console.log(tempSeats);
-
-        var tempSeats2 = [];
-
-        bookingData.forEach((element) => {
-            var seat = tempSeats.find((x) => x.id === element.seat);
-
-            seat.availableTime = seat.availableTime.filter(
-                (e) => e !== dateFormat(element.datetime, "H")
-            );
-            tempSeats2.push(seat);
-        });
-
-        console.log(tempSeats2);
-
-        this.setState({
-            slots: tempSeats2,
-        });
     }
+
 
     searchBy() {
         let { date, time } = this.state.searchViewData;
+        let bookingData = [];
+
         axios
             .get("http://127.0.0.1:80/api/viewbookingData", {
                 params: { date, time },
@@ -108,8 +77,31 @@ export default class ViewSlot extends Component {
                 this.setState({
                     bookingData: response.data,
                 });
+                bookingData = response.data;
             });
-        this.seatGeneration();
+
+        let seats = this.state.seats;
+        let availableTime = ["09:00", "10:00", "11:00", "12:00", "13:00", "14:00", "15:00", "16:00", "17:00", "18:00", "19:00", "20:00"];
+
+        let tempSeats = [];
+
+        seats.forEach((element) => {
+            availableTime.forEach((time) => {
+                var seat = {
+                    id: element.id,
+                    tableNo: element.table_number,
+                    time: time,
+                };
+                tempSeats.push(seat);
+            });
+        });
+
+        console.log(tempSeats);
+
+        this.setState({
+            slots: tempSeats,
+        });
+
     }
 
     // loadSlot() {
@@ -125,8 +117,8 @@ export default class ViewSlot extends Component {
             var datetime_date = new Date(slot.date_time);
 
             return (
-                <tr key={slot.seatID}>
-                    <td>{slot.seatID}</td>
+                <tr key={slot.id + "." + slot.time}>
+                    <td>{slot.id}</td>
                     <td>{slot.tableNo}</td>
                     <td>{slot.time}</td>
                     <td>Action</td>
