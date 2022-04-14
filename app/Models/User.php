@@ -45,4 +45,13 @@ class User extends Authenticatable
     protected $casts = [
         'email_verified_at' => 'datetime',
     ];
+
+
+    /**
+     * Get all related booking data for the user
+     */
+    public function bookingData()
+    {
+        return $this->hasMany(BookingData::class);
+    }
 }

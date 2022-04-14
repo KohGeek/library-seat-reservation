@@ -27,4 +27,20 @@ class BookingData extends Model
         'datetime' => 'timestamp',
         'seat' => 'integer',
     ];
+
+    /**
+     * Get the user for the booking data.
+     */
+    public function user()
+    {
+        return $this->belongsTo(User::class);
+    }
+
+    /**
+     * Get the seat for the booking data.
+     */
+    public function seat()
+    {
+        return $this->belongsTo(Seat::class);
+    }
 }
