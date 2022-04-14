@@ -8,7 +8,7 @@
         margin= "20"
         borderRadius="100" />
     <h1>
-        Welcome
+        Welcome 
     </h1>
 </div>
 

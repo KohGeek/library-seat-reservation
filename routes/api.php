@@ -43,6 +43,11 @@ Route::post('users', [LoginController::class, 'login']);
 // Register API
 Route::post('user', [RegisterController::class, 'register']);
 
+// Dashboard API
+Route::get('booking', [AdminLogController::class, 'index']);
+//Route::get('booking_listseat', [AdminLogController::class, 'getSeat']);
+Route::delete('booking_seat/{id}', [AdminSeatController::class, 'destroy']);
+
 // Viewslot API
 Route::get('viewseats',[SlotController::class,'seatsIndex']);
 Route::get('viewbookingData',[SlotController::class,'bookingDataIndex']);
