@@ -21,9 +21,14 @@ class SlotController extends Controller
 
     public function bookingDataIndex(Request $req){
         
-        $data = BookingData::
+        $data = BookingData::whereDate("datetime", $date) 
+            ->when($time, function($query, $time){
+                $query->whereTime("datetime", $time);
+            })
+            ->get(['booking_data.datetime', 'booking_data.seat']);
+
         
-        return BookingData::all();
+        return $data;
     }
 
 }

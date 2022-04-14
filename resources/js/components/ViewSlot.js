@@ -6,28 +6,29 @@ import {
     Button,
     Modal,
     ModalHeader,
+    Select,
     ModalBody,
     ModalFooter,
     Input,
     FormGroup,
+    FormText,
     Label,
-    DropdownMenu,
-    DropdownItem,
-    DropdownToggle,
-    Dropdown
+    
 } from "reactstrap";
 import axios from "axios";
 import dateFormat, { masks } from "dateformat";
+var DatePicker = require("reactstrap-date-picker");
 
 
 export default class ViewSlot extends Component {
     constructor() {
         super();
 
-        this.toggle = this.toggle.bind(this);
 
         this.state = {
             slots: [],
+
+            searchViewData: {seat:"", tableNo:"", date:"", time:""},
             
             searchBy: "seatID",
             searchInput: "",
@@ -35,15 +36,26 @@ export default class ViewSlot extends Component {
             seats: [],
             bookingData:[],
 
-            dropdownOpen:false,
+            dateValue: new Date().toISOString(),
+            formattedValue: "",
             
         };
     }
+    
+    handleChange(dateValue, formattedValue){
+        
+        let searchViewData = this.state.searchViewData
+        searchViewData.date = dateValue ? dateFormat(dateValue, "yyyy-mm-dd"): ""
+        
+        this.setState({
+            dateValue: dateValue,
+            formattedValue: formattedValue,
+            searchViewData
+        })
+        console.log("ISO Date: " + this.state.dateValue)
+        console.log("String Date: " + this.state.searchViewData.date)
 
-    toggle(){
-        this.setState(prevState => ({
-            dropdownOpen: !prevState.dropdownOpen
-        }));
+
     }
 
     componentWillMount() {
@@ -89,7 +101,12 @@ export default class ViewSlot extends Component {
     }
 
     searchBy(){
-
+        let {seat, tableno, date, time} = this.state.searchViewData
+        axios.get("http://127.0.0.1:80/api/viewbookingData",{params: {seat, tableno, date, time}}).then((response) => {
+            this.setState({
+                slots: response.data,
+            });
+        });
     }
 
 
@@ -108,10 +125,10 @@ export default class ViewSlot extends Component {
 
             return (
                 <tr key={slot.seatID}>
+                    <td>{slot.seatID}</td>
                     <td>{slot.tableNo}</td>
-                    <td>{slot.status}</td>
-                    <td>{slot.date}</td>
                     <td>{slot.time}</td>
+                    <td>Action</td>
                 </tr>
             );
         });
@@ -120,44 +137,39 @@ export default class ViewSlot extends Component {
 
 
                 <FormGroup tag="fieldset">
-                    <legend>Search By</legend>
+                    <h1>Search By</h1>
                     <FormGroup check>
-                        <Label check>
-                        <Dropdown isOpen={this.state.dropdownOpen} toggle={this.toggle}>
-                            <DropdownToggle caret>
-                            Year
-                            </DropdownToggle>
-                            <DropdownMenu>
-                                <DropdownItem header>Pick Year</DropdownItem>
-                                <DropdownItem>2018</DropdownItem>
-                                <DropdownItem>2019</DropdownItem>
-                                <DropdownItem>2020</DropdownItem>
-                                <DropdownItem>2021</DropdownItem>
-                                <DropdownItem>2022</DropdownItem>
-                                <DropdownItem>2023</DropdownItem>
-                            </DropdownMenu>
-                        </Dropdown>
-                        </Label>
+                    <Label>Date</Label> <br/><br/>
+                        <DatePicker id = "datepicker"
+                                    value = {this.state.dateValue}
+                                    onChange = {(v,f) => this.handleChange(v, f)}/>
                     </FormGroup>
+
                     <FormGroup check>
-                        <Label check>
-                            <Input type="radio" name="searchBy" onClick={() => {
-                                this.setState({
-                                    searchBy: "tableNo"
-                                })
-                            }} /> Table Number
-                        </Label>
-                    </FormGroup>
-                    <FormGroup>
-                        <Input type="text" name="searchBy" id="searchBy" placeholder={this.state.searchBy}
+                    <Label>Time</Label> <br/><br/>
+                    <Input type="select" for="times" id="times"
                             onChange={(e) => {
-                                this.setState({
-                                    searchInput: e.target.value
-                                })
-                            }}
-                        />
+                                let { searchViewData } = this.state
+                                searchViewData.time = e.target.value
+                                this.setState({ searchViewData })
+                            }}>
+                            <option></option>
+                            <option key="01:00:00" value="01:00:00"> 09:00 </option>
+                            <option key="02:00:00" value="02:00:00"> 10:00 </option>
+                            <option key="03:00:00" value="03:00:00"> 11:00 </option>
+                            <option key="04:00:00" value="04:00:00"> 12:00 </option>
+                            <option key="05:00:00" value="05:00:00"> 13:00 </option>
+                            <option key="06:00:00" value="06:00:00"> 14:00 </option>
+                            <option key="07:00:00" value="07:00:00"> 15:00 </option>
+                            <option key="08:00:00" value="08:00:00"> 16:00 </option>
+                            <option key="09:00:00" value="09:00:00"> 17:00 </option>
+                            <option key="10:00:00" value="10:00:00"> 18:00 </option>
+                            <option key="11:00:00" value="11:00:00"> 19:00 </option>
+                            <option key="12:00:00" value="12:00:00"> 20:00 </option>
+                        </Input>
                     </FormGroup>
-                    <Button type="submit">Search</Button>
+                    
+                    <Button type="submit" onClick={this.searchBy.bind(this)}>Search</Button>
                 </FormGroup>
 
                 <Table>
@@ -165,9 +177,8 @@ export default class ViewSlot extends Component {
                         <tr>
                             <th>Seat ID</th>
                             <th>Table Number</th>
-                            <th>Status</th>
-                            <th>Date</th>
                             <th>Time</th>
+                            <th>Action</th>
                         </tr>
                     </thead>
                     <tbody>{slots}</tbody>
