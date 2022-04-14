@@ -11,6 +11,10 @@ import {
     Input,
     FormGroup,
     Label,
+    DropdownMenu,
+    DropdownItem,
+    DropdownToggle,
+    Dropdown
 } from "reactstrap";
 import axios from "axios";
 import dateFormat, { masks } from "dateformat";
@@ -19,50 +23,73 @@ import dateFormat, { masks } from "dateformat";
 export default class ViewSlot extends Component {
     constructor() {
         super();
+
+        this.toggle = this.toggle.bind(this);
+
         this.state = {
             slots: [],
-            slotData: {
-                seatID: "",
-                tableNo: "",
-                status: "",
-                date: "",
-                time: "",
-            },
+            
             searchBy: "seatID",
             searchInput: "",
 
-            seats: [
-                { id: 1, tableNo: 1, availableTime: [9, 10, 11, 12, 13, 14] },
-                { id: 2, tableNo: 2, availableTime: [9, 10, 11, 12, 13, 14] },
-                { id: 3, tableNo: 3, availableTime: [9, 10, 11, 12, 13, 14] },
-            ]
+            seats: [],
+            bookingData:[],
+
+            dropdownOpen:false,
+            
         };
+    }
+
+    toggle(){
+        this.setState(prevState => ({
+            dropdownOpen: !prevState.dropdownOpen
+        }));
     }
 
     componentWillMount() {
         this.loadSlot();
     }
 
+    getSeats(){
+        axios.get("http://127.0.0.1:80/api/viewseats").then((response) => {
+            this.setState({
+                seats: response.data,
+            });
+        });
+    }
+
+    getBookingData(){
+        axios.get("http://127.0.0.1:80/api/viewbookingData").then((response) => {
+            this.setState({
+                bookingData: response.data,
+            });
+        });
+    }
+
     seatGeneration() {
-        var seats = getSeats();
+        this.getSeats();
+        this.getBookingData();
+        var seats = this.state.seats;
+        var bookingData = this.state.bookingData;
         var availableTime = [9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20]
+
+        var tempSeats = [];
 
         seats.forEach(element => {
             var seat = { "id": element.id, "tableNo": element.tableNo, "availableTime": availableTime }
-            this.setState.seats.push(seat);
+            tempSeats.push(seat);
         });
+
+        
 
         bookingData.forEach(element => {
-            seats =
-                [
-                    { id: 1, tableNo: 1, availableTime: [9, 10, 11, 12, 13, 14] },
-                    { id: 2, tableNo: 2, availableTime: [9, 10, 11, 12, 13, 14] },
-                    { id: 3, tableNo: 3, availableTime: [9, 10, 11, 12, 13, 14] },
-                ]
-
-            var seat = seats.find(x => x.id === element.seatID);
+            var seat = tempSeats.find(x => x.id === element.seatID);
             seat.availableTime = seat.availableTime.remove(element.time);
         });
+    }
+
+    searchBy(){
+
     }
 
 
@@ -96,11 +123,20 @@ export default class ViewSlot extends Component {
                     <legend>Search By</legend>
                     <FormGroup check>
                         <Label check>
-                            <Input type="radio" name="searchBy" onClick={() => {
-                                this.setState({
-                                    searchBy: "seatID"
-                                })
-                            }} /> Seat ID
+                        <Dropdown isOpen={this.state.dropdownOpen} toggle={this.toggle}>
+                            <DropdownToggle caret>
+                            Year
+                            </DropdownToggle>
+                            <DropdownMenu>
+                                <DropdownItem header>Pick Year</DropdownItem>
+                                <DropdownItem>2018</DropdownItem>
+                                <DropdownItem>2019</DropdownItem>
+                                <DropdownItem>2020</DropdownItem>
+                                <DropdownItem>2021</DropdownItem>
+                                <DropdownItem>2022</DropdownItem>
+                                <DropdownItem>2023</DropdownItem>
+                            </DropdownMenu>
+                        </Dropdown>
                         </Label>
                     </FormGroup>
                     <FormGroup check>

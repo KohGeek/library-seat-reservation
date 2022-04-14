@@ -43,3 +43,7 @@ Route::post('users', [LoginController::class, 'login']);
 
 // Register API
 Route::post('user', [RegisterController::class, 'register']);
+
+// Viewslot API
+Route::get('viewseats',[SlotController::class,'seatsIndex']);
+Route::get('viewbookingData',[SlotController::class,'bookingDataIndex']);

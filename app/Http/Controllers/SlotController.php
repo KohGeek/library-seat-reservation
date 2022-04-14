@@ -14,4 +14,16 @@ class SlotController extends Controller
         
         return $slot;
     }
+
+    public function seatsIndex(){
+        return Seat::all();
+    }
+
+    public function bookingDataIndex(Request $req){
+        
+        $data = BookingData::
+        
+        return BookingData::all();
+    }
+
 }
