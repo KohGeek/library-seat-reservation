@@ -88,35 +88,42 @@ export default class ViewSlot extends Component {
         var tempSeats = [];
 
         seats.forEach(element => {
-            var seat = { "id": element.id, "tableNo": element.tableNo, "availableTime": availableTime }
+            var seat = { "id": element.id, "tableNo": element.table_number, "availableTime": availableTime }
             tempSeats.push(seat);
         });
 
-        
+        var tempSeats2 = [];
 
         bookingData.forEach(element => {
-            var seat = tempSeats.find(x => x.id === element.seatID);
-            seat.availableTime = seat.availableTime.remove(element.time);
+            var seat = tempSeats.find(x => x.id === element.seat);
+
+            seat.availableTime = seat.availableTime.remove(dateFormat(element.datetime, "H"));
+            tempSeats2.push(seat);
         });
+
+        this.setState({
+            slots: tempSeats2
+        })
+
     }
 
     searchBy(){
         let {seat, tableno, date, time} = this.state.searchViewData
         axios.get("http://127.0.0.1:80/api/viewbookingData",{params: {seat, tableno, date, time}}).then((response) => {
             this.setState({
-                slots: response.data,
+                bookingData: response.data,
             });
         });
     }
 
 
-    loadSlot() {
-        axios.get("http://127.0.0.1:80/api/slots").then((response) => {
-            this.setState({
-                slots: response.data,
-            });
-        });
-    }
+    // loadSlot() {
+    //     axios.get("http://127.0.0.1:80/api/slots").then((response) => {
+    //         this.setState({
+    //             slots: response.data,
+    //         });
+    //     });
+    // }
 
     render() {
         let slots = this.state.slots.map((slot) => {
