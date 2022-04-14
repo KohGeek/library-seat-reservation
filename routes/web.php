@@ -38,7 +38,7 @@ Route::view('/viewslots', 'viewslot');
 Route::view('/dashboard', 'dashboard');
 
 // AdminSeats
-Route::view('adminseat');
+Route::view('adminseat', 'adminseat');
 
 // AdminLogs
-Route::view('adminlog');
+Route::view('adminlog', 'adminlog');
