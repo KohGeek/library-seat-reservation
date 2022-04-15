@@ -9,11 +9,14 @@ use App\Models\TimeSlot;
 
 class DashboardController extends Controller
 {
-    // Load all Booking Datas
-    public function index()
+    // Load all data from user's booking
+    public function show(Request $req)
     {
+
         $data = BookingData::join('users', 'users.id', '=', 'booking_data.booked_by')
+            ->which('booking_data.booked_by', $req->user()->id)
             ->get(['booking_data.id', 'users.name', 'booking_data.purpose', 'booking_data.datetime', 'booking_data.seat', 'booking_data.created_at']);
+        $this->authorize('view', $data);
 
         foreach ($data as $d) {
             $d->datetime = ((string)$d->datetime . "000");
@@ -23,13 +26,14 @@ class DashboardController extends Controller
     }
 
     //delete
-    public function destroy($id) 
+    public function destroy($id)
     {
         $data = BookingData::findOrFail($id);
-        $data -> delete();
+        $this->authorize('delete', $data);
+        $data->delete();
         return 204;
     }
-   
+
     // Get Seat Data
     public function getSeat()
     {

@@ -34,9 +34,9 @@ Route::put('adminseat/{id}', [AdminSeatController::class, 'update']);
 Route::delete('adminseat/{id}', [AdminSeatController::class, 'destroy']);
 
 // Dashboard API
-Route::get('booking', [DashboardController::class, 'index']);
+Route::get('booking', [DashboardController::class, 'show']);
 //Route::get('booking_listseat', [AdminLogController::class, 'getSeat']);
-Route::delete('booking_seat/{id}', [DashboardController::class, 'destroy']);
+Route::delete('booking/{id}', [DashboardController::class, 'destroy']);
 
 // Booking API
 Route::get('slots', [BookingController::class, 'index']);
