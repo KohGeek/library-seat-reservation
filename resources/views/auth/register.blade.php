@@ -77,18 +77,17 @@
                             </div>
                         </div>
 
-                        <!-- <div class="row mb-3">
+                        <div class="row mb-3">
                             <label for="role" class="col-md-4 col-form-label text-md-end">{{ __('Role') }}</label>
 
                             <div class="col-md-6">
-                                <select name="role" id="role">
+                                <select class="form-select" name="role" id="role">
                                     <option value="">--- Choose a role ---</option>
                                     <option value="student">Student</option>
-                                    <option value="staff">Staff</option>
+                                    <option value="Librarian">Librarian</option>
                                 </select>
                             </div>
-
-                        </div> -->
+                        </div>
 
                         <div class="row mb-0">
                             <div class="col-md-6 offset-md-4">
@@ -102,8 +101,5 @@
             </div>
         </div>
     </div>
-
-    <div id="registration"></div>
-
 </div>
 @endsection

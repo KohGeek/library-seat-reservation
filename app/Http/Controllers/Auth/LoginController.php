@@ -31,7 +31,7 @@ class LoginController extends Controller
      *
      * @var string
      */
-    protected $redirectTo = RouteServiceProvider::HOME;
+    protected $redirectTo = '/home';
 
     /**
      * Create a new controller instance.
@@ -53,7 +53,7 @@ class LoginController extends Controller
 
         if (Auth::attempt($credentials)) {
             $req->session()->regenerate();
-            
+
             return redirect()->intended('/home');
         }
 
@@ -62,10 +62,8 @@ class LoginController extends Controller
         ])->withInput($req->only('email', 'remember'));
     }
 
-  
-
     public function login(Request $req)
     {
-        $this->authenticate($req);
+        return $this->authenticate($req);
     }
 }

@@ -32,7 +32,7 @@ class RegisterController extends Controller
      *
      * @var string
      */
-    protected $redirectTo = RouteServiceProvider::HOME;
+    protected $redirectTo = '/dashboard';
 
     /**
      * Create a new controller instance.
@@ -62,7 +62,7 @@ class RegisterController extends Controller
     }
 
     /**
-     * Create a new user instance after a valid registration.
+     * Create a new student instance after a valid registration.
      *
      * @param  array  $data
      * @return \App\Models\User
@@ -78,21 +78,14 @@ class RegisterController extends Controller
         ]);
     }
 
+
     public function register(Request $req)
     {
 
-        $validator = $this->validator($req->all());
+        $this->validator($req->all())->validate();
 
-        if ($validator->fails()) {
-            return back()->withErrors($validator)->withInput();
-        }
+        $this->create($req->all());
 
-        $user = new User;
-        $user = $this->create($req->all());
-        $user->save();
-
-        $req->session()->flash('user', $user['username']);
-
-        return redirect('login');
+        return redirect()->intended('login');
     }
 }

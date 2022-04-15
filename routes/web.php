@@ -2,8 +2,7 @@
 
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Auth;
-use App\Http\Controllers\Auth\RegisterController;
-
+use App\Http\Controllers\HomeController;
 
 
 /*
@@ -17,26 +16,15 @@ use App\Http\Controllers\Auth\RegisterController;
 |
 */
 
-Route::get('/', function () {
-    return view('welcome');
-});
+Route::get('/', [HomeController::class, 'index'])->name('home');
+Route::get('/home', [HomeController::class, 'index'])->name('home');
+Route::get('/dashboard', [HomeController::class, 'index'])->name('home');
 
 Auth::routes();
 
-Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
+// Student only
+Route::view('/booking', 'booking')->middleware('can:isStudent')->name('booking');
 
-//Librarian Register
-Route::view('/librarianRegister', 'auth.librarianRegister');
-Route::post('/librarianRegister', [RegisterController::class, 'register']);
-
-//Viewslot
-Route::view('/booking', 'booking');
-
-//Dashboard
-Route::view('/dashboard', 'dashboard');
-
-// AdminSeats
-Route::view('adminseat', 'adminseat');
-
-// AdminLogs
-Route::view('adminlog', 'adminlog');
+// Librarian Only
+Route::view('/adminseat', 'adminseat')->middleware('can:isLibrarian')->name('adminseat');
+Route::view('/adminlog', 'adminlog')->middleware('can:isLibrarian')->name('adminlog');

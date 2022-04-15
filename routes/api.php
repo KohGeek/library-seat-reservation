@@ -8,8 +8,6 @@ use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\BookingController;
 
 
-
-
 /*
 |--------------------------------------------------------------------------
 | API Routes
@@ -42,4 +40,4 @@ Route::delete('booking_seat/{id}', [DashboardController::class, 'destroy']);
 
 // Booking API
 Route::get('slots', [BookingController::class, 'index']);
-Route::post('addBooking',[BookingController::class,'store']);
+Route::post('addBooking', [BookingController::class, 'store']);

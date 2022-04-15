@@ -44,7 +44,7 @@ return [
             'driver' => 'session',
             'provider' => 'users'
         ],
-        
+
     ],
 
     /*
@@ -70,7 +70,6 @@ return [
             'model' => App\Models\User::class,
         ],
 
-    
 
         // 'users' => [
         //     'driver' => 'database',
