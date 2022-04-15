@@ -37,6 +37,28 @@
                 <div class="collapse navbar-collapse" id="navbarSupportedContent">
                     <!-- Left Side Of Navbar -->
                     <ul class="navbar-nav me-auto">
+                        
+                        <li class="nav-item">
+                            <a class="nav-link" href="{{ route('home') }}">{{ __('Dashboard') }}</a>
+                        </li>
+
+                        @can('isLibrarian')
+                        <li class="nav-item">
+                            <a class="nav-link" href="{{ route('adminseat') }}">{{ __('Seat Configuration') }}</a>
+                        </li>
+
+                        <li class="nav-item">
+                            <a class="nav-link" href="{{ route('adminlog') }}">{{ __('View Booking Logs') }}</a>
+                        </li>
+
+                        @elsecan('isStudent')
+                        <li class="nav-item">
+                            <a class="nav-link" href="{{ route('booking') }}">{{ __('Booking') }}</a>
+                        </li>
+
+                        @endcan
+
+
 
                     </ul>
 
