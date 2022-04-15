@@ -21,7 +21,7 @@ export default class Dashboard extends Component {
         super();
         this.state = {
             logs: [],
-            
+
         };
     }
 
@@ -32,14 +32,14 @@ export default class Dashboard extends Component {
                 logs: response.data,
             });
         });
-        
+
     }
 
-    
+
 
     // Delete
     deleteSeat(id) {
-        axios.delete("http://127.0.0.1:80/api/booking_seat/" + id)
+        axios.delete("http://127.0.0.1:80/api/booking/" + id)
             .then((response) => {
                 this.loadLog();
             });
@@ -63,7 +63,7 @@ export default class Dashboard extends Component {
                     <td>{log.name}</td>
                     <td>{log.purpose}</td>
                     <td>{log.seat}</td>
-                    
+
                     <td>
                         {dateFormat(createdat_date, "yyyy-mm-dd HH:MM:ss")}
                     </td>
@@ -90,7 +90,7 @@ export default class Dashboard extends Component {
                         {" "}Add{" "}
                     </Button>
                     <Table>
-                    <thead>
+                        <thead>
                             <tr>
                                 <th> Booked Date & Time </th>
                                 <th> Booking ID </th>
