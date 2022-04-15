@@ -28,6 +28,7 @@
     },
     "dependencies": {
         "dateformat": "^5.0.3",
+        "js-cookie": "^3.0.1",
         "npm": "^8.5.2",
         "proptypes": "^1.1.0",
         "react-datepicker": "^4.7.0",
