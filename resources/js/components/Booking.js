@@ -27,7 +27,7 @@ export default class Booking extends Component {
 
             dateValue: new Date(),
 
-            addBookingData: "",
+            addBookingData: {booked_by:"", purpose:"", datetime:"", seat:""},
             addBookingModal: false,
         };
 
@@ -67,14 +67,32 @@ export default class Booking extends Component {
         });
     }
 
-    toggleAddBookingModal(){
+    toggleAddBookingModal(seatid, purpose, date, time){
         this.setState({
             addBookingModal: !this.state.addBookingModal
         })
     }
 
-    addBooking(){
+    callAddBooking(seatid, date, time){
+        
+        let datetime = date +" "+ time;
+        console.log(datetime);
+        // booked_by = session
+        let booked_by = 1;
+        this.setState({         
+            addBookingData:{booked_by, datetime:datetime, seat:seatid},
+            addBookingModal: !this.state.addBookingModal,
+        });
+    }
 
+    addBooking(){
+        let {booked_by, purpose, datetime, seat} = this.state.addBookingData;
+        axios.post("http://127.0.0.1:80/api/addBooking", this.state.addBookingData).then((response) => {
+            this.setState({
+                addBookingModal: false,
+                addBookingData:{booked_by:"", purpose:"", datetime:"", seat:""},
+            });
+        });
     }
 
     render() {
@@ -85,11 +103,12 @@ export default class Booking extends Component {
                     <td>{slot.table_number}</td>
                     <td>{slot.date}</td>
                     <td>{dateFormat(this.convertTimetoDate(slot.time), "HH:MM")}</td>
-                    <td><Button color="success" size="sm" outline onClick={this.toggleAddBookingModal.bind(this)}>
+                    <td><Button color="success" size="sm" outline onClick={this.callAddBooking.bind(this, slot.id, slot.date, slot.time)}>
                         Add Booking
                     </Button>
                     </td>
                 </tr>
+                
             );
         });
 
@@ -97,13 +116,13 @@ export default class Booking extends Component {
             <div className="container">
                 <div>
 
-                    <Modal isOpen={this.state.addBookingModal} toggle={this.toggleAddBookingModal.bind(this)}>
+                <Modal isOpen={this.state.addBookingModal} toggle={this.toggleAddBookingModal.bind(this)}>
                         <ModalHeader toggle={this.toggleAddBookingModal.bind(this)}>Add Booking</ModalHeader>
                         <ModalBody>
                             <FormGroup>
                                 <Label for="purpose"> Purpose </Label>
                                 <Input id="purpose"
-                                       value={this.state.addBookingData}
+                                       value={this.state.addBookingData.purpose}
                                        onChange = {(e) => {
                                            let {addBookingData} = this.state
                                            addBookingData.purpose = e.target.value
