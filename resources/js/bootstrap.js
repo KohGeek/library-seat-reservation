@@ -1,8 +1,12 @@
+const { default: axios } = require('axios');
+
+axios.defaults.withCredentials = true;
+
 window._ = require('lodash');
 
 try {
     require('bootstrap');
-} catch (e) {}
+} catch (e) { }
 
 /**
  * We'll load the axios HTTP library which allows us to easily issue requests

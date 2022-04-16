@@ -36,10 +36,6 @@ export default class AdminLogs extends Component {
             searchLogModal: false,
             listseat: [],
             datePick: null,
-
-            // Data Validation Example ONLY
-            // error_msgs_person:[''],
-            // error_msgs_seat:[''],
         }
     }
 
@@ -65,25 +61,8 @@ export default class AdminLogs extends Component {
         axios.get("http://127.0.0.1:80/api/adminlogs", { params: { seat, name, date, time } }).then((response) => {
             this.setState({
                 logs: response.data,
-                //searchLogData: {seat:"", name:"", timeslot:""},
                 searchLogModal: false,
             });
-
-            // LOG --- TO see what Param passed to Controller
-            //console.log(this.state.searchLogData);
-        }).catch(err => {
-            // console.log(err);
-            // console.log(err.message);
-            // console.log(err.response);
-            // console.log(err.response.data.message);
-
-            // let {error_msgs_person} = this.state.error_msgs_person;
-            // let {error_msgs_seat} = this.state.error_msgs_seat;
-            // error_msgs_person = err.response.data.errors.name;
-            // error_msgs_seat = err.response.data.errors.seat;
-            // this.setState({ error_msgs_person });
-            // this.setState({ error_msgs_seat });
-            // console.log(error_msgs);
         });
     }
 
@@ -116,26 +95,8 @@ export default class AdminLogs extends Component {
     }
 
 
-
-    componentDidUpdate() {
-        // // Access ISO String and formatted values from the DOM.
-        // var hiddenInputElement = document.getElementById("from_datepicker");
-        // console.log(hiddenInputElement.datePick); // ISO String, ex: "2016-11-19T12:00:00.000Z"
-        // console.log(hiddenInputElement.getAttribute('data-formattedvalue')) // Formatted String, ex: "11/19/2016"
-        // console.log(dateFormat(hiddenInputElement.datePick, "yyyy-mm-dd"))
-    }
-
-
-
     render() {
         let logs = this.state.logs.map((log) => {
-
-            //
-            // This is to check what's the data retrive from backend
-            //
-            // console.log(log.datetime);
-            // console.log(log.created_at);
-
             var datetime_date = new Date(log.datetime);
             var createdat_date = new Date(log.created_at);
 
@@ -173,8 +134,6 @@ export default class AdminLogs extends Component {
                     {/* Filtering - Person Name */}
                     <FormGroup>
                         <Label > Person Name </Label>
-                        {/* <br></br> */}
-                        {/* <span style={{color:'#FF0000'}} > {this.state.error_msgs_person} </span> */}
                         <Input id="name"
                             value={this.state.searchLogData.name}
                             onChange={(e) => {
@@ -186,7 +145,6 @@ export default class AdminLogs extends Component {
                     {/* Filtering - Seat */}
                     <FormGroup>
                         <Label>Seat</Label> <br></br>
-                        {/* <span> {this.state.error_msgs_seat} </span> <br></br> */}
                         <Input type="select" id="seats"
                             onChange={(e) => {
                                 let { searchLogData } = this.state
@@ -237,7 +195,7 @@ export default class AdminLogs extends Component {
                 </div>
 
                 {/* Load Table */}
-                <div className="mt-4">
+                <div className="mt-4 table-responsive">
                     <Table>
                         <thead>
                             <tr>

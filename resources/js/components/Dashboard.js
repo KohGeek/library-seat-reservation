@@ -1,19 +1,8 @@
 import React, { Component } from "react";
 import ReactDOM from "react-dom";
-import {
-    Table,
-    Button,
-    Modal,
-    ModalHeader,
-    ModalBody,
-    ModalFooter,
-    Input,
-    FormGroup,
-    Label,
-    NavItem,
-} from "reactstrap";
+import { Table, Button } from "reactstrap";
 import axios from "axios";
-import dateFormat, { masks } from "dateformat";
+import dateFormat from "dateformat";
 
 
 export default class Dashboard extends Component {
@@ -35,10 +24,8 @@ export default class Dashboard extends Component {
 
     }
 
-
-
     // Delete
-    deleteSeat(id) {
+    deleteBooking(id) {
         axios.delete("http://127.0.0.1:80/api/booking/" + id)
             .then((response) => {
                 this.loadLog();
@@ -46,7 +33,7 @@ export default class Dashboard extends Component {
     }
 
     // DEFAULT STUFF
-    componentWillMount() {
+    componentDidMount() {
         this.loadLog();
     }
 
@@ -72,9 +59,9 @@ export default class Dashboard extends Component {
                             color="danger"
                             size="sm"
                             outline
-                            onClick={this.deleteSeat.bind(this, log.id)}
+                            onClick={this.deleteBooking.bind(this, log.id)}
                         >
-                            {" "} Delete{" "}
+                            Delete
                         </Button>
                     </td>
                 </tr>
@@ -86,22 +73,24 @@ export default class Dashboard extends Component {
                 {/* Load Table */}
                 <div>
                     {/* Missing OnClick*/}
-                    <Button color="primary" style={{ marginLeft: "92%" }}>
-                        {" "}Add{" "}
-                    </Button>
-                    <Table>
-                        <thead>
-                            <tr>
-                                <th> Booked Date & Time </th>
-                                <th> Booking ID </th>
-                                <th> Person Name </th>
-                                <th> Purpose </th>
-                                <th> Seat </th>
-                                <th> Booked At </th>
-                            </tr>
-                        </thead>
-                        <tbody>{logs}</tbody>
-                    </Table>
+                    <a className="btn btn-primary mt-4" href="/booking">
+                        Add
+                    </a>
+                    <div className="table-responsive">
+                        <Table>
+                            <thead>
+                                <tr>
+                                    <th> Booked Date & Time </th>
+                                    <th> Booking ID </th>
+                                    <th> Person Name </th>
+                                    <th> Purpose </th>
+                                    <th> Seat </th>
+                                    <th> Booked At </th>
+                                </tr>
+                            </thead>
+                            <tbody>{logs}</tbody>
+                        </Table>
+                    </div>
                 </div>
             </div>
         );

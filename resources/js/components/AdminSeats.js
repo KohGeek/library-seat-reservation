@@ -13,6 +13,7 @@ export default class AdminSeats extends Component {
             newSeatModal: false,
             updateSeatData: { id: "", table_number: "", closed: 0, closed_reason: "" },
             updateSeatModal: false,
+            reasonDisabled: true,
 
             // Data Validation
             errmsg_tablenum_add: [],
@@ -124,10 +125,10 @@ export default class AdminSeats extends Component {
                     <td>{(seat.closed_reason == null) ? '-' : seat.closed_reason}</td>
                     <td>
                         <Button color="success" size="sm" outline onClick={this.callUpdateSeat.bind(this, seat.id, seat.table_number, seat.closed, seat.closed_reason)}>
-                            {" "} Edit {" "}
+                            Edit
                         </Button>
                         <Button color="danger" size="sm" outline onClick={this.deleteSeat.bind(this, seat.id)}>
-                            {" "} Delete {" "}
+                            Delete
                         </Button>
                     </td>
                 </tr>
@@ -277,7 +278,7 @@ export default class AdminSeats extends Component {
                 </div>
 
                 {/* Load Table */}
-                <div>
+                <div className="mt-4 table-responsive">
                     <Table>
                         <thead>
                             <tr>

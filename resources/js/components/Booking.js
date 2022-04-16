@@ -27,12 +27,14 @@ export default class Booking extends Component {
 
             dateValue: new Date(),
 
-            addBookingData: {booked_by:"", purpose:"", datetime:"", seat:""},
+            addBookingData: { purpose: "", datetime: "", seat: "" },
             addBookingModal: false,
         };
 
-        console.log(this.state.dateValue);
+    }
 
+    componentDidMount() {
+        this.getSeats();
     }
 
     convertTimetoDate(time) {
@@ -54,10 +56,6 @@ export default class Booking extends Component {
         });
     }
 
-    componentDidMount() {
-        this.getSeats();
-    }
-
     getSeats() {
         let { date, time } = this.state.searchViewData;
         axios.get("http://127.0.0.1:80/api/slots", { params: { date, time } }).then((response) => {
@@ -67,32 +65,28 @@ export default class Booking extends Component {
         });
     }
 
-    toggleAddBookingModal(seatid, purpose, date, time){
+    toggleAddBookingModal() {
         this.setState({
             addBookingModal: !this.state.addBookingModal
         })
     }
 
-    callAddBooking(seatid, date, time){
-        
-        let datetime = date +" "+ time;
-        console.log(datetime);
-        // booked_by = session
-        let booked_by = 1;
-        this.setState({         
-            addBookingData:{booked_by, datetime:datetime, seat:seatid},
-            addBookingModal: !this.state.addBookingModal,
+    callAddBooking(seatid, date, time) {
+        let datetime = date + " " + time;
+        this.setState({
+            addBookingData: { datetime: datetime, seat: seatid },
         });
+        this.toggleAddBookingModal();
     }
 
-    addBooking(){
-        let {booked_by, purpose, datetime, seat} = this.state.addBookingData;
+    addBooking() {
         axios.post("http://127.0.0.1:80/api/addBooking", this.state.addBookingData).then((response) => {
             this.setState({
-                addBookingModal: false,
-                addBookingData:{booked_by:"", purpose:"", datetime:"", seat:""},
+                addBookingData: { purpose: "", datetime: "", seat: "" },
             });
         });
+        this.toggleAddBookingModal();
+        this.getSeats();
     }
 
     render() {
@@ -108,7 +102,7 @@ export default class Booking extends Component {
                     </Button>
                     </td>
                 </tr>
-                
+
             );
         });
 
@@ -116,18 +110,18 @@ export default class Booking extends Component {
             <div className="container">
                 <div>
 
-                <Modal isOpen={this.state.addBookingModal} toggle={this.toggleAddBookingModal.bind(this)}>
+                    <Modal isOpen={this.state.addBookingModal} toggle={this.toggleAddBookingModal.bind(this)}>
                         <ModalHeader toggle={this.toggleAddBookingModal.bind(this)}>Add Booking</ModalHeader>
                         <ModalBody>
                             <FormGroup>
                                 <Label for="purpose"> Purpose </Label>
                                 <Input id="purpose"
-                                       value={this.state.addBookingData.purpose}
-                                       onChange = {(e) => {
-                                           let {addBookingData} = this.state
-                                           addBookingData.purpose = e.target.value
-                                           this.setState({addBookingData})
-                                       }}></Input>
+                                    value={this.state.addBookingData.purpose}
+                                    onChange={(e) => {
+                                        let { addBookingData } = this.state
+                                        addBookingData.purpose = e.target.value
+                                        this.setState({ addBookingData })
+                                    }}></Input>
                             </FormGroup>
                         </ModalBody>
                         <ModalFooter>
@@ -182,7 +176,7 @@ export default class Booking extends Component {
                     </Button>
                 </div>
 
-                <div className="mt-2">
+                <div className="mt-2 table-responsive">
                     <Table>
                         <thead>
                             <tr>

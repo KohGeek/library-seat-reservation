@@ -2,29 +2,17 @@
 
 @section('content')
 <div class="container">
-    <img src = "/images/icon.png" 
-        width= "150"
-        height= "150"
-        margin= "20"
-        borderRadius="100" />
-    <h1>
-        Welcome 
-    </h1>
-</div>
-
-
-<div class="container">
     <div class="row justify-content-center">
-        <div class="col-md-8">
-            <div class="card">
-                <div class="card-body")> {{ __('Recent Activity') }}</div>
 
-                <div class="card-header">
-                                    <div id="dashboard"></div>
-                </div>
+        <div class="col-md-12">
+            <img src="/images/icon.png" class="mx-2 my-2" style="max-width: 150px" />
+            <h1 class="mt-2">Welcome, {{Auth::user()->name}}</h1>
+            <div class="card mt-4">
+                <div class="card-header" )> {{ __('Recent Activity') }}</div>
+                <div id="dashboard"></div>
             </div>
         </div>
     </div>
-    
+
 </div>
 @endsection
