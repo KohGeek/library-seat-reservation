@@ -32,7 +32,6 @@ export default class Dashboard extends Component {
             });
     }
 
-    // DEFAULT STUFF
     componentDidMount() {
         this.loadLog();
     }
@@ -70,9 +69,7 @@ export default class Dashboard extends Component {
 
         return (
             <div className="container">
-                {/* Load Table */}
                 <div>
-                    {/* Missing OnClick*/}
                     <a className="btn btn-primary mt-2" href="/booking">
                         Add Booking
                     </a>

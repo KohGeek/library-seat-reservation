@@ -23,7 +23,7 @@ class DashboardController extends Controller
         return $data;
     }
 
-    //delete
+    // delete
     public function destroy($id)
     {
         $data = BookingData::findOrFail($id);

@@ -5,7 +5,7 @@
     <div class="row justify-content-center">
         <div class="col-md-10">
             <div class="card">
-                <div class="card-header">{{ __('Search Booking Log') }}</div>
+                <div class="card-header">{{ __('Add Booking') }}</div>
 
                 <div class="card-body">
                     <div id="booking"></div>
