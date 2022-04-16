@@ -8,15 +8,6 @@ use App\Models\Seat;
 
 class AdminLogController extends Controller
 {
-    /**
-     * Create a new AuthController instance.
-     *
-     * @return void
-     */
-    public function __construct()
-    {
-        $this->middleware('auth:api', ['except' => ['login']]);
-    }
 
     // Get booking datas
     public function index(Request $req)

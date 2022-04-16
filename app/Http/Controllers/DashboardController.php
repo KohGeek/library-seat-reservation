@@ -6,26 +6,15 @@ use Illuminate\Http\Request;
 use App\Models\BookingData;
 use App\Models\Seat;
 use App\Models\TimeSlot;
-use Illuminate\Support\Facades\Log;
 
 class DashboardController extends Controller
 {
-
-    /**
-     * Create a new AuthController instance.
-     *
-     * @return void
-     */
-    public function __construct()
-    {
-        $this->middleware('auth:api', ['except' => ['login']]);
-    }
-
     // Load all data from user's booking
-    public function show()
+    public function show(Request $req)
     {
+
         $data = BookingData::join('users', 'users.id', '=', 'booking_data.booked_by')
-            ->where('booking_data.booked_by', '=', auth()->user()->id)
+            ->which('booking_data.booked_by', $req->user()->id)
             ->get(['booking_data.id', 'users.name', 'booking_data.purpose', 'booking_data.datetime', 'booking_data.seat', 'booking_data.created_at']);
         $this->authorize('view', $data);
 

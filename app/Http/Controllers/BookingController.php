@@ -9,17 +9,6 @@ use App\Models\Seat;
 
 class BookingController extends Controller
 {
-
-    /**
-     * Create a new AuthController instance.
-     *
-     * @return void
-     */
-    public function __construct()
-    {
-        $this->middleware('auth:api', ['except' => ['login']]);
-    }
-
     public function index(Request $req)
     {
         $dbseats = Seat::where('closed', '=', 0)
