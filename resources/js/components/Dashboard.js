@@ -73,10 +73,10 @@ export default class Dashboard extends Component {
                 {/* Load Table */}
                 <div>
                     {/* Missing OnClick*/}
-                    <a className="btn btn-primary mt-4" href="/booking">
-                        Add
+                    <a className="btn btn-primary mt-2" href="/booking">
+                        Add Booking
                     </a>
-                    <div className="table-responsive">
+                    <div className="table-responsive mt-2">
                         <Table>
                             <thead>
                                 <tr>
