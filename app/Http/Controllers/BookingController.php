@@ -65,6 +65,12 @@ class BookingController extends Controller
 
     public function store(Request $req)
     {
+        $req->validate([
+            'purpose' => 'required',
+            'seat' => 'required',
+            'datetime' => 'required',
+        ]);
+
         $req['booked_by'] = auth()->user()->id;
         return BookingData::create($req->all());
     }
