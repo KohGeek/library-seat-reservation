@@ -1,17 +1,6 @@
 import React, { Component } from "react";
 import ReactDOM from "react-dom";
-import {
-    Table,
-    Button,
-    Modal,
-    ModalHeader,
-    ModalBody,
-    ModalFooter,
-    Input,
-    FormGroup,
-    Label,
-    NavItem,
-} from "reactstrap";
+import { Table, Button, Input, FormGroup, Label } from "reactstrap";
 import axios from "axios";
 import dateFormat from "dateformat";
 import DatePicker from "react-datepicker";
@@ -73,8 +62,6 @@ export default class AdminLogs extends Component {
         });
     }
 
-
-
     // To handle DatePicker
     handleChange(datePick, formattedValue) {
 
@@ -87,13 +74,9 @@ export default class AdminLogs extends Component {
         })
     }
 
-
-
-    // DEFAULT STUFF
     componentDidMount() {
         this.loadLog();
     }
-
 
     render() {
         let logs = this.state.logs.map((log) => {
@@ -123,11 +106,8 @@ export default class AdminLogs extends Component {
             );
         });
 
-
         return (
             <div className="container">
-
-
 
                 {/* Searching Log Section */}
                 <div>
@@ -210,8 +190,6 @@ export default class AdminLogs extends Component {
                         <tbody>{logs}</tbody>
                     </Table>
                 </div>
-
-                {/* {checkSearch} */}
             </div>
         );
     }
