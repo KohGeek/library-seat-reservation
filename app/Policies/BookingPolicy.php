@@ -5,6 +5,7 @@ namespace App\Policies;
 use App\Models\BookingData;
 use App\Models\User;
 use Illuminate\Auth\Access\HandlesAuthorization;
+use Illuminate\Auth\Access\Response;
 
 class BookingPolicy
 {
@@ -18,7 +19,9 @@ class BookingPolicy
      */
     public function viewAny(User $user)
     {
-        return $user->role == 'librarian';
+        return $user->role == 'librarian'
+            ? Response::allow()
+            : Response::deny('You are not authorized to view any data.');
     }
 
     /**
@@ -30,7 +33,9 @@ class BookingPolicy
      */
     public function view(User $user, BookingData $bookingData)
     {
-        return $user->id === $bookingData->booked_by;
+        return $user->id === $bookingData->booked_by
+            ? Response::allow()
+            : Response::deny('You are not authorized to view this resource.');
     }
 
     /**
@@ -53,7 +58,9 @@ class BookingPolicy
      */
     public function update(User $user, BookingData $bookingData)
     {
-        return $user->id === $bookingData->booked_by;
+        return $user->id === $bookingData->booked_by
+            ? Response::allow()
+            : Response::deny('You are not authorized to update this resource.');
     }
 
     /**
@@ -65,7 +72,9 @@ class BookingPolicy
      */
     public function delete(User $user, BookingData $bookingData)
     {
-        return $user->id === $bookingData->booked_by;
+        return $user->id === $bookingData->booked_by
+            ? Response::allow()
+            : Response::deny('You are not authorized to delete this resource.');
     }
 
     /**
