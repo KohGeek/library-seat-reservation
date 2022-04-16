@@ -19,25 +19,28 @@ use App\Http\Controllers\BookingController;
 |
 */
 
-Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
-    return $request->user();
+
+Route::middleware('auth:sanctum')->group(function () {
+    Route::get('/user', function (Request $request) {
+        return $request->user();
+    });
+
+    // Admin Logs' API
+    Route::get('adminlogs', [AdminLogController::class, 'index']);
+    Route::get('adminlogs/seats', [AdminLogController::class, 'getSeat']);
+
+    // Admin Seats' API
+    Route::get('adminseats', [AdminSeatController::class, 'index']);
+    Route::post('adminseat', [AdminSeatController::class, 'create']);
+    Route::put('adminseat/{id}', [AdminSeatController::class, 'update']);
+    Route::delete('adminseat/{id}', [AdminSeatController::class, 'destroy']);
+
+    // Dashboard API
+    Route::get('booking', [DashboardController::class, 'show']);
+    //Route::get('booking_listseat', [AdminLogController::class, 'getSeat']);
+    Route::delete('booking/{id}', [DashboardController::class, 'destroy']);
+
+    // Booking API
+    Route::get('slots', [BookingController::class, 'index']);
+    Route::post('addBooking', [BookingController::class, 'store']);
 });
-
-// Admin Logs' API
-Route::get('adminlogs', [AdminLogController::class, 'index']);
-Route::get('adminlogs/seats', [AdminLogController::class, 'getSeat']);
-
-// Admin Seats' API
-Route::get('adminseats', [AdminSeatController::class, 'index']);
-Route::post('adminseat', [AdminSeatController::class, 'create']);
-Route::put('adminseat/{id}', [AdminSeatController::class, 'update']);
-Route::delete('adminseat/{id}', [AdminSeatController::class, 'destroy']);
-
-// Dashboard API
-Route::get('booking', [DashboardController::class, 'show']);
-//Route::get('booking_listseat', [AdminLogController::class, 'getSeat']);
-Route::delete('booking/{id}', [DashboardController::class, 'destroy']);
-
-// Booking API
-Route::get('slots', [BookingController::class, 'index']);
-Route::post('addBooking', [BookingController::class, 'store']);
