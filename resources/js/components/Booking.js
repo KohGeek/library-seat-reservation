@@ -23,6 +23,7 @@ export default class Booking extends Component {
 
         this.state = {
             slots: [],
+            slotsHasData: true,
             searchViewData: { date: dateFormat(new Date(), "yyyy-mm-dd"), time: "" },
 
             dateValue: new Date(),
@@ -70,20 +71,21 @@ export default class Booking extends Component {
         this.toggleAddBookingModal();
     }
 
-    getSeats() {
-        let { date, time } = this.state.searchViewData;
-        axios.get("http://127.0.0.1:80/api/slots", { params: { date, time } }).then((response) => {
-            this.setState({
-                slots: response.data
-            });
-        });
-    }
-
     async search() {
         this.setState({ spinner: true });
         await new Promise(r => setTimeout(r, 500));
         this.getSeats();
         this.setState({ spinner: false });
+    }
+
+    getSeats() {
+        let { date, time } = this.state.searchViewData;
+        axios.get("http://127.0.0.1:80/api/slots", { params: { date, time } }).then((response) => {
+            this.setState({
+                slots: response.data,
+                slotsHasData: response.data.length > 0,
+            });
+        });
     }
 
     addBooking() {
@@ -105,7 +107,7 @@ export default class Booking extends Component {
     }
 
     render() {
-        let slots = this.state.slots.map((slot) => {
+        let slots = this.state.slotsHasData ? this.state.slots.map((slot) => {
             return (
                 <tr key={slot.id + "." + slot.time}>
                     <td>{slot.id}</td>
@@ -120,7 +122,7 @@ export default class Booking extends Component {
                 </tr>
 
             );
-        });
+        }) : <tr><td colSpan="5" className="text-center">No Available Seats</td></tr>;
 
         let errmsg_purpose = this.state.errmsg_purpose ? this.state.errmsg_purpose.map((et) => {
             return (

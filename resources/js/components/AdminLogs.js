@@ -21,6 +21,7 @@ export default class AdminLogs extends Component {
         super();
         this.state = {
             logs: [],
+            logsHasData: true,
             searchLogData: { seat: "", name: "", date: "", time: "" },
             searchLogModal: false,
             listseat: [],
@@ -31,17 +32,17 @@ export default class AdminLogs extends Component {
 
     // Loads All Logs
     loadLog() {
-        axios.get("http://127.0.0.1:80/api/adminlogs", {}).then((response) => {
+        axios.get("http://127.0.0.1:80/api/adminlogs").then((response) => {
             this.setState({
                 logs: response.data,
+                logsHasData: response.data.length > 0,
             });
         });
-        axios.get("http://127.0.0.1:80/api/adminlogs/seats", {})
-            .then((response) => {
-                this.setState({
-                    listseat: response.data,
-                });
+        axios.get("http://127.0.0.1:80/api/adminlogs/seats").then((response) => {
+            this.setState({
+                listseat: response.data,
             });
+        });
 
     }
 
@@ -51,8 +52,10 @@ export default class AdminLogs extends Component {
         await new Promise(r => setTimeout(r, 500));
         let { seat, name, date, time } = this.state.searchLogData
         axios.get("http://127.0.0.1:80/api/adminlogs", { params: { seat, name, date, time } }).then((response) => {
+            console.log(response.data)
             this.setState({
                 logs: response.data,
+                logsHasData: response.data.length > 0,
                 searchLogModal: false,
             });
         });
@@ -83,7 +86,7 @@ export default class AdminLogs extends Component {
     }
 
     render() {
-        let logs = this.state.logs.map((log) => {
+        let logs = this.state.logsHasData ? this.state.logs.map((log) => {
             var datetime_date = new Date(log.datetime);
             var createdat_date = new Date(log.created_at);
 
@@ -100,7 +103,7 @@ export default class AdminLogs extends Component {
                     </td>
                 </tr>
             );
-        });
+        }) : <tr><td colSpan="6" className="text-center">No Booking Data</td></tr>;
 
         let seats = this.state.listseat.map((seat) => {
             return (
@@ -207,7 +210,9 @@ export default class AdminLogs extends Component {
                                 <th>Booked At</th>
                             </tr>
                         </thead>
-                        <tbody>{logs}</tbody>
+                        <tbody>
+                            {logs}
+                        </tbody>
                     </Table>
                 </div>
             </div >

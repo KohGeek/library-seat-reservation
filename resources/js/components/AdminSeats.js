@@ -9,6 +9,7 @@ export default class AdminSeats extends Component {
         super();
         this.state = {
             seats: [],
+            seatsHasData: true,
             modalType: 0, // 0 for add, 1 for update
             seatData: { id: "", table_number: "", closed: null, closed_reason: "" },
             seatModal: false,
@@ -29,6 +30,7 @@ export default class AdminSeats extends Component {
         axios.get("http://127.0.0.1:80/api/adminseats").then((response) => {
             this.setState({
                 seats: response.data,
+                seatsHasData: response.data.length > 0,
             });
         });
         this.setState({ spinner: false });
@@ -119,7 +121,7 @@ export default class AdminSeats extends Component {
 
     // Render
     render() {
-        let seats = this.state.seats.map((seat) => {
+        let seats = this.state.seatsHasData ? this.state.seats.map((seat) => {
             return (
                 <tr key={seat.id}>
                     <td className="col-1">{seat.id}</td>
@@ -137,7 +139,7 @@ export default class AdminSeats extends Component {
                     </td>
                 </tr>
             );
-        });
+        }) : <tr><td colSpan="5" className="text-center">Empty Seats Data</td></tr>;
 
         let errmsg_tablenum = this.state.errmsg_tablenum ? this.state.errmsg_tablenum.map((et) => {
             return (

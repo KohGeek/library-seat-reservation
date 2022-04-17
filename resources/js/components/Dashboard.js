@@ -10,6 +10,7 @@ export default class Dashboard extends Component {
         super();
         this.state = {
             logs: [],
+            logsHasData: true,
             spinner: false,
         };
     }
@@ -19,6 +20,7 @@ export default class Dashboard extends Component {
         axios.get("http://127.0.0.1:80/api/booking", {}).then((response) => {
             this.setState({
                 logs: response.data,
+                logsHasData: response.data.length > 0,
             });
         });
 
@@ -28,10 +30,8 @@ export default class Dashboard extends Component {
     async deleteBooking(id) {
         this.setState({ spinner: id });
         await new Promise(r => setTimeout(r, 500));
-        axios.delete("http://127.0.0.1:80/api/booking/" + id)
-            .then((response) => {
-                this.loadLog();
-            });
+        axios.delete("http://127.0.0.1:80/api/booking/" + id);
+        this.loadLog();
         this.setState({ spinner: false });
     }
 
@@ -41,7 +41,7 @@ export default class Dashboard extends Component {
 
     // Render
     render() {
-        let logs = this.state.logs.map((log) => {
+        let logs = this.state.logsHasData ? this.state.logs.map((log) => {
             var datetime_date = new Date(log.datetime);
             var createdat_date = new Date(log.created_at);
 
@@ -52,7 +52,6 @@ export default class Dashboard extends Component {
                     <td>{log.name}</td>
                     <td>{log.purpose}</td>
                     <td>{log.seat}</td>
-
                     <td>
                         {dateFormat(createdat_date, "yyyy-mm-dd HH:MM:ss")}
                     </td>
@@ -64,7 +63,7 @@ export default class Dashboard extends Component {
                     </td>
                 </tr>
             );
-        });
+        }) : <tr><td colSpan="6" className="text-center">No Booking Data</td></tr>;
 
         return (
             <div className="container">
