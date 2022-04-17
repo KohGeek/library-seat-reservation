@@ -247,6 +247,7 @@ export default class AdminSeats extends Component {
                                 <th> Table Number </th>
                                 <th> Status </th>
                                 <th> Closed Reason </th>
+                                <th> Actions </th>
                             </tr>
                         </thead>
                         <tbody>

@@ -97,7 +97,7 @@ export default class Booking extends Component {
                     <td>{slot.table_number}</td>
                     <td>{slot.date}</td>
                     <td>{dateFormat(this.convertTimetoDate(slot.time), "HH:MM")}</td>
-                    <td><Button color="success" outline onClick={this.callAddBooking.bind(this, slot.id, slot.date, slot.time)}>
+                    <td><Button color="success" size="sm" outline onClick={this.callAddBooking.bind(this, slot.id, slot.date, slot.time)}>
                         Add Booking
                     </Button>
                     </td>
