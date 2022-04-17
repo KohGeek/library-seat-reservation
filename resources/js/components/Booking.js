@@ -29,12 +29,11 @@ export default class Booking extends Component {
 
             addBookingData: { purpose: "", datetime: "", seat: "" },
             addBookingModal: false,
+
+            errmsg_purpose: [],
+            spinner: false,
         };
 
-    }
-
-    componentDidMount() {
-        this.getSeats();
     }
 
     convertTimetoDate(time) {
@@ -56,15 +55,6 @@ export default class Booking extends Component {
         });
     }
 
-    getSeats() {
-        let { date, time } = this.state.searchViewData;
-        axios.get("http://127.0.0.1:80/api/slots", { params: { date, time } }).then((response) => {
-            this.setState({
-                slots: response.data
-            });
-        });
-    }
-
     toggleAddBookingModal() {
         this.setState({
             addBookingModal: !this.state.addBookingModal
@@ -79,13 +69,38 @@ export default class Booking extends Component {
         this.toggleAddBookingModal();
     }
 
+    getSeats() {
+        let { date, time } = this.state.searchViewData;
+        axios.get("http://127.0.0.1:80/api/slots", { params: { date, time } }).then((response) => {
+            this.setState({
+                slots: response.data
+            });
+        });
+    }
+
+    async search() {
+        this.setState({ spinner: true });
+        await new Promise(r => setTimeout(r, 500));
+        this.getSeats();
+        this.setState({ spinner: false });
+    }
+
     addBooking() {
         axios.post("http://127.0.0.1:80/api/addBooking", this.state.addBookingData).then((response) => {
             this.setState({
                 addBookingData: { purpose: "", datetime: "", seat: "" },
             });
+        }).catch((error) => {
+            this.setState({
+                errmsg_purpose: error.response.data.errmsg_purpose,
+            });
         });
+
         this.toggleAddBookingModal();
+        this.getSeats();
+    }
+
+    componentDidMount() {
         this.getSeats();
     }
 
@@ -97,14 +112,21 @@ export default class Booking extends Component {
                     <td>{slot.table_number}</td>
                     <td>{slot.date}</td>
                     <td>{dateFormat(this.convertTimetoDate(slot.time), "HH:MM")}</td>
-                    <td><Button color="success" size="sm" outline onClick={this.callAddBooking.bind(this, slot.id, slot.date, slot.time)}>
-                        Add Booking
-                    </Button>
+                    <td className="text-center">
+                        <Button color="success" size="sm" outline onClick={this.callAddBooking.bind(this, slot.id, slot.date, slot.time)}>
+                            Add Booking
+                        </Button>
                     </td>
                 </tr>
 
             );
         });
+
+        let errmsg_purpose = this.state.errmsg_purpose ? this.state.errmsg_purpose.map((et) => {
+            return (
+                <div key={et} style={{ color: '#FF0000' }} > {et} </div>
+            )
+        }) : null;
 
         return (
             <div className="container">
@@ -115,6 +137,8 @@ export default class Booking extends Component {
                         <ModalBody>
                             <FormGroup>
                                 <Label for="purpose"> Purpose </Label>
+                                {/* Validation error display */}
+                                {errmsg_purpose}
                                 <Input id="purpose"
                                     value={this.state.addBookingData.purpose}
                                     onChange={(e) => {
@@ -178,12 +202,14 @@ export default class Booking extends Component {
 
 
 
-                    <Button color="primary" type="submit" onClick={this.getSeats.bind(this)}>
-                        Search
+                    <Button color="primary" type="submit" onClick={this.search.bind(this)}>
+                        {this.state.spinner ? <span className="spinner-border spinner-border-sm me-2"></span> : null}
+                        <span>Search</span>
                     </Button>
+
                 </div>
 
-                <div className="mt-2 table-responsive">
+                <div className={this.state.spinner ? "mt-2 table-responsive opacity-25" : "mt-2 table-responsive"}>
                     <Table className="table-striped">
                         <thead>
                             <tr>
@@ -191,7 +217,7 @@ export default class Booking extends Component {
                                 <th>Table Number</th>
                                 <th>Date</th>
                                 <th>Time</th>
-                                <th>Action</th>
+                                <th></th>
                             </tr>
                         </thead>
                         <tbody>{slots}</tbody>
