@@ -10,8 +10,6 @@
 
     <title>{{ config('app.name', 'Laravel') }}</title>
 
-    <!-- <script src="http://localhost:8097"></script> -->
-
     <!-- Scripts -->
     <script src="{{ asset('js/app.js') }}" defer></script>
 
@@ -25,7 +23,7 @@
 
 <body>
     <div id="app">
-        <nav class="navbar navbar-expand-md navbar-light bg-white shadow-sm">
+        <nav class="navbar navbar-expand-lg navbar-light bg-white shadow-sm sticky-top">
             <div class="container">
                 <a class="navbar-brand" href="{{ url('/') }}">
                     {{ config('app.name', 'Laravel') }}
@@ -37,7 +35,6 @@
                 <div class="collapse navbar-collapse" id="navbarSupportedContent">
                     <!-- Left Side Of Navbar -->
                     <ul class="navbar-nav me-auto">
-                        
                         <li class="nav-item">
                             <a class="nav-link" href="{{ route('home') }}">{{ __('Dashboard') }}</a>
                         </li>
@@ -46,7 +43,6 @@
                         <li class="nav-item">
                             <a class="nav-link" href="{{ route('adminseat') }}">{{ __('Seat Configuration') }}</a>
                         </li>
-
                         <li class="nav-item">
                             <a class="nav-link" href="{{ route('adminlog') }}">{{ __('View Booking Logs') }}</a>
                         </li>
@@ -55,11 +51,7 @@
                         <li class="nav-item">
                             <a class="nav-link" href="{{ route('booking') }}">{{ __('Booking') }}</a>
                         </li>
-
                         @endcan
-
-
-
                     </ul>
 
                     <!-- Right Side Of Navbar -->

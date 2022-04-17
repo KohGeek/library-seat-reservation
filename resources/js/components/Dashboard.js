@@ -74,7 +74,7 @@ export default class Dashboard extends Component {
                         Add Booking
                     </a>
                     <div className="table-responsive mt-2">
-                        <Table>
+                        <Table className="table-striped">
                             <thead>
                                 <tr>
                                     <th> Booked Date & Time </th>

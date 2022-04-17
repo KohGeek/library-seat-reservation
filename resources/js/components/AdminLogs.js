@@ -110,73 +110,86 @@ export default class AdminLogs extends Component {
             <div className="container">
 
                 {/* Searching Log Section */}
-                <div>
-                    {/* Filtering - Person Name */}
-                    <FormGroup>
-                        <Label > Person Name </Label>
-                        <Input id="name"
-                            value={this.state.searchLogData.name}
-                            onChange={(e) => {
-                                let { searchLogData } = this.state
-                                searchLogData.name = e.target.value
-                                this.setState({ searchLogData })
-                            }} />
-                    </FormGroup>
-                    {/* Filtering - Seat */}
-                    <FormGroup>
-                        <Label>Seat</Label> <br></br>
-                        <Input type="select" id="seats"
-                            onChange={(e) => {
-                                let { searchLogData } = this.state
-                                searchLogData.seat = e.target.value
-                                this.setState({ searchLogData })
-                            }}>
-                            <option></option>
-                            {seats} </Input>
-                    </FormGroup>
-                    {/* Filtering - Date */}
-                    <FormGroup>
-                        <Label>Booked Date</Label> <br></br>
-                        <DatePickerStyle>
-                            <DatePicker
-                                className="form-control"
-                                id="from_datepicker"
-                                selected={this.state.datePick}
-                                isClearable={true}
-                                onChange={(v) => this.handleChange(v)}
-                            />
-                        </DatePickerStyle>
-                    </FormGroup>
-                    {/* Filtering - Time */}
-                    <FormGroup>
-                        <Label>Booked Time</Label> <br></br>
-                        <Input type="select" id="times"
-                            onChange={(e) => {
-                                let { searchLogData } = this.state
-                                searchLogData.time = e.target.value
-                                this.setState({ searchLogData })
-                            }}>
-                            <option></option>
-                            <option key="01:00:00" value="01:00:00"> 09:00 </option>
-                            <option key="02:00:00" value="02:00:00"> 10:00 </option>
-                            <option key="03:00:00" value="03:00:00"> 11:00 </option>
-                            <option key="04:00:00" value="04:00:00"> 12:00 </option>
-                            <option key="05:00:00" value="05:00:00"> 13:00 </option>
-                            <option key="06:00:00" value="06:00:00"> 14:00 </option>
-                            <option key="07:00:00" value="07:00:00"> 15:00 </option>
-                            <option key="08:00:00" value="08:00:00"> 16:00 </option>
-                            <option key="09:00:00" value="09:00:00"> 17:00 </option>
-                            <option key="10:00:00" value="10:00:00"> 18:00 </option>
-                            <option key="11:00:00" value="11:00:00"> 19:00 </option>
-                            <option key="12:00:00" value="12:00:00"> 20:00 </option>
-                        </Input>
-                    </FormGroup>
+                <div className="row">
+                    <div className="col">
+                        {/* Filtering - Person Name */}
+
+                        <FormGroup>
+                            <Label > Person Name </Label>
+                            <Input id="name"
+                                value={this.state.searchLogData.name}
+                                onChange={(e) => {
+                                    let { searchLogData } = this.state
+                                    searchLogData.name = e.target.value
+                                    this.setState({ searchLogData })
+                                }} />
+                        </FormGroup>
+                    </div>
+                    <div className="col">
+                        {/* Filtering - Seat */}
+                        <FormGroup>
+                            <Label>Seat</Label> <br></br>
+                            <Input type="select" id="seats"
+                                onChange={(e) => {
+                                    let { searchLogData } = this.state
+                                    searchLogData.seat = e.target.value
+                                    this.setState({ searchLogData })
+                                }}>
+                                <option></option>
+                                {seats} </Input>
+                        </FormGroup>
+                    </div>
+                </div>
+                <div className="row">
+                    <div className="col">
+                        {/* Filtering - Date */}
+                        <FormGroup>
+                            <Label>Booked Date</Label> <br></br>
+                            <DatePickerStyle>
+                                <DatePicker
+                                    className="form-control"
+                                    id="from_datepicker"
+                                    selected={this.state.datePick}
+                                    isClearable={true}
+                                    onChange={(v) => this.handleChange(v)}
+                                />
+                            </DatePickerStyle>
+                        </FormGroup>
+                    </div>
+                    <div className="col">
+                        {/* Filtering - Time */}
+                        <FormGroup>
+                            <Label>Booked Time</Label> <br></br>
+                            <Input type="select" id="times"
+                                onChange={(e) => {
+                                    let { searchLogData } = this.state
+                                    searchLogData.time = e.target.value
+                                    this.setState({ searchLogData })
+                                }}>
+                                <option></option>
+                                <option key="01:00:00" value="01:00:00"> 09:00 </option>
+                                <option key="02:00:00" value="02:00:00"> 10:00 </option>
+                                <option key="03:00:00" value="03:00:00"> 11:00 </option>
+                                <option key="04:00:00" value="04:00:00"> 12:00 </option>
+                                <option key="05:00:00" value="05:00:00"> 13:00 </option>
+                                <option key="06:00:00" value="06:00:00"> 14:00 </option>
+                                <option key="07:00:00" value="07:00:00"> 15:00 </option>
+                                <option key="08:00:00" value="08:00:00"> 16:00 </option>
+                                <option key="09:00:00" value="09:00:00"> 17:00 </option>
+                                <option key="10:00:00" value="10:00:00"> 18:00 </option>
+                                <option key="11:00:00" value="11:00:00"> 19:00 </option>
+                                <option key="12:00:00" value="12:00:00"> 20:00 </option>
+                            </Input>
+                        </FormGroup>
+                    </div>
+                </div>
+                <div className="mt-2">
                     <Button color="primary" onClick={this.searchLog.bind(this)}> Search </Button>
                 </div>
 
                 {/* Load Table */}
                 <div className="mt-4 table-responsive">
-                    <Table>
+                    <Table className="table-striped">
                         <thead>
                             <tr>
                                 <th> Booking ID </th>
