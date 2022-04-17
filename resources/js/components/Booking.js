@@ -64,6 +64,7 @@ export default class Booking extends Component {
     callAddBooking(seatid, date, time) {
         let datetime = date + " " + time;
         this.setState({
+            errmsg_purpose: [],
             addBookingData: { datetime: datetime, seat: seatid },
         });
         this.toggleAddBookingModal();
@@ -88,15 +89,14 @@ export default class Booking extends Component {
     addBooking() {
         axios.post("http://127.0.0.1:80/api/addBooking", this.state.addBookingData).then((response) => {
             this.setState({
+                addBookingModal: false,
                 addBookingData: { purpose: "", datetime: "", seat: "" },
             });
         }).catch((error) => {
             this.setState({
-                errmsg_purpose: error.response.data.errmsg_purpose,
+                errmsg_purpose: error.response.data.errors.purpose,
             });
         });
-
-        this.toggleAddBookingModal();
         this.getSeats();
     }
 
@@ -220,7 +220,9 @@ export default class Booking extends Component {
                                 <th></th>
                             </tr>
                         </thead>
-                        <tbody>{slots}</tbody>
+                        <tbody>
+                            {slots}
+                        </tbody>
                     </Table>
                 </div>
             </div >
