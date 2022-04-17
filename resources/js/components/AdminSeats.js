@@ -9,15 +9,15 @@ export default class AdminSeats extends Component {
         super();
         this.state = {
             seats: [],
-            newSeatData: { table_number: "", closed: 0, closed_reason: "" },
-            newSeatModal: false,
-            updateSeatData: { id: "", table_number: "", closed: 0, closed_reason: "" },
-            updateSeatModal: false,
+            modalType: 0, // 0 for add, 1 for update
+            seatData: { id: "", table_number: "", closed: "", closed_reason: "" },
+            seatModal: false,
             reasonDisabled: true,
 
             // Data Validation
-            errmsg_tablenum_add: [],
-            errmsg_tablenum_update: [],
+            errmsg_tablenum: [],
+            errmsg_closed: [],
+            errmsg_reason: [],
         }
     }
 
@@ -32,26 +32,55 @@ export default class AdminSeats extends Component {
 
     // Add a SEAT
     addSeat() {
-        axios.post("http://127.0.0.1:80/api/adminseat", this.state.newSeatData).then((response) => {
+        axios.post("http://127.0.0.1:80/api/adminseat", this.state.seatData).then((response) => {
             let { seats } = this.state
             this.loadSeat()
             this.setState({
                 seats,
-                newSeatModal: false,
-                newSeatData: { table_number: "", closed: 0, closed_reason: "" },
+                seatModal: false,
+                seatData: { table_number: "", closed: "", closed_reason: "" },
 
                 // Clear Data Validation Error Msgs
-                errmsg_tablenum_add: [],
-                errmsg_tablenum_update: [],
+                errmsg_tablenum: [],
+                errmsg_closed: [],
+                errmsg_reason: [],
             });
         }).catch(err => {
+            this.setState({
+                errmsg_tablenum: err.response.data.errors.table_number,
+                errmsg_closed: err.response.data.errors.closed,
+                errmsg_reason: err.response.data.errors.closed_reason,
+            });
+        });
+    }
 
-            console.log(err.response);
+    updateSeat() {
+        let { id, table_number, closed, closed_reason } = this.state.seatData
+        axios.put("http://127.0.0.1:80/api/adminseat/" + id, { table_number, closed, closed_reason }).then((response) => {
+            this.loadSeat()
+            this.setState({
+                seatModal: false,
+                seatData: { id: "", table_number: "", closed: 0, closed_reason: "" },
 
-            // Data Validation
-            let { errmsg_tablenum_add } = this.state.errmsg_tablenum_add;
-            errmsg_tablenum_add = err.response.data.errors.table_number;
-            this.setState({ errmsg_tablenum_add });
+                // Clear Data Validation Error Msgs
+                errmsg_tablenum: [],
+                errmsg_closed: [],
+                errmsg_reason: [],
+            });
+        }).catch(err => {
+            this.setState({
+                errmsg_tablenum: err.response.data.errors.table_number,
+                errmsg_closed: err.response.data.errors.closed,
+                errmsg_reason: err.response.data.errors.closed_reason,
+            });
+        });
+    }
+
+    callAddSeat() {
+        this.setState({
+            seatData: { id: "", table_number: "", closed: 0, closed_reason: "" },
+            seatModal: true,
+            modalType: 0,
         });
     }
 
@@ -59,29 +88,9 @@ export default class AdminSeats extends Component {
     // Edit a SEAT
     callUpdateSeat(id, table_number, closed, closed_reason) {
         this.setState({
-            updateSeatData: { id, table_number, closed, closed_reason },
-            updateSeatModal: !this.state.updateSeatModal
-        })
-    }
-
-    updateSeat() {
-        let { id, table_number, closed, closed_reason } = this.state.updateSeatData
-        axios.put("http://127.0.0.1:80/api/adminseat/" + id, { table_number, closed, closed_reason }).then((response) => {
-            this.loadSeat()
-            this.setState({
-                updateSeatModal: false,
-                updateSeatData: { id: "", table_number: "", closed: 0, closed_reason: "" },
-
-                // Clear Data Validation Error Msgs
-                errmsg_tablenum_add: [],
-                errmsg_tablenum_update: [],
-            });
-        }).catch(err => {
-
-            // Data Validation
-            let { errmsg_tablenum_update } = this.state.errmsg_tablenum_update;
-            errmsg_tablenum_update = err.response.data.errors.table_number;
-            this.setState({ errmsg_tablenum_update });
+            seatData: { id, table_number, closed, closed_reason },
+            seatModal: true,
+            modalType: 1,
         });
     }
 
@@ -92,26 +101,16 @@ export default class AdminSeats extends Component {
         });
     }
 
-
-    // Toggles
-    toggleNewSeatModal() {
+    toggleSeatModal() {
         this.setState({
-            newSeatModal: !this.state.newSeatModal
+            seatModal: !this.state.seatModal
         })
     }
-
-    toggleUpdateSeatModal() {
-        this.setState({
-            updateSeatModal: !this.state.updateSeatModal
-        })
-    }
-
 
     // DEFAULT STUFF
     componentDidMount() {
         this.loadSeat();
     }
-
 
     // Render
     render() {
@@ -135,15 +134,21 @@ export default class AdminSeats extends Component {
             );
         });
 
-        let errmsg_tablenum_add = this.state.errmsg_tablenum_add.map((eta) => {
+        let errmsg_tablenum = this.state.errmsg_tablenum.map((et) => {
             return (
-                <div key={eta} style={{ color: '#FF0000' }} > {eta} </div>
+                <div key={et} style={{ color: '#FF0000' }} > {et} </div>
             )
         });
 
-        let errmsg_tablenum_update = this.state.errmsg_tablenum_update.map((etu) => {
+        let errmsg_closed = this.state.errmsg_closed.map((ec) => {
             return (
-                <div key={etu} style={{ color: '#FF0000' }} > {etu} </div>
+                <div key={ec} style={{ color: '#FF0000' }} > {ec} </div>
+            )
+        });
+
+        let errmsg_reason = this.state.errmsg_reason.map((er) => {
+            return (
+                <div key={er} style={{ color: '#FF0000' }} > {er} </div>
             )
         });
 
@@ -151,135 +156,91 @@ export default class AdminSeats extends Component {
         return (
             <div className="container">
 
-                {/* ADD SEAT Button & Section */}
+                {/* Add seat button */}
                 <div>
-                    <Button color="primary" onClick={this.toggleNewSeatModal.bind(this)}> {" "} Add Seat {" "}</Button>
-
-                    <Modal isOpen={this.state.newSeatModal} toggle={this.toggleNewSeatModal.bind(this)}>
-                        <ModalHeader toggle={this.toggleNewSeatModal.bind(this)}> Add New Seat </ModalHeader>
-                        <ModalBody>
-                            {/* ADD SEAT - Table Number */}
-                            <FormGroup>
-                                <Label for="table_number"> Table Number </Label> <br></br>
-                                {/* Data Validation for Table Number - Adding */}
-                                {errmsg_tablenum_add}
-                                <Input id="table_number"
-                                    value={this.state.newSeatData.table_number}
-                                    onChange={(e) => {
-                                        let { newSeatData } = this.state
-                                        newSeatData.table_number = e.target.value
-                                        this.setState({ newSeatData })
-                                    }}> </Input>
-                            </FormGroup>
-                            {/* ADD SEAT - Closed */}
-                            <FormGroup>
-                                <Label for="closed"> Status </Label> <br></br>
-                                <Input type="radio"
-                                    name="closed"
-                                    id="closed"
-                                    value={0}
-                                    onChange={(e) => {
-                                        let { newSeatData } = this.state
-                                        newSeatData.closed = e.target.value
-                                        this.setState({ newSeatData })
-                                    }}
-                                > </Input>
-                                <Label for="closed">Available</Label>  <br></br>
-                                <Input type="radio"
-                                    name="closed"
-                                    id="closed"
-                                    value={1}
-                                    onChange={(e) => {
-                                        let { newSeatData } = this.state
-                                        newSeatData.closed = e.target.value
-                                        this.setState({ newSeatData })
-                                    }}> </Input>
-                                <Label for="closed">Closed</Label>
-                            </FormGroup>
-                            {/* ADD SEAT - Closed Reason */}
-                            <FormGroup>
-                                <Label for="closed_reason"> Closed Reason </Label>
-                                <Input id="closed_reason"
-                                    value={this.state.newSeatData.closed_reason}
-                                    onChange={(e) => {
-                                        let { newSeatData } = this.state
-                                        newSeatData.closed_reason = e.target.value
-                                        this.setState({ newSeatData })
-                                    }}> </Input>
-                            </FormGroup>
-                        </ModalBody>
-                        <ModalFooter>
-                            <Button color="primary" onClick={this.addSeat.bind(this)}> Add </Button>
-                            <Button color="secondary" onClick={this.toggleNewSeatModal.bind(this)}> Cancel </Button>
-                        </ModalFooter>
-                    </Modal>
+                    <Button color="primary" onClick={this.callAddSeat.bind(this)}> Add Seat </Button>
                 </div>
 
                 {/* UPDATE SEAT Section */}
                 <div>
-                    <Modal isOpen={this.state.updateSeatModal} toggle={this.toggleUpdateSeatModal.bind(this)}>
-                        <ModalHeader toggle={this.toggleUpdateSeatModal.bind(this)}> Edit Seat </ModalHeader>
+                    <Modal isOpen={this.state.seatModal} toggle={this.toggleSeatModal.bind(this)}>
+                        <ModalHeader toggle={this.toggleSeatModal.bind(this)}> {this.state.modalType ? "Edit Seat" : "Add Seat"} </ModalHeader>
                         <ModalBody>
-                            {/* EDIT SEAT - Table Number */}
+                            {/* Table Number */}
                             <FormGroup>
                                 <Label for="table_number"> Table Number </Label> <br></br>
-                                {/* Data Validation for Table Number - Updating */}
-                                {errmsg_tablenum_update}
+                                {/* Data Validation for Table Number */}
+                                {errmsg_tablenum}
                                 <Input id="table_number"
-                                    value={this.state.updateSeatData.table_number}
+                                    value={this.state.seatData.table_number}
                                     onChange={(e) => {
-                                        let { updateSeatData } = this.state
-                                        updateSeatData.table_number = e.target.value
-                                        this.setState({ updateSeatData })
-                                    }}> </Input>
+                                        let { seatData } = this.state
+                                        seatData.table_number = e.target.value
+                                        this.setState({ seatData })
+                                    }} />
                             </FormGroup>
-                            {/* EDIT SEAT - Closed */}
+                            {/* Closed */}
                             <FormGroup>
                                 <Label for="closed"> Status </Label> <br></br>
-                                <Input type="radio"
-                                    name="closed"
-                                    id="closed"
-                                    value={0}
-                                    onChange={(e) => {
-                                        let { updateSeatData } = this.state
-                                        updateSeatData.closed = e.target.value
-                                        this.setState({ updateSeatData })
-                                    }}
-                                > </Input>
-                                <Label for="closed">Available</Label>  <br></br>
-                                <Input type="radio"
-                                    name="closed"
-                                    id="closed"
-                                    value={1}
-                                    onChange={(e) => {
-                                        let { updateSeatData } = this.state
-                                        updateSeatData.closed = e.target.value
-                                        this.setState({ updateSeatData })
-                                    }}> </Input>
-                                <Label for="closed">Closed</Label>
+                                {/* Data Validation for Closed */}
+                                {errmsg_closed}
+                                <div className="form-check">
+                                    <Input type="radio"
+                                        name="closed"
+                                        id="closed"
+                                        className="form-check-input"
+                                        value={0}
+                                        onChange={(e) => {
+                                            let { seatData } = this.state
+                                            seatData.closed = e.target.value
+                                            this.setState({
+                                                seatData,
+                                                reasonDisabled: true,
+                                            })
+                                        }}
+                                    />
+                                    <Label for="closed" className="form-check-label">Available</Label>  <br></br>
+                                    <Input type="radio"
+                                        name="closed"
+                                        id="closed"
+                                        className="form-check-input"
+                                        value={1}
+                                        onChange={(e) => {
+                                            let { seatData } = this.state
+                                            seatData.closed = e.target.value
+                                            this.setState({
+                                                seatData,
+                                                reasonDisabled: false,
+                                            })
+                                        }} />
+                                    <Label for="closed" className="form-check-label">Closed</Label>
+                                </div>
                             </FormGroup>
-                            {/* EDIT SEAT - Closed Reason */}
+                            {/* Closed Reason */}
                             <FormGroup>
                                 <Label for="closed_reason"> Closed Reason </Label>
+                                {/* Data Validation for Closed Reason */}
+                                {errmsg_reason}
                                 <Input id="closed_reason"
-                                    value={this.state.updateSeatData.closed_reason}
+                                    value={this.state.seatData.closed_reason ? this.state.seatData.closed_reason : ""}
+                                    disabled={this.state.reasonDisabled}
                                     onChange={(e) => {
-                                        let { updateSeatData } = this.state
-                                        updateSeatData.closed_reason = e.target.value
-                                        this.setState({ updateSeatData })
-                                    }}> </Input>
+                                        let { seatData } = this.state
+                                        seatData.closed_reason = e.target.value
+                                        this.setState({ seatData })
+                                    }} />
                             </FormGroup>
                         </ModalBody>
                         <ModalFooter>
-                            <Button color="primary" onClick={this.updateSeat.bind(this)}> Update </Button>
-                            <Button color="secondary" onClick={this.toggleUpdateSeatModal.bind(this)}> Cancel </Button>
+                            <Button color="primary" onClick={this.state.modalType ? this.updateSeat.bind(this) : this.addSeat.bind(this)}> {this.state.modalType ? "Update" : "Add"} </Button>
+                            <Button color="secondary" onClick={this.toggleSeatModal.bind(this)}> Cancel </Button>
                         </ModalFooter>
                     </Modal>
                 </div>
 
                 {/* Load Table */}
                 <div className="mt-4 table-responsive">
-                    <Table>
+                    <Table className="table-striped">
                         <thead>
                             <tr>
                                 <th> ID </th>
