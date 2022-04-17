@@ -10,7 +10,7 @@ export default class Dashboard extends Component {
         super();
         this.state = {
             logs: [],
-
+            spinner: false,
         };
     }
 
@@ -25,11 +25,14 @@ export default class Dashboard extends Component {
     }
 
     // Delete
-    deleteBooking(id) {
+    async deleteBooking(id) {
+        this.setState({ spinner: id });
+        await new Promise(r => setTimeout(r, 500));
         axios.delete("http://127.0.0.1:80/api/booking/" + id)
             .then((response) => {
                 this.loadLog();
             });
+        this.setState({ spinner: false });
     }
 
     componentDidMount() {
@@ -53,9 +56,10 @@ export default class Dashboard extends Component {
                     <td>
                         {dateFormat(createdat_date, "yyyy-mm-dd HH:MM:ss")}
                     </td>
-                    <td className="text-center">
+                    <td className="text-center col-2">
                         <Button color="danger" size="sm" outline onClick={this.deleteBooking.bind(this, log.id)}>
-                            Delete
+                            {this.state.spinner == log.id ? <span className="spinner-border spinner-border-sm me-2"></span> : null}
+                            <span>Delete</span>
                         </Button>
                     </td>
                 </tr>
@@ -68,7 +72,7 @@ export default class Dashboard extends Component {
                     <a className="btn btn-primary mt-2" href="/booking">
                         Add Booking
                     </a>
-                    <div className="table-responsive mt-2">
+                    <div className={this.state.spinner ? "mt-2 table-responsive opacity-25" : "mt-2 table-responsive"}>
                         <Table className="table-striped">
                             <thead>
                                 <tr>
@@ -81,7 +85,9 @@ export default class Dashboard extends Component {
                                     <th></th>
                                 </tr>
                             </thead>
-                            <tbody>{logs}</tbody>
+                            <tbody>
+                                {logs}
+                            </tbody>
                         </Table>
                     </div>
                 </div>
