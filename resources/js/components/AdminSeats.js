@@ -10,7 +10,7 @@ export default class AdminSeats extends Component {
         this.state = {
             seats: [],
             modalType: 0, // 0 for add, 1 for update
-            seatData: { id: "", table_number: "", closed: "", closed_reason: "" },
+            seatData: { id: "", table_number: "", closed: null, closed_reason: "" },
             seatModal: false,
             reasonDisabled: true,
 
@@ -36,9 +36,8 @@ export default class AdminSeats extends Component {
             let { seats } = this.state
             this.loadSeat()
             this.setState({
-                seats,
                 seatModal: false,
-                seatData: { table_number: "", closed: "", closed_reason: "" },
+                seatData: { table_number: "", closed: null, closed_reason: "" },
 
                 // Clear Data Validation Error Msgs
                 errmsg_tablenum: [],
@@ -52,6 +51,7 @@ export default class AdminSeats extends Component {
                 errmsg_reason: err.response.data.errors.closed_reason,
             });
         });
+        this.loadSeat();
     }
 
     updateSeat() {
@@ -60,7 +60,7 @@ export default class AdminSeats extends Component {
             this.loadSeat()
             this.setState({
                 seatModal: false,
-                seatData: { id: "", table_number: "", closed: 0, closed_reason: "" },
+                seatData: { id: "", table_number: "", closed: null, closed_reason: "" },
 
                 // Clear Data Validation Error Msgs
                 errmsg_tablenum: [],
@@ -74,11 +74,19 @@ export default class AdminSeats extends Component {
                 errmsg_reason: err.response.data.errors.closed_reason,
             });
         });
+        this.loadSeat();
+    }
+
+    // Delete a SEAT
+    deleteSeat(id) {
+        axios.delete("http://127.0.0.1:80/api/adminseat/" + id).then((response) => {
+            this.loadSeat()
+        });
     }
 
     callAddSeat() {
         this.setState({
-            seatData: { id: "", table_number: "", closed: 0, closed_reason: "" },
+            seatData: { id: "", table_number: "", closed: null, closed_reason: "" },
             seatModal: true,
             modalType: 0,
         });
@@ -89,15 +97,9 @@ export default class AdminSeats extends Component {
     callUpdateSeat(id, table_number, closed, closed_reason) {
         this.setState({
             seatData: { id, table_number, closed, closed_reason },
+            reasonDisabled: !closed_reason,
             seatModal: true,
             modalType: 1,
-        });
-    }
-
-    // Delete a SEAT
-    deleteSeat(id) {
-        axios.delete("http://127.0.0.1:80/api/adminseat/" + id).then((response) => {
-            this.loadSeat()
         });
     }
 
@@ -117,16 +119,16 @@ export default class AdminSeats extends Component {
         let seats = this.state.seats.map((seat) => {
             return (
                 <tr key={seat.id}>
-                    <td>{seat.id}</td>
+                    <td className="col-1">{seat.id}</td>
                     <td>{seat.table_number}</td>
                     {/* for seat.closed, 1 is CLOSED, 0 is Available */}
                     <td> {seat.closed ? 'Closed' : 'Available'} </td>
-                    <td>{(seat.closed_reason == null) ? '-' : seat.closed_reason}</td>
-                    <td>
-                        <Button color="success" size="sm" outline onClick={this.callUpdateSeat.bind(this, seat.id, seat.table_number, seat.closed, seat.closed_reason)}>
+                    <td> {(seat.closed_reason == null) ? '-' : seat.closed_reason}</td>
+                    <td className="col-3 text-center">
+                        <Button color="success" className="m-1" size="sm" outline onClick={this.callUpdateSeat.bind(this, seat.id, seat.table_number, seat.closed, seat.closed_reason)}>
                             Edit
                         </Button>
-                        <Button color="danger" size="sm" outline onClick={this.deleteSeat.bind(this, seat.id)}>
+                        <Button color="danger" className="m-1" size="sm" outline onClick={this.deleteSeat.bind(this, seat.id)}>
                             Delete
                         </Button>
                     </td>
@@ -134,23 +136,23 @@ export default class AdminSeats extends Component {
             );
         });
 
-        let errmsg_tablenum = this.state.errmsg_tablenum.map((et) => {
+        let errmsg_tablenum = this.state.errmsg_tablenum ? this.state.errmsg_tablenum.map((et) => {
             return (
                 <div key={et} style={{ color: '#FF0000' }} > {et} </div>
             )
-        });
+        }) : null;
 
-        let errmsg_closed = this.state.errmsg_closed.map((ec) => {
+        let errmsg_closed = this.state.errmsg_closed ? this.state.errmsg_closed.map((ec) => {
             return (
                 <div key={ec} style={{ color: '#FF0000' }} > {ec} </div>
             )
-        });
+        }) : null;
 
-        let errmsg_reason = this.state.errmsg_reason.map((er) => {
+        let errmsg_reason = this.state.errmsg_reason ? this.state.errmsg_reason.map((er) => {
             return (
                 <div key={er} style={{ color: '#FF0000' }} > {er} </div>
             )
-        });
+        }) : null;
 
 
         return (
@@ -189,6 +191,7 @@ export default class AdminSeats extends Component {
                                         name="closed"
                                         id="closed"
                                         className="form-check-input"
+                                        checked={this.state.seatData.closed == 0}
                                         value={0}
                                         onChange={(e) => {
                                             let { seatData } = this.state
@@ -204,6 +207,7 @@ export default class AdminSeats extends Component {
                                         name="closed"
                                         id="closed"
                                         className="form-check-input"
+                                        checked={this.state.seatData.closed == 1}
                                         value={1}
                                         onChange={(e) => {
                                             let { seatData } = this.state
@@ -239,15 +243,15 @@ export default class AdminSeats extends Component {
                 </div>
 
                 {/* Load Table */}
-                <div className="mt-4 table-responsive">
+                <div className="mt-2 table-responsive">
                     <Table className="table-striped">
                         <thead>
                             <tr>
-                                <th> ID </th>
-                                <th> Table Number </th>
-                                <th> Status </th>
-                                <th> Closed Reason </th>
-                                <th> Actions </th>
+                                <th>ID</th>
+                                <th>Table Number</th>
+                                <th>Status</th>
+                                <th>Closed Reason</th>
+                                <th></th>
                             </tr>
                         </thead>
                         <tbody>
