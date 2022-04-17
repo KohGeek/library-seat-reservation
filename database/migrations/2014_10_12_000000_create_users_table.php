@@ -20,14 +20,11 @@ return new class extends Migration
             $table->string('email')->unique();
             $table->timestamp('email_verified_at')->nullable();
             $table->string('password');
-            $table->enum('role', ['librarian','staff','student'])->default('student');
+            $table->enum('role', ['librarian', 'student'])->default('student');
 
             $table->rememberToken();
             $table->timestamps();
         });
-
-        
-
     }
 
     /**
