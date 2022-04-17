@@ -18,32 +18,30 @@ export default class AdminSeats extends Component {
             errmsg_tablenum: [],
             errmsg_closed: [],
             errmsg_reason: [],
+            spinner: false,
         }
     }
 
     // Load Seats
-    loadSeat() {
+    async loadSeat() {
+        this.setState({ spinner: true });
+        await new Promise(r => setTimeout(r, 500));
         axios.get("http://127.0.0.1:80/api/adminseats").then((response) => {
             this.setState({
                 seats: response.data,
             });
         });
+        this.setState({ spinner: false });
     }
 
     // Add a SEAT
     addSeat() {
         axios.post("http://127.0.0.1:80/api/adminseat", this.state.seatData).then((response) => {
-            let { seats } = this.state
-            this.loadSeat()
             this.setState({
                 seatModal: false,
                 seatData: { table_number: "", closed: null, closed_reason: "" },
-
-                // Clear Data Validation Error Msgs
-                errmsg_tablenum: [],
-                errmsg_closed: [],
-                errmsg_reason: [],
             });
+            this.loadSeat();
         }).catch(err => {
             this.setState({
                 errmsg_tablenum: err.response.data.errors.table_number,
@@ -51,22 +49,17 @@ export default class AdminSeats extends Component {
                 errmsg_reason: err.response.data.errors.closed_reason,
             });
         });
-        this.loadSeat();
+
     }
 
     updateSeat() {
         let { id, table_number, closed, closed_reason } = this.state.seatData
         axios.put("http://127.0.0.1:80/api/adminseat/" + id, { table_number, closed, closed_reason }).then((response) => {
-            this.loadSeat()
             this.setState({
                 seatModal: false,
                 seatData: { id: "", table_number: "", closed: null, closed_reason: "" },
-
-                // Clear Data Validation Error Msgs
-                errmsg_tablenum: [],
-                errmsg_closed: [],
-                errmsg_reason: [],
             });
+            this.loadSeat();
         }).catch(err => {
             this.setState({
                 errmsg_tablenum: err.response.data.errors.table_number,
@@ -74,7 +67,7 @@ export default class AdminSeats extends Component {
                 errmsg_reason: err.response.data.errors.closed_reason,
             });
         });
-        this.loadSeat();
+
     }
 
     // Delete a SEAT
@@ -89,6 +82,11 @@ export default class AdminSeats extends Component {
             seatData: { id: "", table_number: "", closed: null, closed_reason: "" },
             seatModal: true,
             modalType: 0,
+
+            // Clear Data Validation Error Msgs
+            errmsg_tablenum: [],
+            errmsg_closed: [],
+            errmsg_reason: [],
         });
     }
 
@@ -100,6 +98,11 @@ export default class AdminSeats extends Component {
             reasonDisabled: !closed_reason,
             seatModal: true,
             modalType: 1,
+
+            // Clear Data Validation Error Msgs
+            errmsg_tablenum: [],
+            errmsg_closed: [],
+            errmsg_reason: [],
         });
     }
 
@@ -243,7 +246,10 @@ export default class AdminSeats extends Component {
                 </div>
 
                 {/* Load Table */}
-                <div className="mt-2 table-responsive">
+                <div className="d-flex justify-content-center">
+                    {this.state.spinner ? <span className="spinner-border"></span> : null}
+                </div>
+                <div className={this.state.spinner ? "mt-2 table-responsive opacity-25" : "mt-2 table-responsive"}>
                     <Table className="table-striped">
                         <thead>
                             <tr>
@@ -259,7 +265,7 @@ export default class AdminSeats extends Component {
                         </tbody>
                     </Table>
                 </div>
-            </div>
+            </div >
         );
     }
 }
