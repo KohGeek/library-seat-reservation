@@ -53,13 +53,8 @@ export default class Dashboard extends Component {
                     <td>
                         {dateFormat(createdat_date, "yyyy-mm-dd HH:MM:ss")}
                     </td>
-                    <td>
-                        <Button
-                            color="danger"
-                            size="sm"
-                            outline
-                            onClick={this.deleteBooking.bind(this, log.id)}
-                        >
+                    <td className="text-center">
+                        <Button color="danger" size="sm" outline onClick={this.deleteBooking.bind(this, log.id)}>
                             Delete
                         </Button>
                     </td>
@@ -77,12 +72,13 @@ export default class Dashboard extends Component {
                         <Table className="table-striped">
                             <thead>
                                 <tr>
-                                    <th> Booked Date & Time </th>
-                                    <th> Booking ID </th>
-                                    <th> Person Name </th>
-                                    <th> Purpose </th>
-                                    <th> Seat </th>
-                                    <th> Booked At </th>
+                                    <th>Booked Date & Time</th>
+                                    <th>Booking ID</th>
+                                    <th>Person Name</th>
+                                    <th>Purpose</th>
+                                    <th>Seat</th>
+                                    <th>Booked At</th>
+                                    <th></th>
                                 </tr>
                             </thead>
                             <tbody>{logs}</tbody>

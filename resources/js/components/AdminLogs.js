@@ -192,12 +192,12 @@ export default class AdminLogs extends Component {
                     <Table className="table-striped">
                         <thead>
                             <tr>
-                                <th> Booking ID </th>
-                                <th> Person Name </th>
-                                <th> Purpose </th>
-                                <th> Seat </th>
-                                <th> Booked Date & Time </th>
-                                <th> Booked At </th>
+                                <th>Booking ID</th>
+                                <th>Person Name</th>
+                                <th>Purpose</th>
+                                <th>Seat</th>
+                                <th>Booked Date & Time</th>
+                                <th>Booked At</th>
                             </tr>
                         </thead>
                         <tbody>{logs}</tbody>
