@@ -25,6 +25,7 @@ export default class AdminLogs extends Component {
             searchLogModal: false,
             listseat: [],
             datePick: null,
+            spinner: false,
         }
     }
 
@@ -45,7 +46,9 @@ export default class AdminLogs extends Component {
     }
 
     // Searching Logs
-    searchLog() {
+    async searchLog() {
+        this.setState({ spinner: true });
+        await new Promise(r => setTimeout(r, 500));
         let { seat, name, date, time } = this.state.searchLogData
         axios.get("http://127.0.0.1:80/api/adminlogs", { params: { seat, name, date, time } }).then((response) => {
             this.setState({
@@ -53,6 +56,7 @@ export default class AdminLogs extends Component {
                 searchLogModal: false,
             });
         });
+        this.setState({ spinner: false });
     }
 
     // Toggles
@@ -184,11 +188,14 @@ export default class AdminLogs extends Component {
                     </div>
                 </div>
                 <div className="mt-2">
-                    <Button color="primary" onClick={this.searchLog.bind(this)}> Search </Button>
+                    <Button color="primary" onClick={this.searchLog.bind(this)}>
+                        {this.state.spinner ? <span className="spinner-border spinner-border-sm me-2"></span> : null}
+                        <span>Search</span>
+                    </Button>
                 </div>
 
                 {/* Load Table */}
-                <div className="mt-4 table-responsive">
+                <div className={this.state.spinner ? "mt-2 table-responsive opacity-25" : "mt-2 table-responsive"}>
                     <Table className="table-striped">
                         <thead>
                             <tr>
@@ -203,7 +210,7 @@ export default class AdminLogs extends Component {
                         <tbody>{logs}</tbody>
                     </Table>
                 </div>
-            </div>
+            </div >
         );
     }
 }
