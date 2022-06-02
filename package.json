@@ -28,7 +28,7 @@
     },
     "dependencies": {
         "dateformat": "^5.0.3",
-        "npm": "^8.5.2",
+        "npm": "^8.11.0",
         "proptypes": "^1.1.0",
         "react-datepicker": "^4.7.0",
         "reactstrap": "^9.0.2",
