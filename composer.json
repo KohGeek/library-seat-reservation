@@ -1,25 +1,26 @@
 {
-    "name": "laravel/laravel",
+    "name": "kohgeek/library-seat-reservation-system",
     "type": "project",
-    "description": "The Laravel Framework.",
-    "keywords": ["framework", "laravel"],
+    "description": "Library Seat Reservation System by KohGeek.",
+    "keywords": [
+        "framework",
+        "laravel"
+    ],
     "license": "MIT",
     "require": {
         "php": "^8.0",
-        "fruitcake/laravel-cors": "^2.0.5",
-        "guzzlehttp/guzzle": "^7.2",
-        "laravel/framework": "^9.0",
-        "laravel/sanctum": "^2.14",
-        "laravel/tinker": "^2.7"
+        "guzzlehttp/guzzle": "^7.5",
+        "laravel/framework": "^10.1.5",
+        "laravel/sanctum": "^3.2.1",
+        "laravel/tinker": "^2.8.1"
     },
     "require-dev": {
-        "fakerphp/faker": "^1.9.1",
-        "laravel/sail": "^1.0.1",
-        "laravel/ui": "^3.4",
-        "mockery/mockery": "^1.4.4",
-        "nunomaduro/collision": "^6.1",
-        "phpunit/phpunit": "^9.5.10",
-        "spatie/laravel-ignition": "^1.0"
+        "fakerphp/faker": "^1.21.0",
+        "laravel/sail": "^1.21.0",
+        "laravel/ui": "^4.2.1",
+        "mockery/mockery": "^1.5.1",
+        "nunomaduro/collision": "^7.0.5",
+        "phpunit/phpunit": "^10.0.12"
     },
     "autoload": {
         "psr-4": {

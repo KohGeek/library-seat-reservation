@@ -21,6 +21,7 @@ For initial cloning, do the following:
 - `composer install`
 - `cp .env.example .env` (do not use in active deployment)
 - `sail artisan key:generate`
+- `sail artisan migrate`
 
 If `sail artisan` fails, you may need to first run `sail up -d` once.
 

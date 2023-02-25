@@ -1,4 +1,4 @@
-FROM ubuntu:21.10
+FROM ubuntu:22.04
 
 LABEL maintainer="Taylor Otwell"
 
@@ -12,14 +12,14 @@ ENV TZ=UTC
 
 RUN ln -snf /usr/share/zoneinfo/$TZ /etc/localtime && echo $TZ > /etc/timezone
 
-RUN echo 'deb http://ossmirror.mycloud.services/os/linux/ubuntu/ impish main' > /etc/apt/sources.list \
-    && echo 'deb http://ossmirror.mycloud.services/os/linux/ubuntu/ impish multiverse' >> /etc/apt/sources.list \
-    && echo 'deb http://ossmirror.mycloud.services/os/linux/ubuntu/ impish restricted' >> /etc/apt/sources.list \
-    && echo 'deb http://ossmirror.mycloud.services/os/linux/ubuntu/ impish universe' >> /etc/apt/sources.list \
-    && echo 'deb http://ossmirror.mycloud.services/os/linux/ubuntu/ impish-updates main' >> /etc/apt/sources.list \
-    && echo 'deb http://ossmirror.mycloud.services/os/linux/ubuntu/ impish-updates multiverse' >> /etc/apt/sources.list \
-    && echo 'deb http://ossmirror.mycloud.services/os/linux/ubuntu/ impish-updates restricted' >> /etc/apt/sources.list \
-    && echo 'deb http://ossmirror.mycloud.services/os/linux/ubuntu/ impish-updates universe' >> /etc/apt/sources.list \
+RUN echo 'deb http://ossmirror.mycloud.services/os/linux/ubuntu/ jammy main' > /etc/apt/sources.list \
+    && echo 'deb http://ossmirror.mycloud.services/os/linux/ubuntu/ jammy multiverse' >> /etc/apt/sources.list \
+    && echo 'deb http://ossmirror.mycloud.services/os/linux/ubuntu/ jammy restricted' >> /etc/apt/sources.list \
+    && echo 'deb http://ossmirror.mycloud.services/os/linux/ubuntu/ jammy universe' >> /etc/apt/sources.list \
+    && echo 'deb http://ossmirror.mycloud.services/os/linux/ubuntu/ jammy-updates main' >> /etc/apt/sources.list \
+    && echo 'deb http://ossmirror.mycloud.services/os/linux/ubuntu/ jammy-updates multiverse' >> /etc/apt/sources.list \
+    && echo 'deb http://ossmirror.mycloud.services/os/linux/ubuntu/ jammy-updates restricted' >> /etc/apt/sources.list \
+    && echo 'deb http://ossmirror.mycloud.services/os/linux/ubuntu/ jammy-updates universe' >> /etc/apt/sources.list \
     && apt-get update \
     && apt-get install -y software-properties-common \
     && add-apt-repository ppa:apt-fast/stable \
@@ -34,7 +34,7 @@ RUN echo 'deb http://ossmirror.mycloud.services/os/linux/ubuntu/ impish main' > 
     && echo "disable-ipv6" >> ~/.gnupg/dirmngr.conf \
     && apt-key adv --homedir ~/.gnupg --keyserver hkp://keyserver.ubuntu.com:80 --recv-keys E5267A6C \
     && apt-key adv --homedir ~/.gnupg --keyserver hkp://keyserver.ubuntu.com:80 --recv-keys C300EE8C \
-    && echo "deb http://ppa.launchpad.net/ondrej/php/ubuntu impish main" > /etc/apt/sources.list.d/ppa_ondrej_php.list \
+    && add-apt-repository ppa:ondrej/php \
     && apt-fast update \
     && apt-fast install -y php8.1-cli php8.1 \
        php8.1-pgsql php8.1-sqlite3 php8.1-gd \
